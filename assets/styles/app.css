@@ -1,3 +1,10 @@
-body {
-    background-color: skyblue;
-}
+/*
+ * Description générale :
+ * Feuille de style principale de l'application.
+ * Rôle :
+ * Recevoir le CSS qui sera produit par Sass pendant la phase de codage.
+ * Tâches :
+ * Ne contenir aucun style d'exemple avant la définition de l'interface.
+ * Liens avec les autres fichiers :
+ * Chargée par templates/base.html.twig et servie par AssetMapper.
+ */

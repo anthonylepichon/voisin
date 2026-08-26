@@ -1,10 +1,10 @@
-import './stimulus_bootstrap.js';
 /*
- * Welcome to your app's main JavaScript file!
- *
- * This file will be included onto the page via the importmap() Twig function,
- * which should already be in your base.html.twig.
+ * Description générale :
+ * Point d'entrée du JavaScript classique de l'application.
+ * Rôle :
+ * Regrouper les futurs scripts servis par AssetMapper.
+ * Tâches :
+ * Accueillir uniquement les comportements JavaScript validés pendant le codage.
+ * Liens avec les autres fichiers :
+ * Chargé par templates/base.html.twig au moyen de la fonction asset().
  */
-import './styles/app.css';
-
-console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');

@@ -1,20 +1,40 @@
+# Dépendances et fichiers générés
+/vendor/
+/var/
+/node_modules/
+/public/assets/
+/public/bundles/
+/assets/vendor/
 
-###> symfony/framework-bundle ###
+# Configuration locale des outils
+/.vscode/
+/.idea/
+
+# Variables d'environnement et secrets privés
 /.env.local
 /.env.local.php
 /.env.*.local
 /config/secrets/prod/prod.decrypt.private.php
-/public/bundles/
-/var/
-/vendor/
-###< symfony/framework-bundle ###
 
-###> phpunit/phpunit ###
+# Fichiers de test locaux
 /phpunit.xml
 /.phpunit.cache/
-###< phpunit/phpunit ###
 
-###> symfony/asset-mapper ###
-/public/assets/
-/assets/vendor/
-###< symfony/asset-mapper ###
+# Fichiers temporaires et journaux
+/tmp/
+*.log
+*.tmp
+*.temp
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Ressources locales de pilotage et de formation
+/AGENTS.md
+/etat-avancement.md
+/documents/pilotage/*
+!/documents/pilotage/rapport-audit-final.md
+/documents/outils/
+/documents/cours/
+/documents/conceptualisation/Spécifications/Google sheet/
+/documents/cahier des charges/cahier-des-charges-enrichi.md
