@@ -25,6 +25,7 @@
 *.log
 *.tmp
 *.temp
+*.bkp
 .DS_Store
 Thumbs.db
 Desktop.ini
