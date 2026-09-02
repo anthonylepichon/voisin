@@ -1,0 +1,69 @@
+/*
+ * Description générale :
+ * Compositions des différents états du fil d'actualité.
+ * Rôle :
+ * Assembler le compositeur, les filtres, les publications et l'état vide sur la colonne centrale.
+ * Tâches :
+ * Appliquer les espacements et variantes de filtre, de réaction et de navigation administrateur.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et les composants du fil d'actualité.
+ */
+
+@use '../abstracts/variables' as variables;
+
+.feed-page {
+    display: flex;
+    flex-direction: column;
+    width: variables.$feed-content-width;
+    min-width: 0;
+    gap: 20px;
+    overflow: hidden;
+}
+
+.feed-page__posts {
+    display: flex;
+    flex-direction: column;
+    width: variables.$feed-content-width;
+    gap: 20px;
+}
+
+.feed-page__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: variables.$feed-content-width;
+    height: 131px;
+    padding: 40px;
+    gap: 12px;
+    text-align: center;
+    background-color: variables.$color-surface;
+    border-radius: variables.$radius-surface;
+}
+
+.feed-page__empty-title {
+    margin: 0;
+    color: variables.$color-text;
+    font-size: variables.$font-size-18;
+    font-weight: variables.$font-weight-semibold;
+}
+
+.feed-page__empty-description {
+    margin: 0;
+    color: variables.$color-text-muted;
+    font-size: variables.$font-size-14;
+}
+
+.feed-page--liked .publication-card:first-child .publication-card__like {
+    color: variables.$color-primary;
+}
+
+.feed-page--liked .publication-card:first-child .publication-card__action-icon {
+    color: variables.$color-primary;
+}
+
+.feed-page--liked .publication-card:first-child .publication-card__action-icon svg,
+.feed-page--liked .publication-card:first-child .publication-card__action-icon path {
+    fill: currentColor;
+    stroke: currentColor;
+}

@@ -1,0 +1,67 @@
+/*
+ * Description générale :
+ * Composition desktop des écrans de lecture, gestion, édition et modération des commentaires.
+ * Rôle :
+ * Ordonner le résumé de publication, le titre, les commentaires et le formulaire dans tous leurs états.
+ * Tâches :
+ * Conserver le rythme vertical de 20 px et les dimensions exactes des états vide et invalide.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et les composants _publication-summary.scss et _comments.scss.
+ */
+
+@use '../abstracts/variables' as variables;
+
+.comments-page {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    gap: 20px;
+    align-items: flex-start;
+    width: variables.$content-width;
+    min-width: 0;
+    overflow: hidden;
+    color: variables.$color-text;
+    font-family: variables.$font-family-base;
+    line-height: normal;
+}
+
+.comments-page__title {
+    font-size: variables.$font-size-18;
+    font-weight: variables.$font-weight-semibold;
+    white-space: nowrap;
+}
+
+.comments-page__list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: variables.$content-width;
+}
+
+.comments-page__empty {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+    justify-content: center;
+    width: variables.$content-width;
+    height: 112px;
+    padding: 32px;
+    overflow: hidden;
+    background-color: variables.$color-surface;
+    border-radius: variables.$radius-surface;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.comments-page__empty-title {
+    color: variables.$color-text;
+    font-size: variables.$font-size-16;
+    font-weight: variables.$font-weight-semibold;
+}
+
+.comments-page__empty-description {
+    color: variables.$color-text-muted;
+    font-size: variables.$font-size-14;
+    font-weight: variables.$font-weight-regular;
+}

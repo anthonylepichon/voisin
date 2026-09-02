@@ -1,0 +1,171 @@
+/*
+ * Description générale :
+ * Mise en page de l'en-tête principal d'après le composant Figma validé.
+ * Rôle :
+ * Reproduire exactement les variantes publique, authentifiée complète et authentifiée compacte.
+ * Tâches :
+ * Dimensionner le logo, les accès publics, la recherche, la notification et l'avatar.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
+ */
+
+@use '../abstracts/variables' as variables;
+
+.site-header {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: variables.$header-height;
+    padding: variables.$header-padding-vertical variables.$header-padding-horizontal;
+    overflow: hidden;
+    background-color: variables.$header-background-color;
+}
+
+.site-header__brand {
+    position: relative;
+    flex: 0 0 variables.$header-logo-width;
+    width: variables.$header-logo-width;
+    height: variables.$header-logo-height;
+    overflow: hidden;
+}
+
+.site-header__logo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+}
+
+.site-header__actions {
+    position: relative;
+    flex: 0 0 variables.$header-actions-width;
+    width: variables.$header-actions-width;
+    height: variables.$header-actions-height;
+}
+
+.site-header--public .site-header__actions {
+    flex-basis: 335px;
+    width: 335px;
+    height: 37px;
+}
+
+.site-header__login,
+.site-header__register {
+    position: absolute;
+    top: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 20px;
+    overflow: hidden;
+    font-size: variables.$font-size-16;
+    font-weight: variables.$font-weight-regular;
+    white-space: nowrap;
+    border-radius: variables.$radius-pill;
+}
+
+.site-header__login {
+    left: 0;
+    width: 150px;
+    height: 37px;
+    color: variables.$color-text;
+    background-color: variables.$color-surface-soft;
+    border: 1px solid variables.$color-text;
+}
+
+.site-header__register {
+    left: 168px;
+    width: 167px;
+    height: 35px;
+    color: variables.$color-surface;
+    background-color: variables.$color-primary;
+    border: 0;
+}
+
+.site-header__search {
+    position: absolute;
+    top: 9px;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 364px;
+    height: 42px;
+    padding: 8px 20px;
+    overflow: hidden;
+    background-color: variables.$color-surface-soft;
+    border: 1px solid variables.$color-border;
+    border-radius: variables.$radius-pill;
+}
+
+.site-header__search-input {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: 0;
+    color: variables.$color-text;
+    font-size: variables.$font-size-16;
+    background: transparent;
+    border: 0;
+    outline: 0;
+}
+
+.site-header__search-input::placeholder {
+    color: variables.$color-text-muted;
+    opacity: 1;
+}
+
+.site-header__search-icon {
+    flex: 0 0 variables.$icon-size;
+    width: variables.$icon-size;
+    height: variables.$icon-size;
+}
+
+.site-header__notification {
+    position: absolute;
+    top: 18px;
+    left: 397.5px;
+    width: variables.$icon-size;
+    height: variables.$icon-size;
+    padding: 0;
+    background: transparent;
+    border: 0;
+}
+
+.site-header__notification-image {
+    width: 100%;
+    height: 100%;
+}
+
+.site-header__avatar {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: variables.$header-avatar-size;
+    height: variables.$header-avatar-size;
+    overflow: hidden;
+    border-radius: variables.$header-avatar-radius;
+}
+
+.site-header__avatar-image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+}
+
+.site-header--compact .site-header__search,
+.site-header--compact .site-header__notification {
+    display: none;
+}
+
+.site-header--public .site-header__search,
+.site-header--public .site-header__notification,
+.site-header--public .site-header__avatar {
+    display: none;
+}

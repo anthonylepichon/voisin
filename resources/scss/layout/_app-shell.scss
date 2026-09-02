@@ -1,0 +1,76 @@
+/*
+ * Description générale :
+ * Structures principales des pages authentifiées de l'application Voisin.
+ * Rôle :
+ * Reproduire les colonnes et espacements desktop communs aux écrans Figma.
+ * Tâches :
+ * Organiser la navigation latérale, le contenu principal et le panneau des membres en ligne.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et accueille les composants des dossiers layout et components.
+ */
+
+@use '../abstracts/variables' as variables;
+
+.app-shell {
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+    padding: variables.$page-padding;
+    gap: variables.$layout-gap;
+}
+
+.app-shell__sidebar {
+    flex: 0 0 variables.$sidebar-width;
+    width: variables.$sidebar-width;
+}
+
+.app-shell__main {
+    flex: 0 0 variables.$content-width;
+    width: variables.$content-width;
+    min-width: 0;
+}
+
+.app-shell__aside {
+    flex: 0 0 variables.$online-friends-width;
+    width: variables.$online-friends-width;
+}
+
+.app-shell--feed {
+    display: grid;
+    grid-template-columns: variables.$sidebar-width variables.$feed-content-width variables.$online-friends-width;
+}
+
+.app-shell--feed .app-shell__main {
+    width: variables.$feed-content-width;
+}
+
+.app-shell--single-column {
+    display: block;
+    padding: 60px;
+}
+
+.app-shell--single-column .app-shell__main {
+    width: 100%;
+}
+
+.page-content {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    gap: 20px;
+    overflow: hidden;
+}
+
+.page-content__title {
+    margin: 0;
+    color: variables.$color-text;
+    font-size: variables.$font-size-24;
+    font-weight: variables.$font-weight-bold;
+}
+
+.page-content__subtitle {
+    margin: 0;
+    color: variables.$color-text-muted;
+    font-size: variables.$font-size-14;
+    font-weight: variables.$font-weight-regular;
+}

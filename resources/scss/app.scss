@@ -1,0 +1,43 @@
+/*
+ * Description générale :
+ * Point d'entrée Sass de l'application Voisin.
+ * Rôle :
+ * Regrouper les styles utiles selon le pattern 7-1 et produire la feuille CSS principale.
+ * Tâches :
+ * Charger les fondations, mises en page, composants et compositions de pages dans un ordre maîtrisé.
+ * Liens avec les autres fichiers :
+ * Compile l'ensemble des fichiers partiels utiles de resources/scss vers assets/styles/app.css.
+ */
+
+@use 'base/reset';
+@use 'base/typography';
+
+@use 'layout/header';
+@use 'layout/app-shell';
+@use 'layout/sidebar';
+
+@use 'components/buttons';
+@use 'components/icons';
+@use 'components/avatars';
+@use 'components/badges';
+@use 'components/forms';
+@use 'components/alerts';
+@use 'components/empty-state';
+@use 'components/filters';
+@use 'components/post-composer';
+@use 'components/online-friends';
+@use 'components/publication-card';
+@use 'components/friend-request-card';
+@use 'components/friend-card';
+@use 'components/publication-summary';
+@use 'components/comments' as comments-components;
+@use 'components/admin' as admin-components;
+
+@use 'pages/public-home';
+@use 'pages/auth';
+@use 'pages/feed';
+@use 'pages/publication-editor';
+@use 'pages/profile';
+@use 'pages/friends';
+@use 'pages/comments';
+@use 'pages/admin';

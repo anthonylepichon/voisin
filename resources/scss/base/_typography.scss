@@ -1,0 +1,43 @@
+/*
+ * Description générale :
+ * Fondations typographiques communes à toute l'interface Voisin.
+ * Rôle :
+ * Appliquer la police Inter et les niveaux de texte relevés dans la maquette Figma.
+ * Tâches :
+ * Définir le texte courant, les titres principaux et les textes secondaires réutilisables.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
+ */
+
+@use '../abstracts/variables' as variables;
+
+html,
+body {
+    color: variables.$color-text;
+    font-family: variables.$font-family-base;
+    font-size: variables.$font-size-16;
+    font-weight: variables.$font-weight-regular;
+    line-height: normal;
+}
+
+body {
+    min-width: variables.$desktop-width;
+    min-height: 100vh;
+    background-color: variables.$color-page-background;
+}
+
+.page-title {
+    color: variables.$color-text;
+    font-size: variables.$font-size-24;
+    font-weight: variables.$font-weight-bold;
+}
+
+.section-title {
+    color: variables.$color-text;
+    font-size: variables.$font-size-20;
+    font-weight: variables.$font-weight-semibold;
+}
+
+.secondary-text {
+    color: variables.$color-text-muted;
+}

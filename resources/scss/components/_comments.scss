@@ -1,0 +1,280 @@
+/*
+ * Description générale :
+ * Composants des listes, actions, éditions et formulaires de commentaires.
+ * Rôle :
+ * Reproduire tous les états de commentaire prévus pour les membres, les auteurs et les administrateurs.
+ * Tâches :
+ * Dimensionner les cartes de 97, 123 et 168 px ainsi que les formulaires valides et invalides.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et compose resources/scss/pages/_comments.scss.
+ */
+
+@use '../abstracts/variables' as variables;
+
+.comment-card {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: variables.$content-width;
+    height: 97px;
+    padding: 16px;
+    overflow: hidden;
+    color: variables.$color-text;
+    background-color: variables.$color-surface;
+    border: 1px solid variables.$color-border;
+    border-radius: variables.$radius-control;
+    font-family: variables.$font-family-base;
+    line-height: normal;
+}
+
+.comment-card--manageable {
+    height: 123px;
+}
+
+.comment-card--editing {
+    height: 168px;
+    border: 2px solid variables.$color-primary;
+}
+
+.comment-card__header {
+    display: flex;
+    flex: 0 0 36px;
+    gap: 10px;
+    align-items: center;
+    width: 100%;
+    height: 36px;
+    overflow: hidden;
+}
+
+.comment-card__avatar {
+    flex: 0 0 36px;
+    width: 36px;
+    height: 36px;
+    overflow: hidden;
+    border-radius: variables.$radius-avatar-small;
+}
+
+.comment-card__avatar-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.comment-card__identity {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    gap: 2px;
+    align-items: flex-start;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.comment-card__author {
+    max-width: 100%;
+    overflow: hidden;
+    font-size: variables.$font-size-14;
+    font-weight: variables.$font-weight-semibold;
+    text-overflow: ellipsis;
+}
+
+.comment-card--editing .comment-card__author {
+    color: variables.$color-primary;
+}
+
+.comment-card__date {
+    color: variables.$color-text-muted;
+    font-size: variables.$font-size-12;
+    font-weight: variables.$font-weight-regular;
+}
+
+.comment-card__content {
+    width: 100%;
+    overflow: hidden;
+    font-size: variables.$font-size-14;
+    font-weight: variables.$font-weight-regular;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.comment-card__actions {
+    display: flex;
+    flex: 0 0 16px;
+    gap: 12px;
+    align-items: flex-start;
+    width: 100%;
+    height: 16px;
+    overflow: hidden;
+}
+
+.comment-card__action {
+    padding: 0;
+    color: variables.$color-primary;
+    background: none;
+    border: 0;
+    font-family: variables.$font-family-base;
+    font-size: variables.$font-size-13;
+    font-weight: variables.$font-weight-medium;
+    line-height: normal;
+    white-space: nowrap;
+}
+
+.comment-card__action--delete {
+    color: variables.$color-danger;
+}
+
+.comment-card--publication-owner .comment-card__action--delete {
+    color: variables.$color-primary;
+}
+
+.comment-card__edit-input {
+    flex: 0 0 41px;
+    width: 1072px;
+    height: 41px;
+    padding: 12px;
+    color: variables.$color-text;
+    background-color: variables.$color-surface-soft;
+    border: 0;
+    border-radius: variables.$radius-field;
+    font-family: variables.$font-family-base;
+    font-size: variables.$font-size-14;
+    font-weight: variables.$font-weight-regular;
+    line-height: normal;
+}
+
+.comment-card__edit-actions {
+    display: flex;
+    flex: 0 0 35px;
+    gap: 12px;
+    align-items: center;
+    width: 1072px;
+    height: 35px;
+    overflow: hidden;
+}
+
+.comment-card__save {
+    display: flex;
+    flex: 0 0 934px;
+    align-items: center;
+    justify-content: center;
+    width: 934px;
+    height: 35px;
+    padding: 8px 20px;
+    color: variables.$color-surface;
+    background-color: variables.$color-primary;
+    border: 0;
+    border-radius: variables.$radius-pill;
+    font-family: variables.$font-family-base;
+    font-size: variables.$font-size-16;
+    font-weight: variables.$font-weight-regular;
+    line-height: normal;
+    white-space: nowrap;
+}
+
+.comment-card__cancel,
+.comment-card__delete {
+    padding: 0;
+    background: none;
+    border: 0;
+    font-family: variables.$font-family-base;
+    font-size: variables.$font-size-13;
+    font-weight: variables.$font-weight-medium;
+    line-height: normal;
+    white-space: nowrap;
+}
+
+.comment-card__cancel {
+    color: variables.$color-primary;
+}
+
+.comment-card__delete {
+    color: variables.$color-danger;
+}
+
+.comment-form {
+    display: flex;
+    flex-direction: column;
+    width: variables.$content-width;
+    height: 44px;
+    font-family: variables.$font-family-base;
+    line-height: normal;
+}
+
+.comment-form--invalid {
+    gap: 8px;
+    height: 67px;
+}
+
+.comment-form__row {
+    display: grid;
+    flex: 0 0 44px;
+    grid-template-columns: 36px 519px 533px;
+    gap: 10px;
+    align-items: center;
+    width: variables.$content-width;
+    height: 44px;
+}
+
+.comment-form__avatar {
+    width: 36px;
+    height: 36px;
+    overflow: hidden;
+    border-radius: variables.$radius-avatar-small;
+}
+
+.comment-form__avatar-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.comment-form__input {
+    width: 519px;
+    height: 44px;
+    padding: 12px;
+    color: variables.$color-text;
+    background-color: variables.$color-surface;
+    border: 1px solid variables.$color-border;
+    border-radius: variables.$radius-field;
+    font-family: variables.$font-family-base;
+    font-size: variables.$font-size-14;
+    font-weight: variables.$font-weight-regular;
+    line-height: normal;
+}
+
+.comment-form__input::placeholder {
+    color: variables.$color-text-muted;
+    opacity: 1;
+}
+
+.comment-form--invalid .comment-form__input {
+    border-color: variables.$color-danger;
+}
+
+.comment-form__submit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 533px;
+    height: 35px;
+    padding: 8px 20px;
+    color: variables.$color-surface;
+    background-color: variables.$color-primary;
+    border: 0;
+    border-radius: variables.$radius-pill;
+    font-family: variables.$font-family-base;
+    font-size: variables.$font-size-16;
+    font-weight: variables.$font-weight-regular;
+    line-height: normal;
+    white-space: nowrap;
+}
+
+.comment-form__error {
+    width: 519px;
+    margin-left: 46px;
+    color: variables.$color-danger;
+    font-size: variables.$font-size-12;
+    font-weight: variables.$font-weight-regular;
+    line-height: normal;
+}

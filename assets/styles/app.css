@@ -1,10 +1,3628 @@
+@charset "UTF-8";
 /*
  * Description générale :
- * Feuille de style principale de l'application.
+ * Point d'entrée Sass de l'application Voisin.
  * Rôle :
- * Recevoir le CSS qui sera produit par Sass pendant la phase de codage.
+ * Regrouper les styles utiles selon le pattern 7-1 et produire la feuille CSS principale.
  * Tâches :
- * Ne contenir aucun style d'exemple avant la définition de l'interface.
+ * Charger les fondations, mises en page, composants et compositions de pages dans un ordre maîtrisé.
  * Liens avec les autres fichiers :
- * Chargée par templates/base.html.twig et servie par AssetMapper.
+ * Compile l'ensemble des fichiers partiels utiles de resources/scss vers assets/styles/app.css.
  */
+/*
+ * Description générale :
+ * Réinitialisation commune aux écrans desktop de l'application.
+ * Rôle :
+ * Neutraliser les styles natifs qui modifieraient les dimensions ou la typographie définies dans Figma.
+ * Tâches :
+ * Uniformiser le modèle de boîte, les marges, les listes, les liens, les contrôles et les images.
+ * Liens avec les autres fichiers :
+ * Chargé par resources/scss/app.scss avant les styles de mise en page.
+ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input,
+select,
+textarea {
+  margin: 0;
+  color: inherit;
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+textarea {
+  resize: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+p {
+  margin: 0;
+}
+
+/*
+ * Description générale :
+ * Fondations typographiques communes à toute l'interface Voisin.
+ * Rôle :
+ * Appliquer la police Inter et les niveaux de texte relevés dans la maquette Figma.
+ * Tâches :
+ * Définir le texte courant, les titres principaux et les textes secondaires réutilisables.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
+ */
+/*
+ * Description générale :
+ * Variables Sass issues des 12 sections et des 48 états desktop de la maquette Figma.
+ * Rôle :
+ * Centraliser les couleurs, typographies, dimensions, espacements et rayons partagés par l'interface.
+ * Tâches :
+ * Fournir les tokens communs aux fondations, composants, mises en page et pages du projet.
+ * Liens avec les autres fichiers :
+ * Utilisé par l'ensemble des fichiers partiels chargés depuis resources/scss/app.scss.
+ */
+html,
+body {
+  color: #2c2420;
+  font-family: "Inter", Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: normal;
+}
+
+body {
+  min-width: 1440px;
+  min-height: 100vh;
+  background-color: #f0e8e3;
+}
+
+.page-title {
+  color: #2c2420;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.section-title {
+  color: #2c2420;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.secondary-text {
+  color: #8d8d8d;
+}
+
+/*
+ * Description générale :
+ * Fondations typographiques communes à toute l'interface Voisin.
+ * Rôle :
+ * Appliquer la police Inter et les niveaux de texte relevés dans la maquette Figma.
+ * Tâches :
+ * Définir le texte courant, les titres principaux et les textes secondaires réutilisables.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
+ */
+/*
+ * Description générale :
+ * Mise en page de l'en-tête principal d'après le composant Figma validé.
+ * Rôle :
+ * Reproduire exactement les variantes publique, authentifiée complète et authentifiée compacte.
+ * Tâches :
+ * Dimensionner le logo, les accès publics, la recherche, la notification et l'avatar.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
+ */
+.site-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 80px;
+  padding: 14px 64px;
+  overflow: hidden;
+  background-color: #faf7f5;
+}
+
+.site-header__brand {
+  position: relative;
+  flex: 0 0 146px;
+  width: 146px;
+  height: 52px;
+  overflow: hidden;
+}
+
+.site-header__logo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+.site-header__actions {
+  position: relative;
+  flex: 0 0 515px;
+  width: 515px;
+  height: 60px;
+}
+
+.site-header--public .site-header__actions {
+  flex-basis: 335px;
+  width: 335px;
+  height: 37px;
+}
+
+.site-header__login,
+.site-header__register {
+  position: absolute;
+  top: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 20px;
+  overflow: hidden;
+  font-size: 16px;
+  font-weight: 400;
+  white-space: nowrap;
+  border-radius: 42px;
+}
+
+.site-header__login {
+  left: 0;
+  width: 150px;
+  height: 37px;
+  color: #2c2420;
+  background-color: #faf7f5;
+  border: 1px solid #2c2420;
+}
+
+.site-header__register {
+  left: 168px;
+  width: 167px;
+  height: 35px;
+  color: #ffffff;
+  background-color: #c95f30;
+  border: 0;
+}
+
+.site-header__search {
+  position: absolute;
+  top: 9px;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 364px;
+  height: 42px;
+  padding: 8px 20px;
+  overflow: hidden;
+  background-color: #faf7f5;
+  border: 1px solid #d8d8d8;
+  border-radius: 42px;
+}
+
+.site-header__search-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 0;
+  color: #2c2420;
+  font-size: 16px;
+  background: transparent;
+  border: 0;
+  outline: 0;
+}
+
+.site-header__search-input::placeholder {
+  color: #8d8d8d;
+  opacity: 1;
+}
+
+.site-header__search-icon {
+  flex: 0 0 24px;
+  width: 24px;
+  height: 24px;
+}
+
+.site-header__notification {
+  position: absolute;
+  top: 18px;
+  left: 397.5px;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  background: transparent;
+  border: 0;
+}
+
+.site-header__notification-image {
+  width: 100%;
+  height: 100%;
+}
+
+.site-header__avatar {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 60px;
+  height: 60px;
+  overflow: hidden;
+  border-radius: 33px;
+}
+
+.site-header__avatar-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+.site-header--compact .site-header__search,
+.site-header--compact .site-header__notification {
+  display: none;
+}
+
+.site-header--public .site-header__search,
+.site-header--public .site-header__notification,
+.site-header--public .site-header__avatar {
+  display: none;
+}
+
+/*
+ * Description générale :
+ * Fondations typographiques communes à toute l'interface Voisin.
+ * Rôle :
+ * Appliquer la police Inter et les niveaux de texte relevés dans la maquette Figma.
+ * Tâches :
+ * Définir le texte courant, les titres principaux et les textes secondaires réutilisables.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
+ */
+/*
+ * Description générale :
+ * Structures principales des pages authentifiées de l'application Voisin.
+ * Rôle :
+ * Reproduire les colonnes et espacements desktop communs aux écrans Figma.
+ * Tâches :
+ * Organiser la navigation latérale, le contenu principal et le panneau des membres en ligne.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et accueille les composants des dossiers layout et components.
+ */
+.app-shell {
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
+  padding: 24px;
+  gap: 24px;
+}
+
+.app-shell__sidebar {
+  flex: 0 0 260px;
+  width: 260px;
+}
+
+.app-shell__main {
+  flex: 0 0 1108px;
+  width: 1108px;
+  min-width: 0;
+}
+
+.app-shell__aside {
+  flex: 0 0 240px;
+  width: 240px;
+}
+
+.app-shell--feed {
+  display: grid;
+  grid-template-columns: 260px 844px 240px;
+}
+
+.app-shell--feed .app-shell__main {
+  width: 844px;
+}
+
+.app-shell--single-column {
+  display: block;
+  padding: 60px;
+}
+
+.app-shell--single-column .app-shell__main {
+  width: 100%;
+}
+
+.page-content {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 20px;
+  overflow: hidden;
+}
+
+.page-content__title {
+  margin: 0;
+  color: #2c2420;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.page-content__subtitle {
+  margin: 0;
+  color: #8d8d8d;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+/*
+ * Description générale :
+ * Fondations typographiques communes à toute l'interface Voisin.
+ * Rôle :
+ * Appliquer la police Inter et les niveaux de texte relevés dans la maquette Figma.
+ * Tâches :
+ * Définir le texte courant, les titres principaux et les textes secondaires réutilisables.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
+ */
+/*
+ * Description générale :
+ * Navigation latérale des espaces membre et administrateur.
+ * Rôle :
+ * Fournir la géométrie commune des menus verticaux visible dans la maquette Figma.
+ * Tâches :
+ * Dimensionner le panneau, les liens, séparateurs, compteurs et bouton de déconnexion.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et se place dans resources/scss/layout/_app-shell.scss.
+ */
+.side-nav {
+  display: flex;
+  flex-direction: column;
+  width: 260px;
+  height: 238px;
+  padding: 24px;
+  gap: 16px;
+  overflow: hidden;
+  background-color: #ffffff;
+  border-radius: 12px;
+}
+
+.side-nav--with-badge {
+  height: 241px;
+}
+
+.side-nav--admin {
+  height: 256px;
+}
+
+.side-nav--admin-extended {
+  height: 290px;
+}
+
+.side-nav__title {
+  margin: 0;
+  color: #c95f30;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.side-nav__links {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.side-nav__link {
+  display: flex;
+  align-items: center;
+  width: fit-content;
+  min-height: 18px;
+  color: #2c2420;
+  font-size: 15px;
+  font-weight: 400;
+  text-decoration: none;
+  gap: 8px;
+}
+
+.side-nav__link--active {
+  color: #c95f30;
+}
+
+.side-nav__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 25px;
+  min-height: 21px;
+  padding: 4px 8px;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  background-color: #c95f30;
+  border-radius: 10px;
+}
+
+.side-nav__separator {
+  flex: 0 0 1px;
+  width: 212px;
+  height: 1px;
+  margin: 0;
+  background-color: #d8d8d8;
+  border: 0;
+}
+
+.side-nav__logout {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 166px;
+  height: 37px;
+  padding: 8px 20px;
+  color: #2c2420;
+  font-size: 16px;
+  font-weight: 400;
+  text-decoration: none;
+  white-space: nowrap;
+  background-color: #faf7f5;
+  border: 1px solid #2c2420;
+  border-radius: 42px;
+}
+
+/*
+ * Description générale :
+ * Fondations typographiques communes à toute l'interface Voisin.
+ * Rôle :
+ * Appliquer la police Inter et les niveaux de texte relevés dans la maquette Figma.
+ * Tâches :
+ * Définir le texte courant, les titres principaux et les textes secondaires réutilisables.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
+ */
+/*
+ * Description générale :
+ * Boutons réutilisables conformes aux variantes visibles dans la maquette Figma.
+ * Rôle :
+ * Harmoniser les actions principales, secondaires, dangereuses et désactivées.
+ * Tâches :
+ * Définir la géométrie en pilule, la typographie et les couleurs de chaque état de bouton.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et complète les formulaires et pages de l'application.
+ */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 20px;
+  overflow: hidden;
+  color: #2c2420;
+  font-family: "Inter", Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: normal;
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  background-color: #faf7f5;
+  border: 1px solid #2c2420;
+  border-radius: 42px;
+}
+
+.button--primary {
+  color: #ffffff;
+  background-color: #c95f30;
+  border: 0;
+}
+
+.button--secondary {
+  color: #2c2420;
+  background-color: #faf7f5;
+  border-color: #2c2420;
+}
+
+.button--danger {
+  color: #ffffff;
+  background-color: #b94848;
+  border: 0;
+}
+
+.button--danger-outline {
+  color: #b94848;
+  background-color: #ffffff;
+  border-color: #b94848;
+}
+
+.button--disabled,
+.button:disabled,
+.button[aria-disabled=true] {
+  color: #8d8d8d;
+  cursor: not-allowed;
+  background-color: #f7f7f7;
+  border-color: #d8d8d8;
+}
+
+.button__icon {
+  flex: 0 0 24px;
+  width: 24px;
+  height: 24px;
+  margin-right: 8px;
+}
+
+/*
+ * Description générale :
+ * Fondations typographiques communes à toute l'interface Voisin.
+ * Rôle :
+ * Appliquer la police Inter et les niveaux de texte relevés dans la maquette Figma.
+ * Tâches :
+ * Définir le texte courant, les titres principaux et les textes secondaires réutilisables.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
+ */
+/*
+ * Description générale :
+ * Dimensions partagées des pictogrammes de l'interface.
+ * Rôle :
+ * Afficher les ressources d'icônes fournies sans les déformer.
+ * Tâches :
+ * Normaliser les tailles, l'alignement et les boutons d'icône transparents.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et les images du dossier assets/images/icons.
+ */
+.icon {
+  display: block;
+  flex: 0 0 24px;
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+.icon--small {
+  flex-basis: 16px;
+  width: 16px;
+  height: 16px;
+}
+
+.icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  color: #2c2420;
+  background: transparent;
+  border: 0;
+}
+
+.status-dot {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  background-color: #8d8d8d;
+  border-radius: 50%;
+}
+
+.status-dot--online {
+  background-color: #1ba030;
+}
+
+/*
+ * Description générale :
+ * Fondations typographiques communes à toute l'interface Voisin.
+ * Rôle :
+ * Appliquer la police Inter et les niveaux de texte relevés dans la maquette Figma.
+ * Tâches :
+ * Définir le texte courant, les titres principaux et les textes secondaires réutilisables.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
+ */
+/*
+ * Description générale :
+ * Avatars et image de couverture de profil issus des composants Figma.
+ * Rôle :
+ * Cadrer les photos des membres sans déformation dans chaque format validé.
+ * Tâches :
+ * Gérer les formats 36, 40, 48, 60 et 100 pixels ainsi que la couverture de 120 pixels.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et est partagé par les cartes de publication et les profils.
+ */
+.avatar {
+  position: relative;
+  flex: 0 0 60px;
+  width: 60px;
+  height: 60px;
+  overflow: hidden;
+  border-radius: 33px;
+}
+
+.avatar__image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+.avatar--small {
+  flex-basis: 36px;
+  width: 36px;
+  height: 36px;
+  border-radius: 18px;
+}
+
+.avatar--compact {
+  flex-basis: 40px;
+  width: 40px;
+  height: 40px;
+  border-radius: 24px;
+}
+
+.avatar--medium {
+  flex-basis: 48px;
+  width: 48px;
+  height: 48px;
+  border-radius: 24px;
+}
+
+.avatar--profile {
+  flex-basis: 100px;
+  width: 100px;
+  height: 100px;
+  border-radius: 33px;
+}
+
+.avatar--cover {
+  flex-basis: 120px;
+  width: 100%;
+  height: 120px;
+  border-radius: 33px;
+}
+
+/*
+ * Description générale :
+ * Fondations typographiques communes à toute l'interface Voisin.
+ * Rôle :
+ * Appliquer la police Inter et les niveaux de texte relevés dans la maquette Figma.
+ * Tâches :
+ * Définir le texte courant, les titres principaux et les textes secondaires réutilisables.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
+ */
+/*
+ * Description générale :
+ * Badges de visibilité, de statut et sélecteur de visibilité conformes à Figma.
+ * Rôle :
+ * Identifier les contenus et représenter les choix courts sous forme de pilules.
+ * Tâches :
+ * Définir les badges avec icône et les états actif ou inactif des choix public et amis.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et accompagne les cartes et éditeurs de publication.
+ */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 4px 8px;
+  overflow: hidden;
+  color: #c95f30;
+  font-family: "Inter", Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: normal;
+  white-space: nowrap;
+  background-color: #f0e8e3;
+  border-radius: 42px;
+}
+
+.badge__icon {
+  flex: 0 0 24px;
+  width: 24px;
+  height: 24px;
+}
+
+.badge__icon img,
+.badge__icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.badge--success {
+  color: #1ba030;
+  background-color: #edfced;
+}
+
+.badge--danger {
+  color: #b94848;
+  background-color: #fff2f2;
+}
+
+.badge--info {
+  color: #3366cc;
+  background-color: #edf2ff;
+}
+
+.badge--warning {
+  color: #996633;
+  background-color: #fff7eb;
+}
+
+.visibility-selector {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.visibility-selector__label {
+  color: #2c2420;
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.visibility-selector__options {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.visibility-selector__option {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 14px;
+  overflow: hidden;
+  color: #2c2420;
+  font-family: "Inter", Arial, sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: normal;
+  white-space: nowrap;
+  cursor: pointer;
+  background-color: #faf7f5;
+  border: 0;
+  border-radius: 20px;
+}
+
+.visibility-selector__option--active,
+.visibility-selector__option[aria-pressed=true] {
+  color: #ffffff;
+  background-color: #c95f30;
+}
+
+/*
+ * Description générale :
+ * Fondations typographiques communes à toute l'interface Voisin.
+ * Rôle :
+ * Appliquer la police Inter et les niveaux de texte relevés dans la maquette Figma.
+ * Tâches :
+ * Définir le texte courant, les titres principaux et les textes secondaires réutilisables.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
+ */
+/*
+ * Description générale :
+ * Champs, zones de texte, téléversements et groupes d'actions des formulaires Figma.
+ * Rôle :
+ * Fournir une structure visuelle commune aux formulaires Symfony rendus avec Twig.
+ * Tâches :
+ * Styliser les libellés, contrôles, erreurs, aperçus de fichiers et alignements de boutons.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et sert aux éditeurs de publication et de profil.
+ */
+.form-field {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  width: 100%;
+}
+
+.form-field__label {
+  color: #2c2420;
+  font-family: "Inter", Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.form-field__control {
+  width: 100%;
+  height: 44px;
+  padding: 12px;
+  overflow: hidden;
+  color: #2c2420;
+  font-family: "Inter", Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: normal;
+  background-color: #ffffff;
+  border: 1px solid #d8d8d8;
+  border-radius: 8px;
+  outline: 0;
+}
+
+.form-field__control::placeholder {
+  color: #8d8d8d;
+  opacity: 1;
+}
+
+.form-field__control--textarea {
+  height: 120px;
+  padding: 16px;
+  resize: none;
+}
+
+.form-field--invalid .form-field__control,
+.form-field__control[aria-invalid=true] {
+  border-color: #b94848;
+}
+
+.form-field__error {
+  color: #b94848;
+  font-family: "Inter", Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.form-actions {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.file-upload {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.file-upload__label {
+  color: #2c2420;
+  font-family: "Inter", Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.file-upload__zone {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 300px;
+  min-height: 51px;
+  padding: 16px;
+  overflow: hidden;
+  color: #8d8d8d;
+  font-family: "Inter", Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: normal;
+  text-align: center;
+  cursor: pointer;
+  background-color: #faf7f5;
+  border: 1px solid #d8d8d8;
+  border-radius: 10px;
+}
+
+.file-upload__input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.file-upload__preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 300px;
+  min-height: 137px;
+  padding: 16px;
+  overflow: hidden;
+  background-color: #faf7f5;
+  border: 1px solid #d8d8d8;
+  border-radius: 10px;
+}
+
+.file-upload__preview-image {
+  width: 120px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.file-upload__filename {
+  color: #8d8d8d;
+  font-family: "Inter", Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.file-upload__error {
+  color: #b94848;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.file-upload--avatar {
+  width: 200px;
+}
+
+.file-upload--avatar .file-upload__zone,
+.file-upload--avatar .file-upload__preview {
+  width: 200px;
+  height: 120px;
+  min-height: 120px;
+  padding: 0;
+  border-radius: 12px;
+}
+
+.file-upload--avatar .file-upload__preview-image {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+}
+
+.file-upload--avatar.file-upload--invalid {
+  min-height: 168px;
+}
+
+/*
+ * Description générale :
+ * Fondations typographiques communes à toute l'interface Voisin.
+ * Rôle :
+ * Appliquer la police Inter et les niveaux de texte relevés dans la maquette Figma.
+ * Tâches :
+ * Définir le texte courant, les titres principaux et les textes secondaires réutilisables.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
+ */
+/*
+ * Description générale :
+ * Messages d'information, de succès, d'avertissement et d'erreur de la maquette.
+ * Rôle :
+ * Présenter clairement le résultat d'une action ou une limitation fonctionnelle.
+ * Tâches :
+ * Appliquer les fonds, bordures, espacements et couleurs propres à chaque état.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et s'intègre aux pages et formulaires concernés.
+ */
+.alert {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 49px;
+  padding: 16px;
+  overflow: hidden;
+  font-family: "Inter", Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: normal;
+  border-radius: 8px;
+}
+
+.alert--danger {
+  min-height: 51px;
+  color: #b94848;
+  background-color: #fff2f2;
+  border: 1px solid #b94848;
+}
+
+.alert--success {
+  min-height: 51px;
+  color: #1ba030;
+  background-color: #edfced;
+  border: 1px solid #1ba030;
+}
+
+.alert--info {
+  color: #3366cc;
+  background-color: #edf2ff;
+}
+
+.alert--warning {
+  color: #996633;
+  background-color: #fff7eb;
+}
+
+.alert--pending {
+  color: #c95f30;
+  font-weight: 400;
+  background-color: #fffaed;
+}
+
+/*
+ * Description générale :
+ * Fondations typographiques communes à toute l'interface Voisin.
+ * Rôle :
+ * Appliquer la police Inter et les niveaux de texte relevés dans la maquette Figma.
+ * Tâches :
+ * Définir le texte courant, les titres principaux et les textes secondaires réutilisables.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
+ */
+/*
+ * Description générale :
+ * État vide générique reproduisant les panneaux sans contenu de la maquette Figma.
+ * Rôle :
+ * Informer l'utilisateur lorsqu'une liste ou un profil ne contient aucun élément visible.
+ * Tâches :
+ * Centrer le titre et la description dans une surface blanche espacée de 131 pixels de haut.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et est employé dans les pages de profil et les listes.
+ */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 131px;
+  padding: 40px;
+  overflow: hidden;
+  text-align: center;
+  background-color: #ffffff;
+  border-radius: 12px;
+}
+
+.empty-state__title {
+  margin: 0;
+  color: #2c2420;
+  font-family: "Inter", Arial, sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: normal;
+}
+
+.empty-state__description {
+  margin: 0;
+  color: #8d8d8d;
+  font-family: "Inter", Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: normal;
+}
+
+/*
+ * Description générale :
+ * Fondations typographiques communes à toute l'interface Voisin.
+ * Rôle :
+ * Appliquer la police Inter et les niveaux de texte relevés dans la maquette Figma.
+ * Tâches :
+ * Définir le texte courant, les titres principaux et les textes secondaires réutilisables.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
+ */
+/*
+ * Description générale :
+ * Filtres du fil d'actualité.
+ * Rôle :
+ * Reproduire la rangée de libellé et de pastilles de filtrage de la maquette.
+ * Tâches :
+ * Gérer les dimensions, espacements et états actif et inactif des filtres.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et s'affiche dans resources/scss/pages/_feed.scss.
+ */
+.feed-filters {
+  display: flex;
+  align-items: center;
+  width: 844px;
+  height: 36px;
+  gap: 12px;
+}
+
+.feed-filters__label {
+  color: #2c2420;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.feed-filters__list {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.feed-filters__item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  padding: 10px 16px;
+  color: #2c2420;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  background-color: #faf7f5;
+  border: 0;
+  border-radius: 20px;
+}
+
+.feed-filters__item:nth-child(1) {
+  width: 75px;
+}
+
+.feed-filters__item:nth-child(2) {
+  width: 94px;
+}
+
+.feed-filters__item:nth-child(3) {
+  width: 141px;
+}
+
+.feed-filters__item--active {
+  color: #ffffff;
+  background-color: #c95f30;
+}
+
+/*
+ * Description générale :
+ * Fondations typographiques communes à toute l'interface Voisin.
+ * Rôle :
+ * Appliquer la police Inter et les niveaux de texte relevés dans la maquette Figma.
+ * Tâches :
+ * Définir le texte courant, les titres principaux et les textes secondaires réutilisables.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
+ */
+/*
+ * Description générale :
+ * Zone de création rapide d'une publication dans le fil d'actualité.
+ * Rôle :
+ * Reproduire la carte de saisie, les actions de média et de visibilité et le bouton de partage.
+ * Tâches :
+ * Positionner l'avatar, le champ de contenu et les commandes selon les dimensions Figma.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss, les boutons et les avatars du dossier components.
+ */
+.post-composer {
+  display: flex;
+  flex-direction: column;
+  width: 844px;
+  height: 174px;
+  padding: 20px;
+  gap: 12px;
+  overflow: hidden;
+  background-color: #faf7f5;
+  border-radius: 12px;
+}
+
+.post-composer__editor {
+  display: flex;
+  align-items: flex-start;
+  width: 804px;
+  height: 80px;
+  gap: 12px;
+}
+
+.post-composer__avatar {
+  flex: 0 0 48px;
+  width: 48px;
+  height: 48px;
+  overflow: hidden;
+  border-radius: 24px;
+  object-fit: cover;
+}
+
+.post-composer__textarea {
+  flex: 0 0 744px;
+  width: 744px;
+  height: 80px;
+  padding: 12px;
+  resize: none;
+  color: #2c2420;
+  font-family: "Inter", Arial, sans-serif;
+  font-size: 14px;
+  background-color: #ffffff;
+  border: 1px solid #d8d8d8;
+  border-radius: 8px;
+  outline: 0;
+}
+
+.post-composer__textarea::placeholder {
+  color: #8d8d8d;
+  opacity: 1;
+}
+
+.post-composer__actions {
+  display: flex;
+  align-items: center;
+  width: 804px;
+  height: 42px;
+  gap: 12px;
+}
+
+.post-composer__photo,
+.post-composer__visibility {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 42px;
+  gap: 8px;
+  color: #2c2420;
+  font-size: 14px;
+  background-color: #ffffff;
+  border: 1px solid #d8d8d8;
+  border-radius: 8px;
+}
+
+.post-composer__photo {
+  width: 155px;
+}
+
+.post-composer__visibility {
+  width: 156px;
+}
+
+.post-composer__submit {
+  width: 106px;
+  height: 35px;
+  margin-left: auto;
+}
+
+/*
+ * Description générale :
+ * Fondations typographiques communes à toute l'interface Voisin.
+ * Rôle :
+ * Appliquer la police Inter et les niveaux de texte relevés dans la maquette Figma.
+ * Tâches :
+ * Définir le texte courant, les titres principaux et les textes secondaires réutilisables.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
+ */
+/*
+ * Description générale :
+ * Panneau des amis actuellement en ligne.
+ * Rôle :
+ * Reproduire la troisième colonne du fil d'actualité.
+ * Tâches :
+ * Dimensionner le panneau et aligner les avatars, noms et indicateurs de présence.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et se place dans resources/scss/layout/_app-shell.scss.
+ */
+.online-friends {
+  display: flex;
+  flex-direction: column;
+  width: 240px;
+  height: 189px;
+  padding: 20px;
+  gap: 12px;
+  overflow: hidden;
+  background-color: #ffffff;
+  border-radius: 12px;
+}
+
+.online-friends__title {
+  margin: 0;
+  color: #2c2420;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.online-friends__list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.online-friends__item {
+  display: flex;
+  align-items: center;
+  min-height: 32px;
+  gap: 10px;
+}
+
+.online-friends__avatar {
+  flex: 0 0 32px;
+  width: 32px;
+  height: 32px;
+  overflow: hidden;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.online-friends__name {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  color: #2c2420;
+  font-size: 13px;
+  font-weight: 400;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.online-friends__status {
+  flex: 0 0 8px;
+  width: 8px;
+  height: 8px;
+  background-color: #1ba030;
+  border-radius: 50%;
+}
+
+/*
+ * Description générale :
+ * Fondations typographiques communes à toute l'interface Voisin.
+ * Rôle :
+ * Appliquer la police Inter et les niveaux de texte relevés dans la maquette Figma.
+ * Tâches :
+ * Définir le texte courant, les titres principaux et les textes secondaires réutilisables.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
+ */
+/*
+ * Description générale :
+ * Carte de publication et variantes dimensionnelles issues des écrans Figma.
+ * Rôle :
+ * Afficher l'auteur, la visibilité, le texte, le média et les actions sociales d'une publication.
+ * Tâches :
+ * Reproduire les cartes de l'accueil, du fil et du profil ainsi que l'état aimé et les actions du propriétaire.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et s'appuie sur les composants avatar et badge.
+ */
+.publication-card {
+  position: relative;
+  flex: 0 0 395px;
+  width: 395px;
+  height: 455px;
+  overflow: hidden;
+  color: #2c2420;
+  font-family: "Inter", Arial, sans-serif;
+  background-color: #ffffff;
+  border: 1px solid #d8d8d8;
+  border-radius: 16px;
+}
+
+.publication-card__header {
+  position: absolute;
+  top: 15px;
+  left: -1px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 389px;
+  height: 60px;
+  padding: 0 16px;
+}
+
+.publication-card__author {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.publication-card__author-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 134px;
+  height: 40px;
+  white-space: nowrap;
+}
+
+.publication-card__author-name,
+.publication-card__date,
+.publication-card__text,
+.publication-card__action-count {
+  margin: 0;
+  line-height: normal;
+}
+
+.publication-card__author-name {
+  color: #2c2420;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.publication-card__date {
+  color: #8d8d8d;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.publication-card__text {
+  position: absolute;
+  top: 109px;
+  left: 20px;
+  width: 352px;
+  max-height: 58px;
+  overflow: hidden;
+  color: #2c2420;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.publication-card__media {
+  position: absolute;
+  top: 188px;
+  left: 17px;
+  width: 355px;
+  height: 210px;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.publication-card__media-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+.publication-card__report,
+.publication-card__like,
+.publication-card__comments {
+  position: absolute;
+  top: 416px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 24px;
+  padding: 0;
+  color: #000000;
+  font-family: "Inter", Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: normal;
+  text-decoration: none;
+  background: transparent;
+  border: 0;
+}
+
+.publication-card__report {
+  left: 348px;
+  width: 24px;
+}
+
+.publication-card__like {
+  left: 21px;
+}
+
+.publication-card__comments {
+  left: 101px;
+}
+
+.publication-card__action-icon {
+  display: block;
+  flex: 0 0 24px;
+  width: 24px;
+  height: 24px;
+}
+
+.publication-card__action-icon img,
+.publication-card__action-icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.publication-card__like--active .publication-card__action-icon,
+.publication-card__like[aria-pressed=true] .publication-card__action-icon {
+  color: #c95f30;
+}
+
+.publication-card__like--active .publication-card__action-icon svg,
+.publication-card__like--active .publication-card__action-icon path,
+.publication-card__like[aria-pressed=true] .publication-card__action-icon svg,
+.publication-card__like[aria-pressed=true] .publication-card__action-icon path {
+  fill: currentColor;
+  stroke: currentColor;
+}
+
+.publication-card__action-count {
+  color: #000000;
+}
+
+.publication-card__owner-actions {
+  position: absolute;
+  top: 420px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 16px;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: normal;
+  white-space: nowrap;
+}
+
+.publication-card__owner-action {
+  color: #c95f30;
+  text-decoration: none;
+}
+
+.publication-card__owner-action--delete {
+  color: #b94848;
+}
+
+.publication-card--feed {
+  flex-basis: 844px;
+  width: 844px;
+}
+
+.publication-card--feed .publication-card__header {
+  left: 19px;
+  width: 804px;
+}
+
+.publication-card--feed .publication-card__text {
+  left: 19px;
+  width: 804px;
+}
+
+.publication-card--feed .publication-card__media {
+  left: 19px;
+  width: 804px;
+}
+
+.publication-card--feed .publication-card__report {
+  left: 19px;
+}
+
+.publication-card--feed .publication-card__like {
+  left: 53px;
+}
+
+.publication-card--feed .publication-card__comments {
+  left: 111px;
+}
+
+.publication-card--profile-third {
+  flex-basis: 358.667px;
+  width: 358.667px;
+}
+
+.publication-card--profile-third .publication-card__header {
+  left: 9px;
+  width: 339px;
+}
+
+.publication-card--profile-third .publication-card__text {
+  left: 9px;
+  width: 339px;
+}
+
+.publication-card--profile-third .publication-card__media {
+  left: 9px;
+  width: 339px;
+}
+
+.publication-card--profile-third .publication-card__report {
+  left: 9px;
+}
+
+.publication-card--profile-third .publication-card__like {
+  left: 43px;
+}
+
+.publication-card--profile-third .publication-card__comments {
+  left: 91px;
+}
+
+.publication-card--profile-half {
+  flex-basis: 546px;
+  width: 546px;
+}
+
+.publication-card--profile-half .publication-card__header {
+  left: 9px;
+  width: 389px;
+}
+
+.publication-card--profile-half .publication-card__text {
+  left: 9px;
+  width: 352px;
+}
+
+.publication-card--profile-half .publication-card__media {
+  left: 9px;
+  width: 355px;
+}
+
+.publication-card--profile-half .publication-card__report {
+  left: 9px;
+}
+
+.publication-card--profile-half .publication-card__like {
+  left: 43px;
+}
+
+.publication-card--profile-half .publication-card__comments {
+  left: 91px;
+}
+
+.publication-card--profile-compact {
+  flex-basis: 542px;
+  width: 542px;
+}
+
+/*
+ * Description générale :
+ * Fondations typographiques communes à toute l'interface Voisin.
+ * Rôle :
+ * Appliquer la police Inter et les niveaux de texte relevés dans la maquette Figma.
+ * Tâches :
+ * Définir le texte courant, les titres principaux et les textes secondaires réutilisables.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
+ */
+/*
+ * Description générale :
+ * Carte desktop représentant une demande d'amitié reçue.
+ * Rôle :
+ * Positionner précisément l'avatar, l'identité et les deux décisions proposées au membre.
+ * Tâches :
+ * Reproduire la carte de 1108 × 127 px et ses actions Refuser et Accepter.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et compose resources/scss/pages/_friends.scss.
+ */
+.friend-request-card {
+  position: relative;
+  flex: 0 0 127px;
+  width: 1108px;
+  height: 127px;
+  overflow: hidden;
+  background-color: #faf7f5;
+  border-radius: 16px;
+}
+
+.friend-request-card__avatar {
+  position: absolute;
+  top: 27px;
+  left: 32px;
+  width: 73px;
+  height: 73px;
+  overflow: hidden;
+  border-radius: 50%;
+}
+
+.friend-request-card__avatar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.friend-request-card__identity {
+  position: absolute;
+  top: 43px;
+  left: 122px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  align-items: flex-start;
+  overflow: hidden;
+  line-height: normal;
+  white-space: nowrap;
+}
+
+.friend-request-card__name {
+  color: #000000;
+  font-family: "Inter", Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.friend-request-card__date {
+  color: #8d8d8d;
+  font-family: "Inter", Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.friend-request-card__actions {
+  position: absolute;
+  top: 45px;
+  left: 418px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.friend-request-card__decline,
+.friend-request-card__accept {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 20px;
+  overflow: hidden;
+  border-radius: 42px;
+  font-family: "Inter", Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: normal;
+  white-space: nowrap;
+}
+
+.friend-request-card__decline {
+  width: 135px;
+  height: 37px;
+  color: #2c2420;
+  background-color: #faf7f5;
+  border: 1px solid #2c2420;
+}
+
+.friend-request-card__accept {
+  width: 155px;
+  height: 35px;
+  color: #ffffff;
+  background-color: #c95f30;
+  border: 0;
+}
+
+/*
+ * Description générale :
+ * Fondations typographiques communes à toute l'interface Voisin.
+ * Rôle :
+ * Appliquer la police Inter et les niveaux de texte relevés dans la maquette Figma.
+ * Tâches :
+ * Définir le texte courant, les titres principaux et les textes secondaires réutilisables.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
+ */
+/*
+ * Description générale :
+ * Carte desktop d'un ami en ligne ou hors ligne.
+ * Rôle :
+ * Présenter le portrait, le nom et l'indicateur de présence dans les deux grilles d'amis.
+ * Tâches :
+ * Reproduire la carte de 238 px de haut, le portrait de 119 px et le statut superposé.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et compose resources/scss/pages/_friends.scss.
+ */
+.friend-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 34px;
+  align-items: center;
+  width: 100%;
+  height: 238px;
+  min-width: 0;
+  padding: 32px;
+  overflow: hidden;
+  background-color: #faf7f5;
+  border: 1px solid #d8d8d8;
+  border-radius: 16px;
+}
+
+.friend-card__portrait {
+  flex: 0 0 119px;
+  width: 119px;
+  height: 119px;
+  overflow: hidden;
+  border-radius: 50%;
+}
+
+.friend-card__portrait-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.friend-card__name {
+  width: 100%;
+  overflow: hidden;
+  color: #2c2420;
+  font-family: "Inter", Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: normal;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.friend-card__status {
+  position: absolute;
+  top: 139px;
+  left: calc(50% + 46.5px);
+  width: 12px;
+  height: 12px;
+  overflow: hidden;
+  border-radius: 50%;
+}
+
+.friend-card__status-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.friend-card__status--online {
+  background-color: #1ba030;
+}
+
+.friend-card__status--offline {
+  background-color: #8d8d8d;
+}
+
+/*
+ * Description générale :
+ * Fondations typographiques communes à toute l'interface Voisin.
+ * Rôle :
+ * Appliquer la police Inter et les niveaux de texte relevés dans la maquette Figma.
+ * Tâches :
+ * Définir le texte courant, les titres principaux et les textes secondaires réutilisables.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
+ */
+/*
+ * Description générale :
+ * Résumé d'une publication affiché au-dessus de sa liste de commentaires.
+ * Rôle :
+ * Regrouper l'auteur, la visibilité, le texte et les statistiques de la publication.
+ * Tâches :
+ * Gérer les variantes complète de 145 px et compacte de 117 px sans modifier leur géométrie.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et compose resources/scss/pages/_comments.scss.
+ */
+.publication-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 1108px;
+  height: 145px;
+  padding: 20px;
+  overflow: hidden;
+  color: #2c2420;
+  background-color: #faf7f5;
+  border-radius: 12px;
+  font-family: "Inter", Arial, sans-serif;
+  line-height: normal;
+}
+
+.publication-summary--compact {
+  height: 117px;
+}
+
+.publication-summary__header {
+  display: flex;
+  flex: 0 0 48px;
+  gap: 10px;
+  align-items: center;
+  width: 1068px;
+  height: 48px;
+  overflow: hidden;
+}
+
+.publication-summary__avatar {
+  flex: 0 0 48px;
+  width: 48px;
+  height: 48px;
+  overflow: hidden;
+  border-radius: 24px;
+}
+
+.publication-summary__avatar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.publication-summary__identity {
+  display: flex;
+  flex: 0 0 492px;
+  flex-direction: column;
+  gap: 2px;
+  align-items: flex-start;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.publication-summary__author {
+  max-width: 100%;
+  overflow: hidden;
+  font-size: 15px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+}
+
+.publication-summary__date {
+  color: #8d8d8d;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.publication-summary__visibility {
+  display: flex;
+  flex: 0 0 508px;
+  gap: 4px;
+  align-items: center;
+  justify-content: center;
+  width: 508px;
+  min-width: 0;
+  padding: 4px 8px;
+  overflow: hidden;
+  color: #c95f30;
+  background-color: #f0e8e3;
+  border-radius: 42px;
+  font-size: 16px;
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.publication-summary__visibility-icon {
+  flex: 0 0 24px;
+  width: 24px;
+  height: 24px;
+}
+
+.publication-summary__text {
+  flex: 0 0 auto;
+  width: 100%;
+  overflow: hidden;
+  font-size: 14px;
+  font-weight: 400;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.publication-summary__stats {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  width: 100%;
+  overflow: hidden;
+  color: #8d8d8d;
+  font-size: 13px;
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.publication-summary--compact .publication-summary__stats {
+  display: none;
+}
+
+/*
+ * Description générale :
+ * Fondations typographiques communes à toute l'interface Voisin.
+ * Rôle :
+ * Appliquer la police Inter et les niveaux de texte relevés dans la maquette Figma.
+ * Tâches :
+ * Définir le texte courant, les titres principaux et les textes secondaires réutilisables.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
+ */
+/*
+ * Description générale :
+ * Composants des listes, actions, éditions et formulaires de commentaires.
+ * Rôle :
+ * Reproduire tous les états de commentaire prévus pour les membres, les auteurs et les administrateurs.
+ * Tâches :
+ * Dimensionner les cartes de 97, 123 et 168 px ainsi que les formulaires valides et invalides.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et compose resources/scss/pages/_comments.scss.
+ */
+.comment-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 1108px;
+  height: 97px;
+  padding: 16px;
+  overflow: hidden;
+  color: #2c2420;
+  background-color: #ffffff;
+  border: 1px solid #d8d8d8;
+  border-radius: 10px;
+  font-family: "Inter", Arial, sans-serif;
+  line-height: normal;
+}
+
+.comment-card--manageable {
+  height: 123px;
+}
+
+.comment-card--editing {
+  height: 168px;
+  border: 2px solid #c95f30;
+}
+
+.comment-card__header {
+  display: flex;
+  flex: 0 0 36px;
+  gap: 10px;
+  align-items: center;
+  width: 100%;
+  height: 36px;
+  overflow: hidden;
+}
+
+.comment-card__avatar {
+  flex: 0 0 36px;
+  width: 36px;
+  height: 36px;
+  overflow: hidden;
+  border-radius: 18px;
+}
+
+.comment-card__avatar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.comment-card__identity {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 2px;
+  align-items: flex-start;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.comment-card__author {
+  max-width: 100%;
+  overflow: hidden;
+  font-size: 14px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+}
+
+.comment-card--editing .comment-card__author {
+  color: #c95f30;
+}
+
+.comment-card__date {
+  color: #8d8d8d;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.comment-card__content {
+  width: 100%;
+  overflow: hidden;
+  font-size: 14px;
+  font-weight: 400;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.comment-card__actions {
+  display: flex;
+  flex: 0 0 16px;
+  gap: 12px;
+  align-items: flex-start;
+  width: 100%;
+  height: 16px;
+  overflow: hidden;
+}
+
+.comment-card__action {
+  padding: 0;
+  color: #c95f30;
+  background: none;
+  border: 0;
+  font-family: "Inter", Arial, sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: normal;
+  white-space: nowrap;
+}
+
+.comment-card__action--delete {
+  color: #b94848;
+}
+
+.comment-card--publication-owner .comment-card__action--delete {
+  color: #c95f30;
+}
+
+.comment-card__edit-input {
+  flex: 0 0 41px;
+  width: 1072px;
+  height: 41px;
+  padding: 12px;
+  color: #2c2420;
+  background-color: #faf7f5;
+  border: 0;
+  border-radius: 8px;
+  font-family: "Inter", Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.comment-card__edit-actions {
+  display: flex;
+  flex: 0 0 35px;
+  gap: 12px;
+  align-items: center;
+  width: 1072px;
+  height: 35px;
+  overflow: hidden;
+}
+
+.comment-card__save {
+  display: flex;
+  flex: 0 0 934px;
+  align-items: center;
+  justify-content: center;
+  width: 934px;
+  height: 35px;
+  padding: 8px 20px;
+  color: #ffffff;
+  background-color: #c95f30;
+  border: 0;
+  border-radius: 42px;
+  font-family: "Inter", Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: normal;
+  white-space: nowrap;
+}
+
+.comment-card__cancel,
+.comment-card__delete {
+  padding: 0;
+  background: none;
+  border: 0;
+  font-family: "Inter", Arial, sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: normal;
+  white-space: nowrap;
+}
+
+.comment-card__cancel {
+  color: #c95f30;
+}
+
+.comment-card__delete {
+  color: #b94848;
+}
+
+.comment-form {
+  display: flex;
+  flex-direction: column;
+  width: 1108px;
+  height: 44px;
+  font-family: "Inter", Arial, sans-serif;
+  line-height: normal;
+}
+
+.comment-form--invalid {
+  gap: 8px;
+  height: 67px;
+}
+
+.comment-form__row {
+  display: grid;
+  flex: 0 0 44px;
+  grid-template-columns: 36px 519px 533px;
+  gap: 10px;
+  align-items: center;
+  width: 1108px;
+  height: 44px;
+}
+
+.comment-form__avatar {
+  width: 36px;
+  height: 36px;
+  overflow: hidden;
+  border-radius: 18px;
+}
+
+.comment-form__avatar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.comment-form__input {
+  width: 519px;
+  height: 44px;
+  padding: 12px;
+  color: #2c2420;
+  background-color: #ffffff;
+  border: 1px solid #d8d8d8;
+  border-radius: 8px;
+  font-family: "Inter", Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.comment-form__input::placeholder {
+  color: #8d8d8d;
+  opacity: 1;
+}
+
+.comment-form--invalid .comment-form__input {
+  border-color: #b94848;
+}
+
+.comment-form__submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 533px;
+  height: 35px;
+  padding: 8px 20px;
+  color: #ffffff;
+  background-color: #c95f30;
+  border: 0;
+  border-radius: 42px;
+  font-family: "Inter", Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: normal;
+  white-space: nowrap;
+}
+
+.comment-form__error {
+  width: 519px;
+  margin-left: 46px;
+  color: #b94848;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: normal;
+}
+
+/*
+ * Description générale :
+ * Fondations typographiques communes à toute l'interface Voisin.
+ * Rôle :
+ * Appliquer la police Inter et les niveaux de texte relevés dans la maquette Figma.
+ * Tâches :
+ * Définir le texte courant, les titres principaux et les textes secondaires réutilisables.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
+ */
+/*
+ * Description générale :
+ * Composants du tableau de bord administrateur et de la modération.
+ * Rôle :
+ * Styliser le tableau des membres et les lignes de publication administratives.
+ * Tâches :
+ * Respecter les dimensions du tableau et des variantes de modération ou de suppression.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss, complète layout/_sidebar.scss et compose pages/_admin.scss.
+ */
+.members-table {
+  display: flex;
+  flex-direction: column;
+  width: 1108px;
+  height: 266px;
+  overflow: hidden;
+  background-color: #ffffff;
+  border: 1px solid #d8d8d8;
+  border-radius: 12px;
+  font-family: "Inter", Arial, sans-serif;
+  line-height: normal;
+}
+
+.members-table__row {
+  display: grid;
+  flex: 0 0 44px;
+  grid-template-columns: repeat(4, 1fr);
+  width: 100%;
+  height: 44px;
+}
+
+.members-table__row--head {
+  background-color: #faf7f5;
+  border-radius: 8px;
+}
+
+.members-table__cell {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  height: 44px;
+  padding: 0 12px;
+  overflow: hidden;
+  color: #2c2420;
+  border-right: 1px solid #d8d8d8;
+  border-bottom: 1px solid #d8d8d8;
+  font-size: 13px;
+  font-weight: 400;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.members-table__row--head .members-table__cell {
+  font-weight: 600;
+}
+
+.members-table__cell:last-child {
+  border-right: 0;
+}
+
+.members-table__row:last-child .members-table__cell {
+  border-bottom: 0;
+}
+
+.members-table__role--admin {
+  color: #c95f30;
+}
+
+.moderation-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 1108px;
+}
+
+.moderation-item {
+  display: flex;
+  flex: 0 0 90px;
+  gap: 12px;
+  align-items: center;
+  width: 1108px;
+  height: 90px;
+  padding: 16px;
+  overflow: hidden;
+  color: #2c2420;
+  background-color: #ffffff;
+  border: 1px solid #d8d8d8;
+  border-radius: 8px;
+  font-family: "Inter", Arial, sans-serif;
+  line-height: normal;
+}
+
+.moderation-item--deleted {
+  background-color: #f7f7f7;
+}
+
+.moderation-item__thumbnail {
+  flex: 0 0 336px;
+  width: 336px;
+  height: 40px;
+  overflow: hidden;
+  border-radius: 33px;
+}
+
+.moderation-item--deleted .moderation-item__thumbnail {
+  flex-basis: 491px;
+  width: 491px;
+}
+
+.moderation-item__thumbnail-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.moderation-item__details {
+  display: flex;
+  flex: 0 0 336px;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-start;
+  width: 336px;
+  height: 56px;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.moderation-item--deleted .moderation-item__details {
+  flex-basis: 491px;
+  width: 491px;
+}
+
+.moderation-item__author,
+.moderation-item__excerpt,
+.moderation-item__date {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.moderation-item__author {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.moderation-item__excerpt {
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.moderation-item__date {
+  color: #8d8d8d;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.moderation-item--deleted .moderation-item__excerpt {
+  color: #8d8d8d;
+}
+
+.moderation-item__actions {
+  display: flex;
+  flex: 0 0 378px;
+  gap: 12px;
+  align-items: center;
+  width: 378px;
+  height: 37px;
+  overflow: hidden;
+}
+
+.moderation-item__comments,
+.moderation-item__delete {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 37px;
+  padding: 8px 20px;
+  overflow: hidden;
+  border-radius: 42px;
+  font-size: 16px;
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.moderation-item__comments {
+  flex: 0 0 246px;
+  width: 246px;
+  color: #2c2420;
+  background-color: #faf7f5;
+  border: 1px solid #2c2420;
+}
+
+.moderation-item__delete {
+  flex: 0 0 120px;
+  width: 120px;
+  color: #2c2420;
+  background-color: #faf7f5;
+  border: 1px solid #2c2420;
+}
+
+.moderation-item--single-action .moderation-item__delete {
+  flex-basis: 378px;
+  width: 378px;
+}
+
+.moderation-item__status {
+  flex: 0 0 68px;
+  width: 68px;
+  overflow: hidden;
+  color: #b94848;
+  font-size: 13px;
+  font-weight: 500;
+  text-align: right;
+  white-space: nowrap;
+}
+
+/*
+ * Description générale :
+ * Fondations typographiques communes à toute l'interface Voisin.
+ * Rôle :
+ * Appliquer la police Inter et les niveaux de texte relevés dans la maquette Figma.
+ * Tâches :
+ * Définir le texte courant, les titres principaux et les textes secondaires réutilisables.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
+ */
+/*
+ * Description générale :
+ * Présentation publique de l'application Voisin avant authentification.
+ * Rôle :
+ * Reproduire le héros, les publications récentes et leur état vide définis dans Figma.
+ * Tâches :
+ * Dimensionner les sections, centrer les appels à l'action et organiser les cartes sur trois colonnes.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss ainsi que les boutons et cartes du dossier components.
+ */
+.public-home {
+  width: 100%;
+  background-color: #f0e8e3;
+}
+
+.public-home__hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 363px;
+  padding: 80px;
+  gap: 24px;
+  text-align: center;
+}
+
+.public-home__title {
+  width: 646px;
+  min-height: 96px;
+  margin: 0;
+  color: #2c2420;
+  font-size: 40px;
+  font-weight: 700;
+}
+
+.public-home__subtitle {
+  margin: 0;
+  color: #8d8d8d;
+  font-size: 18px;
+  font-weight: 400;
+}
+
+.public-home__actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 443px;
+  height: 37px;
+  gap: 16px;
+}
+
+.public-home__primary-action {
+  width: 233px;
+  height: 35px;
+}
+
+.public-home__secondary-action {
+  width: 194px;
+  height: 37px;
+}
+
+.public-home__recent {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 40px 100px;
+  gap: 24px;
+}
+
+.public-home__recent-title {
+  margin: 0;
+  color: #2c2420;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.public-home__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 395px);
+  width: 1233px;
+  gap: 24px;
+}
+
+.public-home__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 300px;
+  padding: 80px;
+  gap: 16px;
+  text-align: center;
+}
+
+.public-home__empty-title {
+  margin: 0;
+  color: #2c2420;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.public-home__empty-description {
+  margin: 0;
+  color: #8d8d8d;
+  font-size: 16px;
+}
+
+/*
+ * Description générale :
+ * Fondations typographiques communes à toute l'interface Voisin.
+ * Rôle :
+ * Appliquer la police Inter et les niveaux de texte relevés dans la maquette Figma.
+ * Tâches :
+ * Définir le texte courant, les titres principaux et les textes secondaires réutilisables.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
+ */
+/*
+ * Description générale :
+ * Pages publiques d'inscription et de connexion.
+ * Rôle :
+ * Reproduire les cartes de formulaires et leurs états vide, saisi, invalide et confirmé.
+ * Tâches :
+ * Centrer les formulaires et appliquer leurs largeurs et hauteurs spécifiques à chaque écran Figma.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et les composants de formulaire, bouton et alerte.
+ */
+.auth-page {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+  min-height: calc(100vh - 80px);
+  padding: 60px;
+  background-color: #f0e8e3;
+}
+
+.auth-card {
+  display: flex;
+  flex-direction: column;
+  width: 500px;
+  padding: 40px;
+  gap: 20px;
+  overflow: hidden;
+  background-color: #ffffff;
+  border-radius: 16px;
+}
+
+.auth-card--registration {
+  height: 756px;
+}
+
+.auth-card--registration-invalid {
+  height: 863px;
+}
+
+.auth-card--login {
+  width: 460px;
+  height: 417px;
+}
+
+.auth-card--login-with-alert {
+  width: 460px;
+  height: 488px;
+}
+
+.auth-card__heading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  text-align: center;
+}
+
+.auth-card__title {
+  margin: 0;
+  color: #2c2420;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.auth-card__subtitle {
+  margin: 0;
+  color: #8d8d8d;
+  font-size: 14px;
+}
+
+.auth-card__form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.auth-card--registration .auth-card__form {
+  width: 420px;
+}
+
+.auth-card--login .auth-card__form,
+.auth-card--login-with-alert .auth-card__form {
+  width: 380px;
+}
+
+.auth-card__submit {
+  align-self: center;
+}
+
+.auth-card__avatar-upload {
+  align-self: center;
+  width: 200px;
+}
+
+.auth-card--login .auth-card__submit,
+.auth-card--login-with-alert .auth-card__submit {
+  width: 141px;
+}
+
+.auth-card__alert--danger {
+  width: 432px;
+  margin-left: -26px;
+}
+
+.auth-card__alert--success {
+  width: 494px;
+  margin-left: -57px;
+  background-color: #f2fff2;
+}
+
+.auth-card__footer {
+  margin: 0;
+  color: #8d8d8d;
+  font-size: 14px;
+  text-align: center;
+}
+
+.auth-card__footer-link {
+  color: #c95f30;
+  text-decoration: none;
+}
+
+/*
+ * Description générale :
+ * Fondations typographiques communes à toute l'interface Voisin.
+ * Rôle :
+ * Appliquer la police Inter et les niveaux de texte relevés dans la maquette Figma.
+ * Tâches :
+ * Définir le texte courant, les titres principaux et les textes secondaires réutilisables.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
+ */
+/*
+ * Description générale :
+ * Compositions des différents états du fil d'actualité.
+ * Rôle :
+ * Assembler le compositeur, les filtres, les publications et l'état vide sur la colonne centrale.
+ * Tâches :
+ * Appliquer les espacements et variantes de filtre, de réaction et de navigation administrateur.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et les composants du fil d'actualité.
+ */
+.feed-page {
+  display: flex;
+  flex-direction: column;
+  width: 844px;
+  min-width: 0;
+  gap: 20px;
+  overflow: hidden;
+}
+
+.feed-page__posts {
+  display: flex;
+  flex-direction: column;
+  width: 844px;
+  gap: 20px;
+}
+
+.feed-page__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 844px;
+  height: 131px;
+  padding: 40px;
+  gap: 12px;
+  text-align: center;
+  background-color: #ffffff;
+  border-radius: 12px;
+}
+
+.feed-page__empty-title {
+  margin: 0;
+  color: #2c2420;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.feed-page__empty-description {
+  margin: 0;
+  color: #8d8d8d;
+  font-size: 14px;
+}
+
+.feed-page--liked .publication-card:first-child .publication-card__like {
+  color: #c95f30;
+}
+
+.feed-page--liked .publication-card:first-child .publication-card__action-icon {
+  color: #c95f30;
+}
+
+.feed-page--liked .publication-card:first-child .publication-card__action-icon svg,
+.feed-page--liked .publication-card:first-child .publication-card__action-icon path {
+  fill: currentColor;
+  stroke: currentColor;
+}
+
+/*
+ * Description générale :
+ * Fondations typographiques communes à toute l'interface Voisin.
+ * Rôle :
+ * Appliquer la police Inter et les niveaux de texte relevés dans la maquette Figma.
+ * Tâches :
+ * Définir le texte courant, les titres principaux et les textes secondaires réutilisables.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
+ */
+/*
+ * Description générale :
+ * Pages de création et de modification d'une publication des sections 05 et 06 de Figma.
+ * Rôle :
+ * Organiser le titre, le formulaire, les médias, la visibilité et les messages d'autorisation.
+ * Tâches :
+ * Reproduire les états initial, avec aperçu, invalide, image conservée, image retirée et accès refusé.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et les composants de formulaire, bouton, badge et alerte.
+ */
+.publication-editor {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.publication-editor__title {
+  margin: 0;
+  color: #2c2420;
+  font-family: "Inter", Arial, sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.publication-editor__form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+  width: 700px;
+  padding: 32px;
+  overflow: hidden;
+  background-color: #ffffff;
+  border-radius: 12px;
+}
+
+.publication-editor__form--initial {
+  height: 389px;
+}
+
+.publication-editor__form--with-preview {
+  height: 475px;
+}
+
+.publication-editor__form--invalid {
+  height: 424px;
+}
+
+.publication-editor__form--image-kept {
+  height: 413px;
+}
+
+.publication-editor__form--image-removed {
+  height: 407px;
+}
+
+.publication-editor__textarea {
+  width: 600px;
+  height: 120px;
+}
+
+.publication-editor__content-error {
+  margin: 0;
+  color: #b94848;
+  font-family: "Inter", Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.publication-editor__upload {
+  width: 300px;
+}
+
+.publication-editor__current-image {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 312px;
+  height: 100px;
+  overflow: hidden;
+}
+
+.publication-editor__current-image-preview {
+  flex: 0 0 150px;
+  width: 150px;
+  height: 100px;
+  object-fit: cover;
+  background-color: #d9d9d9;
+  border-radius: 8px;
+}
+
+.publication-editor__removed-image {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 212px;
+  min-height: 94px;
+  padding: 16px;
+  overflow: hidden;
+  background-color: #faf7f5;
+  border-radius: 10px;
+}
+
+.publication-editor__removed-image-label {
+  margin: 0;
+  color: #8d8d8d;
+  font-family: "Inter", Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.publication-editor__alert {
+  width: 700px;
+}
+
+.publication-editor__return-action {
+  align-self: center;
+}
+
+.publication-editor--unauthorized {
+  height: 157px;
+}
+
+/*
+ * Description générale :
+ * Fondations typographiques communes à toute l'interface Voisin.
+ * Rôle :
+ * Appliquer la police Inter et les niveaux de texte relevés dans la maquette Figma.
+ * Tâches :
+ * Définir le texte courant, les titres principaux et les textes secondaires réutilisables.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
+ */
+/*
+ * Description générale :
+ * Profil membre et formulaire de modification issus des sections 07 et 08 de Figma.
+ * Rôle :
+ * Structurer la présentation d'un membre, ses publications, ses relations et l'édition de ses informations.
+ * Tâches :
+ * Reproduire les profils propriétaire, ami, non-ami, demande reçue, état vide et tous les états du formulaire.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et les composants avatar, bouton, alerte, formulaire et publication.
+ */
+.profile-page {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.profile-page__summary {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  padding: 32px;
+  overflow: hidden;
+  background-color: #faf7f5;
+  border-radius: 12px;
+}
+
+.profile-page__summary--owner,
+.profile-page__summary--stranger {
+  height: 404px;
+}
+
+.profile-page__summary--friend,
+.profile-page__summary--request-sent,
+.profile-page__summary--request-received {
+  height: 406px;
+}
+
+.profile-page__summary--empty {
+  height: 353px;
+}
+
+.profile-page__cover {
+  width: 100%;
+  height: 120px;
+  overflow: hidden;
+  border-radius: 33px;
+}
+
+.profile-page__cover-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+.profile-page__name,
+.profile-page__biography,
+.profile-page__member-since,
+.profile-page__stat-value,
+.profile-page__stat-label {
+  margin: 0;
+  line-height: normal;
+}
+
+.profile-page__name {
+  color: #2c2420;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.profile-page__biography {
+  color: #2c2420;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.profile-page__member-since {
+  color: #8d8d8d;
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.profile-page__stats {
+  display: flex;
+  align-items: flex-start;
+  gap: 32px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.profile-page__stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.profile-page__stat-value {
+  color: #2c2420;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.profile-page__stat-label {
+  color: #8d8d8d;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.profile-page__actions {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.profile-page__relationship-message {
+  width: 100%;
+  height: 49px;
+}
+
+.profile-page__tabs {
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
+  height: 48px;
+  overflow: hidden;
+}
+
+.profile-page__tab {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  align-items: center;
+  min-width: 0;
+  padding: 12px 20px;
+  overflow: hidden;
+  color: #2c2420;
+  font-family: "Inter", Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: normal;
+  text-decoration: none;
+}
+
+.profile-page__tab--active,
+.profile-page__tab[aria-current=page] {
+  gap: 4px;
+  color: #c95f30;
+}
+
+.profile-page__tab-indicator {
+  width: 60px;
+  height: 3px;
+  background-color: #c95f30;
+  border-radius: 2px;
+}
+
+.profile-page__publications {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.profile-page__publication-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.profile-page__publication-row--member {
+  gap: 24px;
+}
+
+.profile-page__empty-state {
+  width: 100%;
+}
+
+.profile-editor {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.profile-editor__title {
+  margin: 0;
+  color: #2c2420;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.profile-editor__alert {
+  width: 700px;
+}
+
+.profile-editor__form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+  width: 600px;
+  padding: 32px;
+  overflow: hidden;
+  background-color: #ffffff;
+  border-radius: 12px;
+}
+
+.profile-editor__form--default {
+  height: 531px;
+}
+
+.profile-editor__form--photo-selected {
+  height: 558px;
+}
+
+.profile-editor__form--invalid {
+  height: 573px;
+}
+
+.profile-editor__photo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 173px;
+  overflow: hidden;
+}
+
+.profile-editor__filename {
+  margin: 0;
+  color: #8d8d8d;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.profile-editor__field {
+  width: 520px;
+}
+
+.profile-editor__actions {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+/*
+ * Description générale :
+ * Fondations typographiques communes à toute l'interface Voisin.
+ * Rôle :
+ * Appliquer la police Inter et les niveaux de texte relevés dans la maquette Figma.
+ * Tâches :
+ * Définir le texte courant, les titres principaux et les textes secondaires réutilisables.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
+ */
+/*
+ * Description générale :
+ * Compositions desktop des demandes d'amitié et de la liste des amis.
+ * Rôle :
+ * Organiser les titres, alertes, listes, grilles et états vides des sections 09 et 10.
+ * Tâches :
+ * Reproduire les espacements de 16, 20 et 24 px ainsi que les grilles de trois et deux colonnes.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et les composants d'amitié de resources/scss/components.
+ */
+.friend-requests,
+.friends {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 1108px;
+  min-width: 0;
+  overflow: hidden;
+  color: #2c2420;
+  font-family: "Inter", Arial, sans-serif;
+  line-height: normal;
+}
+
+.friend-requests {
+  gap: 20px;
+}
+
+.friends {
+  gap: 24px;
+}
+
+.friend-requests__title,
+.friends__title {
+  font-size: 24px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.friend-requests__alert {
+  display: flex;
+  align-items: center;
+  width: 1108px;
+  height: 51px;
+  padding: 16px;
+  overflow: hidden;
+  border: 1px solid;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.friend-requests__alert--accepted {
+  color: #1ba030;
+  background-color: #edfced;
+  border-color: #1ba030;
+}
+
+.friend-requests__alert--declined {
+  color: #996633;
+  background-color: #fff7eb;
+  border-color: #996633;
+}
+
+.friend-requests__list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 1108px;
+}
+
+.friend-requests__empty,
+.friends__empty {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
+  width: 1108px;
+  height: 131px;
+  padding: 40px;
+  overflow: hidden;
+  background-color: #ffffff;
+  border-radius: 12px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.friend-requests__empty-title,
+.friends__empty-title {
+  color: #2c2420;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.friend-requests__empty-description,
+.friends__empty-description {
+  color: #8d8d8d;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.friends__section-title {
+  color: #2c2420;
+  font-size: 16px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.friends__section-title--offline {
+  color: #8d8d8d;
+}
+
+.friends__grid {
+  display: grid;
+  gap: 20px;
+  width: 1108px;
+  overflow: hidden;
+}
+
+.friends__grid--three-columns {
+  grid-template-columns: repeat(3, 356px);
+}
+
+.friends__grid--two-columns {
+  grid-template-columns: repeat(2, 544px);
+}
+
+/*
+ * Description générale :
+ * Fondations typographiques communes à toute l'interface Voisin.
+ * Rôle :
+ * Appliquer la police Inter et les niveaux de texte relevés dans la maquette Figma.
+ * Tâches :
+ * Définir le texte courant, les titres principaux et les textes secondaires réutilisables.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
+ */
+/*
+ * Description générale :
+ * Composition desktop des écrans de lecture, gestion, édition et modération des commentaires.
+ * Rôle :
+ * Ordonner le résumé de publication, le titre, les commentaires et le formulaire dans tous leurs états.
+ * Tâches :
+ * Conserver le rythme vertical de 20 px et les dimensions exactes des états vide et invalide.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et les composants _publication-summary.scss et _comments.scss.
+ */
+.comments-page {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 20px;
+  align-items: flex-start;
+  width: 1108px;
+  min-width: 0;
+  overflow: hidden;
+  color: #2c2420;
+  font-family: "Inter", Arial, sans-serif;
+  line-height: normal;
+}
+
+.comments-page__title {
+  font-size: 18px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.comments-page__list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 1108px;
+}
+
+.comments-page__empty {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
+  width: 1108px;
+  height: 112px;
+  padding: 32px;
+  overflow: hidden;
+  background-color: #ffffff;
+  border-radius: 12px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.comments-page__empty-title {
+  color: #2c2420;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.comments-page__empty-description {
+  color: #8d8d8d;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+/*
+ * Description générale :
+ * Fondations typographiques communes à toute l'interface Voisin.
+ * Rôle :
+ * Appliquer la police Inter et les niveaux de texte relevés dans la maquette Figma.
+ * Tâches :
+ * Définir le texte courant, les titres principaux et les textes secondaires réutilisables.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
+ */
+/*
+ * Description générale :
+ * Compositions desktop du tableau de bord administrateur et de l'accès refusé.
+ * Rôle :
+ * Ordonner les titres, compteurs, alertes, tableaux, listes de modération et états vides.
+ * Tâches :
+ * Reproduire le rythme de 20 px, les surfaces de 1108 px et l'écran d'accès refusé sans espacement ajouté.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et les composants administratifs de resources/scss/components/_admin.scss.
+ */
+.admin-page {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 20px;
+  align-items: flex-start;
+  width: 1108px;
+  min-width: 0;
+  overflow: hidden;
+  color: #2c2420;
+  font-family: "Inter", Arial, sans-serif;
+  line-height: normal;
+}
+
+.admin-page__title {
+  font-size: 24px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.admin-page__count {
+  color: #8d8d8d;
+  font-size: 14px;
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.admin-page__alert {
+  display: flex;
+  align-items: center;
+  width: 1108px;
+  height: 51px;
+  padding: 16px;
+  overflow: hidden;
+  color: #1ba030;
+  background-color: #edfced;
+  border: 1px solid #1ba030;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.admin-page__empty {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
+  width: 1108px;
+  height: 131px;
+  padding: 40px;
+  overflow: hidden;
+  background-color: #ffffff;
+  border-radius: 12px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.admin-page__empty-title {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.admin-page__empty-description {
+  color: #8d8d8d;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.access-denied {
+  display: flex;
+  flex: 0 0 350px;
+  flex-direction: column;
+  align-items: center;
+  width: 1440px;
+  height: 350px;
+  padding: 60px;
+  overflow: hidden;
+  color: #2c2420;
+  background-color: #f0e8e3;
+  font-family: "Inter", Arial, sans-serif;
+  line-height: normal;
+}
+
+.access-denied__alert {
+  display: flex;
+  flex: 0 0 51px;
+  align-items: center;
+  width: 522px;
+  height: 51px;
+  padding: 16px;
+  overflow: hidden;
+  color: #b94848;
+  background-color: #fff2f2;
+  border: 1px solid #b94848;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.access-denied__return {
+  display: flex;
+  flex: 0 0 37px;
+  align-items: center;
+  justify-content: center;
+  width: 216px;
+  height: 37px;
+  padding: 8px 20px;
+  overflow: hidden;
+  color: #2c2420;
+  background-color: #faf7f5;
+  border: 1px solid #2c2420;
+  border-radius: 42px;
+  font-size: 16px;
+  font-weight: 400;
+  white-space: nowrap;
+}

@@ -1,0 +1,72 @@
+/*
+ * Description générale :
+ * Panneau des amis actuellement en ligne.
+ * Rôle :
+ * Reproduire la troisième colonne du fil d'actualité.
+ * Tâches :
+ * Dimensionner le panneau et aligner les avatars, noms et indicateurs de présence.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et se place dans resources/scss/layout/_app-shell.scss.
+ */
+
+@use '../abstracts/variables' as variables;
+
+.online-friends {
+    display: flex;
+    flex-direction: column;
+    width: variables.$online-friends-width;
+    height: 189px;
+    padding: 20px;
+    gap: 12px;
+    overflow: hidden;
+    background-color: variables.$color-surface;
+    border-radius: variables.$radius-surface;
+}
+
+.online-friends__title {
+    margin: 0;
+    color: variables.$color-text;
+    font-size: variables.$font-size-14;
+    font-weight: variables.$font-weight-semibold;
+}
+
+.online-friends__list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.online-friends__item {
+    display: flex;
+    align-items: center;
+    min-height: 32px;
+    gap: 10px;
+}
+
+.online-friends__avatar {
+    flex: 0 0 32px;
+    width: 32px;
+    height: 32px;
+    overflow: hidden;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.online-friends__name {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    color: variables.$color-text;
+    font-size: variables.$font-size-13;
+    font-weight: variables.$font-weight-regular;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.online-friends__status {
+    flex: 0 0 8px;
+    width: 8px;
+    height: 8px;
+    background-color: variables.$color-success;
+    border-radius: 50%;
+}

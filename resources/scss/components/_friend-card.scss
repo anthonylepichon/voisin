@@ -1,0 +1,79 @@
+/*
+ * Description générale :
+ * Carte desktop d'un ami en ligne ou hors ligne.
+ * Rôle :
+ * Présenter le portrait, le nom et l'indicateur de présence dans les deux grilles d'amis.
+ * Tâches :
+ * Reproduire la carte de 238 px de haut, le portrait de 119 px et le statut superposé.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et compose resources/scss/pages/_friends.scss.
+ */
+
+@use '../abstracts/variables' as variables;
+
+.friend-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 34px;
+    align-items: center;
+    width: 100%;
+    height: 238px;
+    min-width: 0;
+    padding: 32px;
+    overflow: hidden;
+    background-color: variables.$color-surface-soft;
+    border: 1px solid variables.$color-border;
+    border-radius: variables.$radius-card;
+}
+
+.friend-card__portrait {
+    flex: 0 0 119px;
+    width: 119px;
+    height: 119px;
+    overflow: hidden;
+    border-radius: 50%;
+}
+
+.friend-card__portrait-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.friend-card__name {
+    width: 100%;
+    overflow: hidden;
+    color: variables.$color-text;
+    font-family: variables.$font-family-base;
+    font-size: variables.$font-size-16;
+    font-weight: variables.$font-weight-bold;
+    line-height: normal;
+    text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.friend-card__status {
+    position: absolute;
+    top: 139px;
+    left: calc(50% + 46.5px);
+    width: 12px;
+    height: 12px;
+    overflow: hidden;
+    border-radius: 50%;
+}
+
+.friend-card__status-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.friend-card__status--online {
+    background-color: variables.$color-success;
+}
+
+.friend-card__status--offline {
+    background-color: variables.$color-text-muted;
+}

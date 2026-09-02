@@ -1,0 +1,131 @@
+/*
+ * Description générale :
+ * Compositions desktop des demandes d'amitié et de la liste des amis.
+ * Rôle :
+ * Organiser les titres, alertes, listes, grilles et états vides des sections 09 et 10.
+ * Tâches :
+ * Reproduire les espacements de 16, 20 et 24 px ainsi que les grilles de trois et deux colonnes.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et les composants d'amitié de resources/scss/components.
+ */
+
+@use '../abstracts/variables' as variables;
+
+.friend-requests,
+.friends {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    align-items: flex-start;
+    width: variables.$content-width;
+    min-width: 0;
+    overflow: hidden;
+    color: variables.$color-text;
+    font-family: variables.$font-family-base;
+    line-height: normal;
+}
+
+.friend-requests {
+    gap: 20px;
+}
+
+.friends {
+    gap: 24px;
+}
+
+.friend-requests__title,
+.friends__title {
+    font-size: variables.$font-size-24;
+    font-weight: variables.$font-weight-bold;
+    white-space: nowrap;
+}
+
+.friend-requests__alert {
+    display: flex;
+    align-items: center;
+    width: variables.$content-width;
+    height: 51px;
+    padding: 16px;
+    overflow: hidden;
+    border: 1px solid;
+    border-radius: variables.$radius-field;
+    font-size: variables.$font-size-14;
+    font-weight: variables.$font-weight-medium;
+    white-space: nowrap;
+}
+
+.friend-requests__alert--accepted {
+    color: variables.$color-success;
+    background-color: variables.$color-success-background;
+    border-color: variables.$color-success;
+}
+
+.friend-requests__alert--declined {
+    color: variables.$color-warning;
+    background-color: variables.$color-warning-background;
+    border-color: variables.$color-warning;
+}
+
+.friend-requests__list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: variables.$content-width;
+}
+
+.friend-requests__empty,
+.friends__empty {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+    justify-content: center;
+    width: variables.$content-width;
+    height: 131px;
+    padding: 40px;
+    overflow: hidden;
+    background-color: variables.$color-surface;
+    border-radius: variables.$radius-surface;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.friend-requests__empty-title,
+.friends__empty-title {
+    color: variables.$color-text;
+    font-size: variables.$font-size-18;
+    font-weight: variables.$font-weight-semibold;
+}
+
+.friend-requests__empty-description,
+.friends__empty-description {
+    color: variables.$color-text-muted;
+    font-size: variables.$font-size-14;
+    font-weight: variables.$font-weight-regular;
+}
+
+.friends__section-title {
+    color: variables.$color-text;
+    font-size: variables.$font-size-16;
+    font-weight: variables.$font-weight-semibold;
+    white-space: nowrap;
+}
+
+.friends__section-title--offline {
+    color: variables.$color-text-muted;
+}
+
+.friends__grid {
+    display: grid;
+    gap: 20px;
+    width: variables.$content-width;
+    overflow: hidden;
+}
+
+.friends__grid--three-columns {
+    grid-template-columns: repeat(3, 356px);
+}
+
+.friends__grid--two-columns {
+    grid-template-columns: repeat(2, 544px);
+}

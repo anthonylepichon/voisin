@@ -1,0 +1,48 @@
+/*
+ * Description générale :
+ * Dimensions partagées des pictogrammes de l'interface.
+ * Rôle :
+ * Afficher les ressources d'icônes fournies sans les déformer.
+ * Tâches :
+ * Normaliser les tailles, l'alignement et les boutons d'icône transparents.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et les images du dossier assets/images/icons.
+ */
+
+@use '../abstracts/variables' as variables;
+
+.icon {
+    display: block;
+    flex: 0 0 variables.$icon-size;
+    width: variables.$icon-size;
+    height: variables.$icon-size;
+    object-fit: contain;
+}
+
+.icon--small {
+    flex-basis: 16px;
+    width: 16px;
+    height: 16px;
+}
+
+.icon-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    color: variables.$color-text;
+    background: transparent;
+    border: 0;
+}
+
+.status-dot {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    background-color: variables.$color-text-muted;
+    border-radius: 50%;
+}
+
+.status-dot--online {
+    background-color: variables.$color-success;
+}

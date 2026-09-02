@@ -1,0 +1,263 @@
+/*
+ * Description générale :
+ * Profil membre et formulaire de modification issus des sections 07 et 08 de Figma.
+ * Rôle :
+ * Structurer la présentation d'un membre, ses publications, ses relations et l'édition de ses informations.
+ * Tâches :
+ * Reproduire les profils propriétaire, ami, non-ami, demande reçue, état vide et tous les états du formulaire.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et les composants avatar, bouton, alerte, formulaire et publication.
+ */
+
+@use '../abstracts/variables' as variables;
+
+.profile-page {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+    width: 100%;
+    overflow: hidden;
+}
+
+.profile-page__summary {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+    padding: 32px;
+    overflow: hidden;
+    background-color: variables.$color-surface-soft;
+    border-radius: variables.$radius-surface;
+}
+
+.profile-page__summary--owner,
+.profile-page__summary--stranger {
+    height: 404px;
+}
+
+.profile-page__summary--friend,
+.profile-page__summary--request-sent,
+.profile-page__summary--request-received {
+    height: 406px;
+}
+
+.profile-page__summary--empty {
+    height: 353px;
+}
+
+.profile-page__cover {
+    width: 100%;
+    height: 120px;
+    overflow: hidden;
+    border-radius: variables.$radius-avatar;
+}
+
+.profile-page__cover-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+}
+
+.profile-page__name,
+.profile-page__biography,
+.profile-page__member-since,
+.profile-page__stat-value,
+.profile-page__stat-label {
+    margin: 0;
+    line-height: normal;
+}
+
+.profile-page__name {
+    color: variables.$color-text;
+    font-size: variables.$font-size-24;
+    font-weight: variables.$font-weight-bold;
+}
+
+.profile-page__biography {
+    color: variables.$color-text;
+    font-size: variables.$font-size-14;
+    font-weight: variables.$font-weight-regular;
+}
+
+.profile-page__member-since {
+    color: variables.$color-text-muted;
+    font-size: variables.$font-size-13;
+    font-weight: variables.$font-weight-regular;
+}
+
+.profile-page__stats {
+    display: flex;
+    align-items: flex-start;
+    gap: 32px;
+    width: 100%;
+    overflow: hidden;
+}
+
+.profile-page__stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.profile-page__stat-value {
+    color: variables.$color-text;
+    font-size: variables.$font-size-20;
+    font-weight: variables.$font-weight-bold;
+}
+
+.profile-page__stat-label {
+    color: variables.$color-text-muted;
+    font-size: variables.$font-size-12;
+    font-weight: variables.$font-weight-regular;
+}
+
+.profile-page__actions {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    width: 100%;
+    overflow: hidden;
+}
+
+.profile-page__relationship-message {
+    width: 100%;
+    height: 49px;
+}
+
+.profile-page__tabs {
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+    height: 48px;
+    overflow: hidden;
+}
+
+.profile-page__tab {
+    display: flex;
+    flex: 1 1 0;
+    flex-direction: column;
+    align-items: center;
+    min-width: 0;
+    padding: 12px 20px;
+    overflow: hidden;
+    color: variables.$color-text;
+    font-family: variables.$font-family-base;
+    font-size: variables.$font-size-14;
+    font-weight: variables.$font-weight-medium;
+    line-height: normal;
+    text-decoration: none;
+}
+
+.profile-page__tab--active,
+.profile-page__tab[aria-current='page'] {
+    gap: 4px;
+    color: variables.$color-primary;
+}
+
+.profile-page__tab-indicator {
+    width: 60px;
+    height: 3px;
+    background-color: variables.$color-primary;
+    border-radius: variables.$radius-line;
+}
+
+.profile-page__publications {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+    width: 100%;
+    overflow: hidden;
+}
+
+.profile-page__publication-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    width: 100%;
+    overflow: hidden;
+}
+
+.profile-page__publication-row--member {
+    gap: 24px;
+}
+
+.profile-page__empty-state {
+    width: 100%;
+}
+
+.profile-editor {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    overflow: hidden;
+}
+
+.profile-editor__title {
+    margin: 0;
+    color: variables.$color-text;
+    font-size: variables.$font-size-24;
+    font-weight: variables.$font-weight-bold;
+    line-height: normal;
+}
+
+.profile-editor__alert {
+    width: 700px;
+}
+
+.profile-editor__form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+    width: 600px;
+    padding: 32px;
+    overflow: hidden;
+    background-color: variables.$color-surface;
+    border-radius: variables.$radius-surface;
+}
+
+.profile-editor__form--default {
+    height: 531px;
+}
+
+.profile-editor__form--photo-selected {
+    height: 558px;
+}
+
+.profile-editor__form--invalid {
+    height: 573px;
+}
+
+.profile-editor__photo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    width: 173px;
+    overflow: hidden;
+}
+
+.profile-editor__filename {
+    margin: 0;
+    color: variables.$color-text-muted;
+    font-size: variables.$font-size-12;
+    font-weight: variables.$font-weight-regular;
+    line-height: normal;
+}
+
+.profile-editor__field {
+    width: 520px;
+}
+
+.profile-editor__actions {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}

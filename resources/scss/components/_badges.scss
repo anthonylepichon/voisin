@@ -1,0 +1,104 @@
+/*
+ * Description générale :
+ * Badges de visibilité, de statut et sélecteur de visibilité conformes à Figma.
+ * Rôle :
+ * Identifier les contenus et représenter les choix courts sous forme de pilules.
+ * Tâches :
+ * Définir les badges avec icône et les états actif ou inactif des choix public et amis.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et accompagne les cartes et éditeurs de publication.
+ */
+
+@use '../abstracts/variables' as variables;
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 4px 8px;
+    overflow: hidden;
+    color: variables.$color-primary;
+    font-family: variables.$font-family-base;
+    font-size: variables.$font-size-16;
+    font-weight: variables.$font-weight-regular;
+    line-height: normal;
+    white-space: nowrap;
+    background-color: variables.$color-page-background;
+    border-radius: variables.$radius-pill;
+}
+
+.badge__icon {
+    flex: 0 0 variables.$icon-size;
+    width: variables.$icon-size;
+    height: variables.$icon-size;
+}
+
+.badge__icon img,
+.badge__icon svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.badge--success {
+    color: variables.$color-success;
+    background-color: variables.$color-success-background;
+}
+
+.badge--danger {
+    color: variables.$color-danger;
+    background-color: variables.$color-danger-background;
+}
+
+.badge--info {
+    color: variables.$color-info;
+    background-color: variables.$color-info-background;
+}
+
+.badge--warning {
+    color: variables.$color-warning;
+    background-color: variables.$color-warning-background;
+}
+
+.visibility-selector {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.visibility-selector__label {
+    color: variables.$color-text;
+    font-size: variables.$font-size-14;
+    font-weight: variables.$font-weight-medium;
+    white-space: nowrap;
+}
+
+.visibility-selector__options {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.visibility-selector__option {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 14px;
+    overflow: hidden;
+    color: variables.$color-text;
+    font-family: variables.$font-family-base;
+    font-size: variables.$font-size-13;
+    font-weight: variables.$font-weight-medium;
+    line-height: normal;
+    white-space: nowrap;
+    cursor: pointer;
+    background-color: variables.$color-surface-soft;
+    border: 0;
+    border-radius: variables.$radius-pill-medium;
+}
+
+.visibility-selector__option--active,
+.visibility-selector__option[aria-pressed='true'] {
+    color: variables.$color-surface;
+    background-color: variables.$color-primary;
+}

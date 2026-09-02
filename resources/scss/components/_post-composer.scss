@@ -1,0 +1,97 @@
+/*
+ * Description générale :
+ * Zone de création rapide d'une publication dans le fil d'actualité.
+ * Rôle :
+ * Reproduire la carte de saisie, les actions de média et de visibilité et le bouton de partage.
+ * Tâches :
+ * Positionner l'avatar, le champ de contenu et les commandes selon les dimensions Figma.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss, les boutons et les avatars du dossier components.
+ */
+
+@use '../abstracts/variables' as variables;
+
+.post-composer {
+    display: flex;
+    flex-direction: column;
+    width: variables.$feed-content-width;
+    height: 174px;
+    padding: 20px;
+    gap: 12px;
+    overflow: hidden;
+    background-color: variables.$color-surface-soft;
+    border-radius: variables.$radius-surface;
+}
+
+.post-composer__editor {
+    display: flex;
+    align-items: flex-start;
+    width: 804px;
+    height: 80px;
+    gap: 12px;
+}
+
+.post-composer__avatar {
+    flex: 0 0 48px;
+    width: 48px;
+    height: 48px;
+    overflow: hidden;
+    border-radius: variables.$radius-avatar-medium;
+    object-fit: cover;
+}
+
+.post-composer__textarea {
+    flex: 0 0 744px;
+    width: 744px;
+    height: 80px;
+    padding: 12px;
+    resize: none;
+    color: variables.$color-text;
+    font-family: variables.$font-family-base;
+    font-size: variables.$font-size-14;
+    background-color: variables.$color-surface;
+    border: 1px solid variables.$color-border;
+    border-radius: variables.$radius-field;
+    outline: 0;
+}
+
+.post-composer__textarea::placeholder {
+    color: variables.$color-text-muted;
+    opacity: 1;
+}
+
+.post-composer__actions {
+    display: flex;
+    align-items: center;
+    width: 804px;
+    height: 42px;
+    gap: 12px;
+}
+
+.post-composer__photo,
+.post-composer__visibility {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 42px;
+    gap: 8px;
+    color: variables.$color-text;
+    font-size: variables.$font-size-14;
+    background-color: variables.$color-surface;
+    border: 1px solid variables.$color-border;
+    border-radius: variables.$radius-field;
+}
+
+.post-composer__photo {
+    width: 155px;
+}
+
+.post-composer__visibility {
+    width: 156px;
+}
+
+.post-composer__submit {
+    width: 106px;
+    height: 35px;
+    margin-left: auto;
+}
