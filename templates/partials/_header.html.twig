@@ -11,6 +11,7 @@ Liens avec les autres fichiers : Inclus par templates/base.html.twig et stylisé
 
     <nav class="site-header__actions" aria-label="Accès au compte">
         {% if app.user %}
+            <a class="site-header__login" href="{{ path('app_profile_current') }}">Mon profil</a>
             <form action="{{ path('app_logout') }}" method="post">
                 <input type="hidden" name="_token" value="{{ csrf_token('logout') }}">
                 <button class="site-header__register" type="submit">Déconnexion</button>

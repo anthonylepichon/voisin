@@ -30,6 +30,7 @@ security:
     # Note: Only the *first* matching rule is applied
     access_control:
         - { path: ^/administration, roles: ROLE_ADMIN }
+        - { path: ^/media/profils, roles: ROLE_USER }
         - { path: ^/(profil|publications|demandes|amis), roles: ROLE_USER }
 
 when@test:
