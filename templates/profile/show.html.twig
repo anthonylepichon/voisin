@@ -1,0 +1,62 @@
+{#
+ Description générale : Page de consultation d'un profil membre.
+ Rôle : Présenter les informations publiques du membre connecté ou visité.
+ Tâches : Afficher la photo, la biographie, les compteurs et l'accès à la modification du propriétaire.
+ Liens avec les autres fichiers : Étend base.html.twig, utilise ProfileController et les styles pages/_profile.scss.
+#}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Profil de {{ utilisateur.pseudonyme }} — Voisin{% endblock %}
+{% block body_class %}app-shell{% endblock %}
+
+{% block body %}
+    <section class="profile-page" aria-labelledby="titre-profil">
+        <article class="profile-page__summary {{ estProprietaire ? 'profile-page__summary--owner' : 'profile-page__summary--stranger' }}">
+            <div class="avatar avatar--profile">
+                <img class="avatar__image" src="{{ path('app_profile_photo', {nom: utilisateur.nomPhotoProfil}) }}" alt="Photo de profil de {{ utilisateur.pseudonyme }}">
+            </div>
+
+            <h1 class="profile-page__name" id="titre-profil">{{ utilisateur.pseudonyme }}</h1>
+
+            {% if utilisateur.biographie %}
+                <p class="profile-page__biography">{{ utilisateur.biographie }}</p>
+            {% else %}
+                <p class="profile-page__biography">Ce voisin n’a pas encore renseigné de biographie.</p>
+            {% endif %}
+
+            <p class="profile-page__member-since">Membre depuis le {{ utilisateur.dateInscription|date('d/m/Y') }}</p>
+
+            <div class="profile-page__stats" aria-label="Statistiques du profil">
+                <div class="profile-page__stat">
+                    <p class="profile-page__stat-value">{{ utilisateur.publications|length }}</p>
+                    <p class="profile-page__stat-label">Publications</p>
+                </div>
+                <div class="profile-page__stat">
+                    <p class="profile-page__stat-value">{{ utilisateur.amis|length }}</p>
+                    <p class="profile-page__stat-label">Amis</p>
+                </div>
+            </div>
+
+            {% if estProprietaire %}
+                <div class="profile-page__actions">
+                    <a class="button button--primary" href="{{ path('app_profile_edit') }}">Modifier mon profil</a>
+                </div>
+            {% endif %}
+        </article>
+
+        <nav class="profile-page__tabs" aria-label="Contenu du profil">
+            <span class="profile-page__tab profile-page__tab--active" aria-current="page">
+                Publications
+                <span class="profile-page__tab-indicator" aria-hidden="true"></span>
+            </span>
+        </nav>
+
+        <section class="profile-page__publications" aria-labelledby="titre-publications">
+            <h2 class="visually-hidden" id="titre-publications">Publications de {{ utilisateur.pseudonyme }}</h2>
+            <div class="empty-state profile-page__empty-state">
+                <p class="empty-state__title">Les publications de {{ utilisateur.pseudonyme }} apparaîtront bientôt ici.</p>
+            </div>
+        </section>
+    </section>
+{% endblock %}

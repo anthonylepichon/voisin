@@ -1,0 +1,51 @@
+{#
+ Description générale : Page de modification du profil connecté.
+ Rôle : Afficher les champs que le membre peut modifier.
+ Tâches : Présenter les erreurs de validation et l'aperçu local d'une nouvelle photo.
+ Liens avec les autres fichiers : Utilise ProfileFormType, ProfileController, assets/app.js et les styles pages/_profile.scss.
+#}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier mon profil — Voisin{% endblock %}
+{% block body_class %}app-shell{% endblock %}
+
+{% block body %}
+    <section class="profile-editor" aria-labelledby="titre-modification-profil">
+        <h1 class="profile-editor__title" id="titre-modification-profil">Modifier mon profil</h1>
+
+        {{ form_start(profileForm, {'attr': {'class': 'profile-editor__form profile-editor__form--default'}}) }}
+            {{ form_errors(profileForm) }}
+
+            <div class="profile-editor__field form-field">
+                {{ form_label(profileForm.pseudonyme, null, {'label_attr': {'class': 'form-field__label'}}) }}
+                {{ form_widget(profileForm.pseudonyme, {'attr': {'class': 'form-field__control'}}) }}
+                {{ form_errors(profileForm.pseudonyme) }}
+            </div>
+
+            <div class="profile-editor__field form-field">
+                {{ form_label(profileForm.biographie, null, {'label_attr': {'class': 'form-field__label'}}) }}
+                {{ form_widget(profileForm.biographie, {'attr': {'class': 'form-field__control form-field__control--textarea', 'placeholder': 'Présente-toi à ton voisinage'}}) }}
+                {{ form_errors(profileForm.biographie) }}
+            </div>
+
+            <div class="profile-editor__photo file-upload file-upload--avatar">
+                {{ form_label(profileForm.photoProfil, null, {'label_attr': {'class': 'file-upload__label'}}) }}
+                <label class="file-upload__zone" for="{{ profileForm.photoProfil.vars.id }}">
+                    Choisir une nouvelle photo
+                    {{ form_widget(profileForm.photoProfil, {'attr': {'class': 'file-upload__input', 'accept': 'image/jpeg,image/png,image/webp', 'data-photo-profil-input': ''}}) }}
+                </label>
+                <div class="file-upload__preview" data-photo-profil-preview hidden>
+                    <img class="file-upload__preview-image" src="" alt="Aperçu de la nouvelle photo de profil" data-photo-profil-image>
+                    <span class="file-upload__filename" data-photo-profil-name></span>
+                </div>
+                {{ form_errors(profileForm.photoProfil) }}
+            </div>
+
+            <div class="profile-editor__actions">
+                <button class="button button--primary" type="submit">Enregistrer</button>
+                <a class="button button--secondary" href="{{ path('app_profile_current') }}">Annuler</a>
+            </div>
+        {{ form_end(profileForm) }}
+    </section>
+{% endblock %}
