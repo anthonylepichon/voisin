@@ -5,6 +5,7 @@
 /public/assets/
 /public/bundles/
 /assets/vendor/
+/uploads/profils/*
 
 # Configuration locale des outils
 /.vscode/

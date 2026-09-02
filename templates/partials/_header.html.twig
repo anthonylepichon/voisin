@@ -10,7 +10,14 @@ Liens avec les autres fichiers : Inclus par templates/base.html.twig et stylisé
     </a>
 
     <nav class="site-header__actions" aria-label="Accès au compte">
-        <a class="site-header__login" href="/connexion">Connexion</a>
-        <a class="site-header__register" href="/inscription">Inscription</a>
+        {% if app.user %}
+            <form action="{{ path('app_logout') }}" method="post">
+                <input type="hidden" name="_token" value="{{ csrf_token('logout') }}">
+                <button class="site-header__register" type="submit">Déconnexion</button>
+            </form>
+        {% else %}
+            <a class="site-header__login" href="{{ path('app_login') }}">Connexion</a>
+            <a class="site-header__register" href="{{ path('app_register') }}">Inscription</a>
+        {% endif %}
     </nav>
 </header>

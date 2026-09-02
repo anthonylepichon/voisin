@@ -13,6 +13,7 @@ use App\Repository\UtilisateurRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -21,6 +22,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Table(name: 'utilisateur')]
 #[ORM\UniqueConstraint(name: 'uq_utilisateur_pseudonyme', fields: ['pseudonyme'])]
 #[ORM\UniqueConstraint(name: 'uq_utilisateur_adresse_email', fields: ['adresseEmail'])]
+#[UniqueEntity(fields: ['pseudonyme'], message: 'Ce pseudonyme est déjà utilisé.')]
+#[UniqueEntity(fields: ['adresseEmail'], message: 'Cette adresse e-mail est déjà utilisée.')]
 class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -46,7 +49,6 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $motDePasse = null;
 
     #[ORM\Column(name: 'nom_photo_profil', length: 255)]
-    #[Assert\NotBlank(message: 'Le nom de la photo de profil est obligatoire.')]
     private ?string $nomPhotoProfil = null;
 
     #[ORM\Column(name: 'biographie', length: 500, nullable: true)]

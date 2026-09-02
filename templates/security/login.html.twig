@@ -1,0 +1,39 @@
+{#
+ Description générale : Page publique de connexion à l'application Voisin.
+ Rôle : Permettre l'authentification par adresse e-mail ou pseudonyme.
+ Tâches : Afficher le formulaire CSRF, la dernière saisie et l'erreur générique de connexion.
+ Liens avec les autres fichiers : Utilise SecurityController, security.yaml et UtilisateurProvider.
+#}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion — Voisin{% endblock %}
+{% block body_class %}auth-page{% endblock %}
+
+{% block body %}
+    <section class="auth-card auth-card--login{% if error %} auth-card--login-with-alert{% endif %}" aria-labelledby="titre-connexion">
+        <div class="auth-card__heading">
+            <h1 class="auth-card__title" id="titre-connexion">Connexion</h1>
+            <p class="auth-card__subtitle">Retrouve ton voisinage.</p>
+        </div>
+
+        {% if error %}
+            <div class="alert alert--danger auth-card__alert--danger" role="alert">Les identifiants sont incorrects.</div>
+        {% endif %}
+
+        <form class="auth-card__form" method="post" action="{{ path('app_login') }}">
+            <div class="form-field">
+                <label class="form-field__label" for="identifiant">Adresse e-mail ou pseudonyme</label>
+                <input class="form-field__control" type="text" value="{{ last_username }}" name="identifiant" id="identifiant" autocomplete="username" required autofocus>
+            </div>
+            <div class="form-field">
+                <label class="form-field__label" for="mot_de_passe">Mot de passe</label>
+                <input class="form-field__control" type="password" name="mot_de_passe" id="mot_de_passe" autocomplete="current-password" required>
+            </div>
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+            <button class="button button--primary auth-card__submit" type="submit">Se connecter</button>
+        </form>
+
+        <p class="auth-card__footer">Pas encore de compte ? <a class="auth-card__footer-link" href="{{ path('app_register') }}">Inscris-toi</a>.</p>
+    </section>
+{% endblock %}
