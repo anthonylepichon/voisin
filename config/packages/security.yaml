@@ -5,11 +5,8 @@ security:
 
     # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
     providers:
-        # used to reload user from session & other features (e.g. switch_user)
         app_user_provider:
-            entity:
-                class: App\Entity\Utilisateur
-                property: adresseEmail
+            id: App\Security\UtilisateurProvider
 
     firewalls:
         dev:
@@ -19,17 +16,21 @@ security:
         main:
             lazy: true
             provider: app_user_provider
-
-            # Activate different ways to authenticate:
-            # https://symfony.com/doc/current/security.html#the-firewall
-
-            # https://symfony.com/doc/current/security/impersonating_user.html
-            # switch_user: true
+            form_login:
+                login_path: app_login
+                check_path: app_login
+                enable_csrf: true
+                username_parameter: identifiant
+                password_parameter: mot_de_passe
+                default_target_path: app_home
+            logout:
+                path: app_logout
+                target: app_home
 
     # Note: Only the *first* matching rule is applied
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/administration, roles: ROLE_ADMIN }
+        - { path: ^/(profil|publications|demandes|amis), roles: ROLE_USER }
 
 when@test:
     security:
