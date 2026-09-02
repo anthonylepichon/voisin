@@ -1,0 +1,33 @@
+{#
+ Description générale : Page d'accueil publique minimale de l'application Voisin.
+ Rôle : Permettre de contrôler le gabarit Twig, les styles compilés et l'en-tête commun.
+ Tâches : Présenter les accès statiques prévus et l'état vide des publications récentes.
+ Liens avec les autres fichiers : Étend templates/base.html.twig et utilise les styles de resources/scss/pages/_public-home.scss.
+#}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Voisin — Le réseau de quartier{% endblock %}
+
+{% block body_class %}public-home{% endblock %}
+
+{% block body %}
+    <section class="public-home__hero">
+        <h1 class="public-home__title">Le réseau de quartier qui rapproche les voisins.</h1>
+        <p class="public-home__subtitle">Partagez, échangez et restez en contact avec votre voisinage.</p>
+
+        <div class="public-home__actions">
+            <a class="button button--primary public-home__primary-action" href="/inscription">Créer un compte</a>
+            <a class="button button--secondary public-home__secondary-action" href="/connexion">Se connecter</a>
+        </div>
+    </section>
+
+    <section class="public-home__recent" aria-labelledby="publications-recentes">
+        <h2 class="public-home__recent-title" id="publications-recentes">Publications récentes</h2>
+
+        <div class="public-home__empty">
+            <p class="public-home__empty-title">Les publications apparaîtront bientôt ici.</p>
+            <p class="public-home__empty-description">Connectez-vous pour rejoindre votre voisinage.</p>
+        </div>
+    </section>
+{% endblock %}

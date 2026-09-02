@@ -1,0 +1,14 @@
+#
+# Description générale : Règles Apache de réécriture des URL publiques de l'application.
+# Rôle : Transmettre à Symfony les requêtes qui ne ciblent pas un fichier ou un dossier existant.
+# Tâches : Préserver l'accès aux ressources publiques et router les autres URL via index.php.
+# Liens avec les autres fichiers : Utilise public/index.php comme point d'entrée et les routes déclarées dans src/Controller.
+#
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^ index.php [QSA,L]
+</IfModule>
