@@ -1,0 +1,109 @@
+# Origine du code : Code créé par le développeur.
+# Description générale : Workflow de déploiement de l’application Voisin sur OVH.
+# Rôle : Mettre à jour la production uniquement depuis la branche main.
+# Tâches : Vérifier les migrations, mettre à jour le dépôt OVH, installer les dépendances et compiler les ressources.
+# Liens avec les autres fichiers : composer.lock, migrations/, public/, config/ et l’environnement GitHub production.
+
+name: Déploiement en production
+
+on:
+    push:
+        branches:
+            - main
+
+    workflow_dispatch:
+
+permissions:
+    contents: read
+
+concurrency:
+    group: production
+    cancel-in-progress: false
+
+jobs:
+    deployer:
+        name: Déployer sur OVH
+        runs-on: ubuntu-latest
+        timeout-minutes: 15
+
+        if: github.ref == 'refs/heads/main'
+
+        environment:
+            name: production
+
+        env:
+            OVH_HOST: ${{ secrets.OVH_HOST }}
+            OVH_PORT: ${{ secrets.OVH_PORT }}
+            OVH_USER: ${{ secrets.OVH_USER }}
+            OVH_DEPLOY_PATH: ${{ secrets.OVH_DEPLOY_PATH }}
+            OVH_SSH_PRIVATE_KEY: ${{ secrets.OVH_SSH_PRIVATE_KEY }}
+            OVH_KNOWN_HOSTS: ${{ secrets.OVH_KNOWN_HOSTS }}
+            PRODUCTION_URL: ${{ secrets.PRODUCTION_URL }}
+
+        steps:
+            - name: Préparer la connexion SSH
+              run: |
+                  install -m 700 -d ~/.ssh
+                  printf '%s\n' "$OVH_SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
+                  chmod 600 ~/.ssh/id_ed25519
+                  printf '%s\n' "$OVH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+                  chmod 600 ~/.ssh/known_hosts
+
+            - name: Vérifier les migrations avant le déploiement
+              run: |
+                  ssh -p "$OVH_PORT" "$OVH_USER@$OVH_HOST" "
+                    set -eu
+                    cd \"$OVH_DEPLOY_PATH\"
+
+                    CURRENT_BRANCH=\$(git symbolic-ref --short HEAD)
+
+                    if [ \"\$CURRENT_BRANCH\" != \"main\" ]; then
+                      echo \"Le dépôt OVH n'est pas positionné sur main.\"
+                      exit 1
+                    fi
+
+                    git fetch origin main
+
+                    if ! git diff --quiet HEAD origin/main -- migrations/; then
+                      echo \"Une modification des migrations a été détectée.\"
+                      echo \"Le déploiement automatique est interrompu avant toute mise à jour.\"
+                      exit 42
+                    fi
+                  "
+
+            - name: Mettre à jour l’application
+              run: |
+                  ssh -p "$OVH_PORT" "$OVH_USER@$OVH_HOST" "
+                    set -eu
+                    cd \"$OVH_DEPLOY_PATH\"
+
+                    git pull --ff-only origin main
+
+                    APP_ENV=prod APP_DEBUG=0 \
+                      php \"\$HOME/bin/composer\" install \
+                        --no-dev \
+                        --prefer-dist \
+                        --no-interaction \
+                        --no-progress \
+                        --optimize-autoloader
+
+                    APP_ENV=prod APP_DEBUG=0 \
+                      php bin/console cache:clear
+
+                    APP_ENV=prod APP_DEBUG=0 \
+                      php bin/console asset-map:compile
+                  "
+
+            - name: Contrôler l’URL de production
+              run: |
+                  curl \
+                    --fail \
+                    --silent \
+                    --show-error \
+                    --location \
+                    "$PRODUCTION_URL" \
+                    --output /dev/null
+
+            - name: Nettoyer la clé SSH temporaire
+              if: always()
+              run: rm -f ~/.ssh/id_ed25519

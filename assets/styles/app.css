@@ -1,5 +1,6 @@
 @charset "UTF-8";
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Point d'entrée Sass de l'application Voisin.
  * Rôle :
@@ -10,6 +11,7 @@
  * Compile l'ensemble des fichiers partiels utiles de resources/scss vers assets/styles/app.css.
  */
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Réinitialisation commune aux écrans desktop de l'application.
  * Rôle :
@@ -85,6 +87,7 @@ p {
 }
 
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Fondations typographiques communes à toute l'interface Voisin.
  * Rôle :
@@ -95,6 +98,7 @@ p {
  * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
  */
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Variables Sass issues des 12 sections et des 48 états desktop de la maquette Figma.
  * Rôle :
@@ -154,6 +158,7 @@ body {
   }
 }
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Fondations typographiques communes à toute l'interface Voisin.
  * Rôle :
@@ -164,6 +169,7 @@ body {
  * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
  */
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Mise en page de l'en-tête principal d'après le composant Figma validé.
  * Rôle :
@@ -411,6 +417,7 @@ body {
   }
 }
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Fondations typographiques communes à toute l'interface Voisin.
  * Rôle :
@@ -421,6 +428,7 @@ body {
  * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
  */
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Structures principales des pages authentifiées de l'application Voisin.
  * Rôle :
@@ -540,6 +548,7 @@ body {
   }
 }
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Fondations typographiques communes à toute l'interface Voisin.
  * Rôle :
@@ -550,6 +559,7 @@ body {
  * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
  */
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Navigation latérale des espaces membre et administrateur.
  * Rôle :
@@ -689,6 +699,7 @@ body {
   }
 }
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Fondations typographiques communes à toute l'interface Voisin.
  * Rôle :
@@ -699,6 +710,7 @@ body {
  * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
  */
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Boutons réutilisables conformes aux variantes visibles dans la maquette Figma.
  * Rôle :
@@ -774,6 +786,7 @@ body {
 }
 
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Fondations typographiques communes à toute l'interface Voisin.
  * Rôle :
@@ -784,6 +797,7 @@ body {
  * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
  */
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Dimensions partagées des pictogrammes de l'interface.
  * Rôle :
@@ -830,6 +844,7 @@ body {
 }
 
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Fondations typographiques communes à toute l'interface Voisin.
  * Rôle :
@@ -840,6 +855,7 @@ body {
  * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
  */
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Avatars et image de couverture de profil issus des composants Figma.
  * Rôle :
@@ -903,6 +919,7 @@ body {
 }
 
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Fondations typographiques communes à toute l'interface Voisin.
  * Rôle :
@@ -913,6 +930,7 @@ body {
  * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
  */
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Badges de visibilité, de statut et sélecteur de visibilité conformes à Figma.
  * Rôle :
@@ -1041,6 +1059,7 @@ body {
   }
 }
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Fondations typographiques communes à toute l'interface Voisin.
  * Rôle :
@@ -1051,6 +1070,7 @@ body {
  * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
  */
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Champs, zones de texte, téléversements et groupes d'actions des formulaires Figma.
  * Rôle :
@@ -1282,6 +1302,7 @@ body {
   }
 }
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Fondations typographiques communes à toute l'interface Voisin.
  * Rôle :
@@ -1292,6 +1313,7 @@ body {
  * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
  */
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Messages d'information, de succès, d'avertissement et d'erreur de la maquette.
  * Rôle :
@@ -1354,6 +1376,7 @@ body {
   }
 }
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Fondations typographiques communes à toute l'interface Voisin.
  * Rôle :
@@ -1364,6 +1387,7 @@ body {
  * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
  */
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * État vide générique reproduisant les panneaux sans contenu de la maquette Figma.
  * Rôle :
@@ -1416,6 +1440,7 @@ body {
   }
 }
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Fondations typographiques communes à toute l'interface Voisin.
  * Rôle :
@@ -1426,6 +1451,7 @@ body {
  * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
  */
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Filtres du fil d'actualité.
  * Rôle :
@@ -1516,6 +1542,7 @@ body {
   }
 }
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Fondations typographiques communes à toute l'interface Voisin.
  * Rôle :
@@ -1526,6 +1553,7 @@ body {
  * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
  */
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Zone de création rapide d'une publication dans le fil d'actualité.
  * Rôle :
@@ -1759,6 +1787,7 @@ body {
   }
 }
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Fondations typographiques communes à toute l'interface Voisin.
  * Rôle :
@@ -1769,6 +1798,7 @@ body {
  * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
  */
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Panneau des amis actuellement en ligne.
  * Rôle :
@@ -1845,6 +1875,7 @@ body {
 }
 
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Fondations typographiques communes à toute l'interface Voisin.
  * Rôle :
@@ -1855,6 +1886,7 @@ body {
  * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
  */
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Carte de publication et variantes dimensionnelles issues des écrans Figma.
  * Rôle :
@@ -2353,6 +2385,7 @@ body {
   }
 }
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Fondations typographiques communes à toute l'interface Voisin.
  * Rôle :
@@ -2363,6 +2396,7 @@ body {
  * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
  */
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Navigation entre les pages de publications.
  * Rôle :
@@ -2400,6 +2434,7 @@ body {
   }
 }
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Fondations typographiques communes à toute l'interface Voisin.
  * Rôle :
@@ -2410,6 +2445,7 @@ body {
  * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
  */
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Carte desktop représentant une demande d'amitié reçue.
  * Rôle :
@@ -2572,6 +2608,7 @@ body {
   }
 }
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Fondations typographiques communes à toute l'interface Voisin.
  * Rôle :
@@ -2582,6 +2619,7 @@ body {
  * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
  */
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Carte desktop d'un ami en ligne ou hors ligne.
  * Rôle :
@@ -2665,6 +2703,7 @@ body {
 }
 
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Fondations typographiques communes à toute l'interface Voisin.
  * Rôle :
@@ -2675,6 +2714,7 @@ body {
  * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
  */
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Résumé d'une publication affiché au-dessus de sa liste de commentaires.
  * Rôle :
@@ -2845,6 +2885,7 @@ body {
   }
 }
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Fondations typographiques communes à toute l'interface Voisin.
  * Rôle :
@@ -2855,6 +2896,7 @@ body {
  * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
  */
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Composants des listes, actions, éditions et formulaires de commentaires.
  * Rôle :
@@ -3195,6 +3237,7 @@ body {
   }
 }
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Fondations typographiques communes à toute l'interface Voisin.
  * Rôle :
@@ -3205,6 +3248,7 @@ body {
  * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
  */
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Composants du tableau de bord administrateur et de la modération.
  * Rôle :
@@ -3469,6 +3513,7 @@ body {
   }
 }
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Fondations typographiques communes à toute l'interface Voisin.
  * Rôle :
@@ -3479,6 +3524,7 @@ body {
  * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
  */
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Présentation publique de l'application Voisin avant authentification.
  * Rôle :
@@ -3645,6 +3691,7 @@ body {
   }
 }
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Fondations typographiques communes à toute l'interface Voisin.
  * Rôle :
@@ -3655,6 +3702,7 @@ body {
  * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
  */
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Pages publiques d'inscription et de connexion.
  * Rôle :
@@ -3820,6 +3868,7 @@ body {
   }
 }
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Fondations typographiques communes à toute l'interface Voisin.
  * Rôle :
@@ -3830,6 +3879,7 @@ body {
  * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
  */
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Compositions des différents états du fil d'actualité.
  * Rôle :
@@ -3908,6 +3958,7 @@ body {
   }
 }
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Fondations typographiques communes à toute l'interface Voisin.
  * Rôle :
@@ -3918,6 +3969,7 @@ body {
  * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
  */
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Pages de création et de modification d'une publication des sections 05 et 06 de Figma.
  * Rôle :
@@ -4103,6 +4155,7 @@ body {
   }
 }
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Fondations typographiques communes à toute l'interface Voisin.
  * Rôle :
@@ -4113,6 +4166,7 @@ body {
  * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
  */
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Profil membre et formulaire de modification issus des sections 07 et 08 de Figma.
  * Rôle :
@@ -4468,6 +4522,7 @@ body {
   }
 }
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Fondations typographiques communes à toute l'interface Voisin.
  * Rôle :
@@ -4478,6 +4533,7 @@ body {
  * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
  */
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Compositions desktop des demandes d'amitié et de la liste des amis.
  * Rôle :
@@ -4650,6 +4706,7 @@ body {
   }
 }
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Fondations typographiques communes à toute l'interface Voisin.
  * Rôle :
@@ -4660,6 +4717,7 @@ body {
  * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
  */
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Composition desktop des écrans de lecture, gestion, édition et modération des commentaires.
  * Rôle :
@@ -4751,6 +4809,7 @@ body {
   }
 }
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Fondations typographiques communes à toute l'interface Voisin.
  * Rôle :
@@ -4761,6 +4820,7 @@ body {
  * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
  */
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Compositions desktop du tableau de bord administrateur et de l'accès refusé.
  * Rôle :
@@ -4979,6 +5039,7 @@ body {
   }
 }
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Fondations typographiques communes à toute l'interface Voisin.
  * Rôle :
@@ -4989,6 +5050,7 @@ body {
  * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
  */
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Ajustements finaux issus de la maquette Figma simplifiée de l’application Voisin.
  * Rôle :
