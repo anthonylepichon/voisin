@@ -6,6 +6,8 @@
 /public/bundles/
 /assets/vendor/
 /uploads/profils/*
+/uploads/publications/*
+!/uploads/publications/.gitkeep
 
 # Configuration locale des outils
 /.vscode/

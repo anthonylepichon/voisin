@@ -1,0 +1,22 @@
+{#
+ Description générale : Page de création d'une publication.
+ Rôle : Permettre au membre connecté de partager un texte et/ou une image.
+ Tâches : Afficher le formulaire, ses erreurs et les choix de visibilité autorisés.
+ Liens avec les autres fichiers : Utilise PublicationController, PublicationFormType, le fragment publication/_form et les styles publication-editor.
+#}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer une publication — Voisin{% endblock %}
+{% block body_class %}publication-editor-page{% endblock %}
+
+{% block body %}
+    <section class="publication-editor" aria-labelledby="titre-creation-publication">
+        <h1 class="publication-editor__title" id="titre-creation-publication">Créer une publication</h1>
+        {% include 'publication/_form.html.twig' with {
+            publication: publicationForm.vars.data,
+            afficherSuppressionImage: false,
+            libelleValidation: 'Publier'
+        } %}
+    </section>
+{% endblock %}

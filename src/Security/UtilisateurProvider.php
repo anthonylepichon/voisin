@@ -76,6 +76,6 @@ class UtilisateurProvider implements UserProviderInterface
      */
     public function supportsClass(string $class): bool
     {
-        return Utilisateur::class === $class;
+        return is_a($class, Utilisateur::class, true);
     }
 }
