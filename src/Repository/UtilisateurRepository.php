@@ -3,8 +3,8 @@
 /*
  * Description générale : Fournit l'accès Doctrine aux comptes utilisateurs.
  * Rôle : Rechercher les utilisateurs, leurs amis et mettre à niveau leurs accès de sécurité.
- * Tâches : Retrouver un compte par identifiant, réunir ses amis, vérifier une relation et mettre à niveau un mot de passe.
- * Liens avec les autres fichiers : Utilisé par l'entité Utilisateur, Symfony Security et les fonctionnalités sociales.
+ * Tâches : Retrouver un compte, réunir ses amis, préparer la liste administrative et mettre à niveau un mot de passe.
+ * Liens avec les autres fichiers : Utilisé par Utilisateur, Symfony Security, les fonctionnalités sociales et AdminController.
  */
 
 namespace App\Repository;
@@ -80,6 +80,22 @@ class UtilisateurRepository extends ServiceEntityRepository implements PasswordU
     public function sontAmis(Utilisateur $premier, Utilisateur $second): bool
     {
         return in_array($second, $this->trouverAmis($premier), true);
+    }
+
+    /**
+     * Rôle : Retourner tous les comptes destinés à la consultation administrative.
+     * Paramètres : Aucun.
+     * Retour : La liste des utilisateurs triée par pseudonyme.
+     *
+     * @return list<Utilisateur>
+     */
+    public function trouverTousPourAdministration(): array
+    {
+        return $this->createQueryBuilder('utilisateur')
+            ->orderBy('utilisateur.pseudonyme', 'ASC')
+            ->addOrderBy('utilisateur.id', 'ASC')
+            ->getQuery()
+            ->getResult();
     }
 
     /**

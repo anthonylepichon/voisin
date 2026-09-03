@@ -1,0 +1,57 @@
+{#
+Description générale : Tableau de bord administratif et liste des membres.
+Rôle : Permettre à un administrateur de consulter les comptes sans les modifier.
+Tâches : Afficher les accès administratifs, le nombre de membres et leurs informations utiles.
+Liens avec les autres fichiers : Étend base.html.twig, utilise AdminController et les styles SCSS administratifs.
+#}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Administration — Voisin{% endblock %}
+
+{% block body %}
+    <div class="app-shell">
+        <aside class="app-shell__sidebar">
+            {% include 'partials/_member_sidebar.html.twig' %}
+        </aside>
+
+        <section class="app-shell__main admin-page" aria-labelledby="titre-administration">
+            <header class="admin-page__header">
+                <div>
+                    <h1 class="admin-page__title" id="titre-administration">Tableau de bord</h1>
+                    <p class="admin-page__count">{{ membres|length }} membre{% if membres|length != 1 %}s{% endif %} inscrit{% if membres|length != 1 %}s{% endif %}</p>
+                </div>
+                <nav class="admin-page__navigation" aria-label="Navigation d’administration">
+                    <a class="admin-page__navigation-link admin-page__navigation-link--active" href="{{ path('app_admin_index') }}" aria-current="page">Membres</a>
+                    <a class="admin-page__navigation-link" href="{{ path('app_admin_publications') }}">Publications</a>
+                </nav>
+            </header>
+
+            {% if membres is empty %}
+                <div class="admin-page__empty">
+                    <p class="admin-page__empty-title">Aucun membre à afficher.</p>
+                    <p class="admin-page__empty-description">Les comptes inscrits apparaîtront ici.</p>
+                </div>
+            {% else %}
+                <div class="members-table" role="table" aria-label="Liste des membres">
+                    <div class="members-table__row members-table__row--head" role="row">
+                        <span class="members-table__cell" role="columnheader">Pseudonyme</span>
+                        <span class="members-table__cell" role="columnheader">Adresse e-mail</span>
+                        <span class="members-table__cell" role="columnheader">Inscription</span>
+                        <span class="members-table__cell" role="columnheader">Rôle</span>
+                    </div>
+                    {% for membre in membres %}
+                        <div class="members-table__row" role="row">
+                            <span class="members-table__cell" role="cell">{{ membre.pseudonyme }}</span>
+                            <span class="members-table__cell" role="cell">{{ membre.adresseEmail }}</span>
+                            <time class="members-table__cell" role="cell" datetime="{{ membre.dateInscription|date('c') }}">{{ membre.dateInscription|date('d/m/Y') }}</time>
+                            <span class="members-table__cell{% if 'ROLE_ADMIN' in membre.roles %} members-table__role--admin{% endif %}" role="cell">
+                                {% if 'ROLE_ADMIN' in membre.roles %}Administrateur{% else %}Membre{% endif %}
+                            </span>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </section>
+    </div>
+{% endblock %}
