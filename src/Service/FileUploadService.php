@@ -3,7 +3,7 @@
 /*
  * Description générale : Service central de gestion des fichiers téléversés par les membres.
  * Rôle : Éviter la duplication du déplacement, du nommage, de la suppression et de la résolution des fichiers.
- * Tâches : Enregistrer les photos et images, préparer leurs métadonnées Doctrine, compenser les échecs et journaliser les suppressions physiques.
+ * Tâches : Déduire le répertoire du type, enregistrer les images, préparer leurs métadonnées Doctrine, compenser les échecs et journaliser les suppressions physiques.
  * Liens avec les autres fichiers : Utilise UploadFichier, Utilisateur, Publication et les contrôleurs de médias.
  */
 
@@ -45,7 +45,7 @@ class FileUploadService
     public function televerserPhotoProfil(UploadedFile $fichier, Utilisateur $utilisateur): ?UploadFichier
     {
         $baseNom = 'profil-'.(string) $utilisateur->getPseudonyme();
-        $upload = $this->televerser($fichier, UploadFichier::TYPE_PROFIL, self::CHEMIN_PROFILS, $baseNom);
+        $upload = $this->televerser($fichier, UploadFichier::TYPE_PROFIL, $baseNom);
 
         if (null === $upload) {
             return null;
@@ -65,7 +65,7 @@ class FileUploadService
     public function televerserImagePublication(UploadedFile $fichier, Publication $publication): ?UploadFichier
     {
         $baseNom = pathinfo($fichier->getClientOriginalName(), PATHINFO_FILENAME);
-        $upload = $this->televerser($fichier, UploadFichier::TYPE_PUBLICATION, self::CHEMIN_PUBLICATIONS, $baseNom);
+        $upload = $this->televerser($fichier, UploadFichier::TYPE_PUBLICATION, $baseNom);
 
         if (null === $upload) {
             return null;
@@ -133,7 +133,8 @@ class FileUploadService
     {
         $type = (string) $upload->getType();
         $nom = (string) $upload->getNom();
-        $chemin = $this->obtenirCheminFichier($type, $nom, $upload->getChemin());
+        $cheminRelatif = $this->determinerCheminParType($type);
+        $chemin = $this->obtenirCheminFichier($type, $nom);
 
         if (!is_file($chemin)) {
             return true;
@@ -143,7 +144,7 @@ class FileUploadService
             $this->logger->error('Un fichier devenu inutile n’a pas pu être supprimé.', [
                 'type' => $type,
                 'nom' => $nom,
-                'chemin' => $upload->getChemin(),
+                'chemin' => $cheminRelatif,
             ]);
 
             return false;
@@ -153,36 +154,29 @@ class FileUploadService
     }
 
     /**
-     * Rôle : Construire le chemin sûr d'un fichier centralisé ou historique.
-     * Paramètres : Le type, le nom sécurisé et le chemin enregistré lorsqu'il existe.
+     * Rôle : Construire le chemin sûr d'un fichier à partir de son type métier.
+     * Paramètres : Le type et le nom sécurisé du fichier.
      * Retour : Le chemin absolu attendu.
      */
-    public function obtenirCheminFichier(string $type, string $nom, ?string $cheminEnregistre = null): string
+    public function obtenirCheminFichier(string $type, string $nom): string
     {
         if (basename($nom) !== $nom) {
             return $this->kernel->getProjectDir().'/uploads/fichier-invalide';
         }
 
-        $chemin = self::CHEMIN_PUBLICATIONS;
-
-        if (UploadFichier::TYPE_PROFIL === $type) {
-            $chemin = self::CHEMIN_PROFILS;
-        }
-
-        if (null !== $cheminEnregistre && in_array($cheminEnregistre, [self::CHEMIN_PROFILS, self::CHEMIN_PUBLICATIONS], true)) {
-            $chemin = $cheminEnregistre;
-        }
+        $chemin = $this->determinerCheminParType($type);
 
         return $this->kernel->getProjectDir().'/'.$chemin.'/'.$nom;
     }
 
     /**
      * Rôle : Déplacer un fichier validé et créer ses métadonnées communes.
-     * Paramètres : Le fichier, son type, son répertoire relatif et la base de son nom.
+     * Paramètres : Le fichier, son type et la base de son nom.
      * Retour : Les métadonnées non rattachées ou null en cas d'échec.
      */
-    private function televerser(UploadedFile $fichier, string $type, string $chemin, string $baseNom): ?UploadFichier
+    private function televerser(UploadedFile $fichier, string $type, string $baseNom): ?UploadFichier
     {
+        $chemin = $this->determinerCheminParType($type);
         $extension = $fichier->guessExtension();
 
         if (null === $extension) {
@@ -213,6 +207,24 @@ class FileUploadService
             ->setType($type)
             ->setNom($nom)
             ->setChemin($chemin);
+    }
+
+    /**
+     * Rôle : Déterminer l'unique répertoire autorisé pour un type de fichier.
+     * Paramètres : Le type métier du fichier.
+     * Retour : Le répertoire relatif correspondant au type.
+     */
+    private function determinerCheminParType(string $type): string
+    {
+        if (UploadFichier::TYPE_PROFIL === $type) {
+            return self::CHEMIN_PROFILS;
+        }
+
+        if (UploadFichier::TYPE_PUBLICATION === $type) {
+            return self::CHEMIN_PUBLICATIONS;
+        }
+
+        throw new \InvalidArgumentException('Le type de fichier est invalide.');
     }
 
 }

@@ -3,7 +3,7 @@
 /*
  * Description générale : Distribution centralisée des fichiers téléversés.
  * Rôle : Servir une photo de profil ou une image de publication selon les autorisations applicables.
- * Tâches : Retrouver le fichier, identifier sa publication, consulter les règles d'accès centralisées et retourner l'image.
+ * Tâches : Retrouver le fichier, identifier sa publication, consulter les règles d'accès centralisées et résoudre son chemin depuis son type.
  * Liens avec les autres fichiers : Utilise UploadFichierRepository, PublicationRepository, PublicationAccessService, FileUploadService et Publication.
  */
 
@@ -61,13 +61,7 @@ class UploadFichierController extends AbstractController
             }
         }
 
-        $cheminEnregistre = null;
-
-        if (null !== $uploadFichier) {
-            $cheminEnregistre = $uploadFichier->getChemin();
-        }
-
-        $chemin = $fileUploadService->obtenirCheminFichier($type, $nom, $cheminEnregistre);
+        $chemin = $fileUploadService->obtenirCheminFichier($type, $nom);
 
         if (!is_file($chemin)) {
             throw $this->createNotFoundException();
