@@ -59,7 +59,12 @@ class PublicationController extends AbstractController
         $form->handleRequest($request);
 
         /** @var UploadedFile|null $image */
-        $image = $form->isSubmitted() ? $form->get('image')->getData() : null;
+        $image = null;
+
+        if ($form->isSubmitted()) {
+            $image = $form->get('image')->getData();
+        }
+
         $supprimerImage = $form->isSubmitted() && $form->get('supprimerImage')->isClicked();
 
         if ($form->isSubmitted() && $form->isValid()) {
