@@ -3,7 +3,7 @@
 /*
  * Description générale : Représente un compte utilisateur de l'application Voisin.
  * Rôle : Porter les données de sécurité, de profil et d'activité d'un utilisateur.
- * Tâches : Garantir les contraintes Doctrine, la validation du MPD et la relation avec la photo du profil.
+ * Tâches : Garantir les contraintes Doctrine, la validation du MPD, la photo du profil et l'encapsulation des relations inverses.
  * Liens avec les autres fichiers : Utilisée par UtilisateurRepository, UploadFichier, Security, les contrôleurs et les autres entités métier.
  */
 
@@ -12,6 +12,7 @@ namespace App\Entity;
 use App\Repository\UtilisateurRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ReadableCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -299,47 +300,134 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * Rôle : Retourner les publications écrites par l'utilisateur.
      * Paramètres : Aucun.
-     * Retour : La collection de publications.
+     * Retour : La collection consultable de publications.
      *
-     * @return Collection<int, Publication>
+     * @return ReadableCollection<int, Publication>
      */
-    public function getPublications(): Collection
+    public function getPublications(): ReadableCollection
     {
         return $this->publications;
     }
 
     /**
+     * Rôle : Ajouter une publication écrite par l'utilisateur et synchroniser son propriétaire.
+     * Paramètres : La publication à associer.
+     * Retour : L'utilisateur modifié.
+     */
+    public function ajouterPublication(Publication $publication): static
+    {
+        if (!$this->publications->contains($publication)) {
+            $this->publications->add($publication);
+            $publication->setUtilisateur($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Rôle : Retirer une publication de l'utilisateur et synchroniser son propriétaire.
+     * Paramètres : La publication à dissocier.
+     * Retour : L'utilisateur modifié.
+     */
+    public function retirerPublication(Publication $publication): static
+    {
+        if ($this->publications->removeElement($publication) && $publication->getUtilisateur() === $this) {
+            $publication->setUtilisateur(null);
+        }
+
+        return $this;
+    }
+
+    /**
      * Rôle : Retourner les commentaires écrits par l'utilisateur.
      * Paramètres : Aucun.
-     * Retour : La collection de commentaires.
+     * Retour : La collection consultable de commentaires.
      *
-     * @return Collection<int, Commentaire>
+     * @return ReadableCollection<int, Commentaire>
      */
-    public function getCommentaires(): Collection
+    public function getCommentaires(): ReadableCollection
     {
         return $this->commentaires;
     }
 
     /**
+     * Rôle : Ajouter un commentaire écrit par l'utilisateur et synchroniser son propriétaire.
+     * Paramètres : Le commentaire à associer.
+     * Retour : L'utilisateur modifié.
+     */
+    public function ajouterCommentaire(Commentaire $commentaire): static
+    {
+        if (!$this->commentaires->contains($commentaire)) {
+            $this->commentaires->add($commentaire);
+            $commentaire->setUtilisateur($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Rôle : Retirer un commentaire de l'utilisateur et synchroniser son propriétaire.
+     * Paramètres : Le commentaire à dissocier.
+     * Retour : L'utilisateur modifié.
+     */
+    public function retirerCommentaire(Commentaire $commentaire): static
+    {
+        if ($this->commentaires->removeElement($commentaire) && $commentaire->getUtilisateur() === $this) {
+            $commentaire->setUtilisateur(null);
+        }
+
+        return $this;
+    }
+
+    /**
      * Rôle : Retourner les publications aimées par l'utilisateur.
      * Paramètres : Aucun.
-     * Retour : La collection de publications aimées.
+     * Retour : La collection consultable de publications aimées.
      *
-     * @return Collection<int, Publication>
+     * @return ReadableCollection<int, Publication>
      */
-    public function getPublicationsAimees(): Collection
+    public function getPublicationsAimees(): ReadableCollection
     {
         return $this->publicationsAimees;
     }
 
     /**
+     * Rôle : Ajouter une publication aux mentions J'aime de l'utilisateur et synchroniser la relation propriétaire.
+     * Paramètres : La publication aimée.
+     * Retour : L'utilisateur modifié.
+     */
+    public function ajouterPublicationAimee(Publication $publication): static
+    {
+        if (!$this->publicationsAimees->contains($publication)) {
+            $this->publicationsAimees->add($publication);
+            $publication->ajouterUtilisateurAimant($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Rôle : Retirer une publication des mentions J'aime de l'utilisateur et synchroniser la relation propriétaire.
+     * Paramètres : La publication qui n'est plus aimée.
+     * Retour : L'utilisateur modifié.
+     */
+    public function retirerPublicationAimee(Publication $publication): static
+    {
+        if ($this->publicationsAimees->removeElement($publication)) {
+            $publication->retirerUtilisateurAimant($this);
+        }
+
+        return $this;
+    }
+
+    /**
      * Rôle : Retourner les amis enregistrés du côté propriétaire de la relation normalisée.
      * Paramètres : Aucun.
-     * Retour : La collection d'amis concernés.
+     * Retour : La collection consultable d'amis concernés.
      *
-     * @return Collection<int, Utilisateur>
+     * @return ReadableCollection<int, Utilisateur>
      */
-    public function getAmis(): Collection
+    public function getAmis(): ReadableCollection
     {
         return $this->amis;
     }

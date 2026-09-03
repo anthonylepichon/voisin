@@ -3,7 +3,7 @@
 /*
  * Description générale : Représente un commentaire déposé sous une publication.
  * Rôle : Conserver son contenu, sa date, son propriétaire et sa publication associée.
- * Tâches : Appliquer les champs, relations et index de la table commentaire du MPD.
+ * Tâches : Appliquer les champs et index du MPD, puis synchroniser les relations avec l'utilisateur et la publication.
  * Liens avec les autres fichiers : Lié à Utilisateur, Publication, CommentaireRepository, CommentFormType et CommentController.
  */
 
@@ -34,10 +34,12 @@ class Commentaire
 
     #[ORM\ManyToOne(inversedBy: 'commentaires')]
     #[ORM\JoinColumn(name: 'utilisateur_id', nullable: false, onDelete: 'RESTRICT')]
+    #[Assert\NotNull(message: 'L’utilisateur du commentaire est obligatoire.')]
     private ?Utilisateur $utilisateur = null;
 
     #[ORM\ManyToOne(inversedBy: 'commentaires')]
     #[ORM\JoinColumn(name: 'publication_id', nullable: false, onDelete: 'CASCADE')]
+    #[Assert\NotNull(message: 'La publication du commentaire est obligatoire.')]
     private ?Publication $publication = null;
 
     /**
@@ -116,12 +118,25 @@ class Commentaire
 
     /**
      * Rôle : Définir l'utilisateur du commentaire.
-     * Paramètres : L'utilisateur propriétaire du commentaire.
+     * Paramètres : L'utilisateur propriétaire du commentaire ou null pendant une dissociation contrôlée.
      * Retour : Le commentaire modifié.
      */
-    public function setUtilisateur(Utilisateur $utilisateur): static
+    public function setUtilisateur(?Utilisateur $utilisateur): static
     {
+        if ($this->utilisateur === $utilisateur) {
+            return $this;
+        }
+
+        $ancienUtilisateur = $this->utilisateur;
         $this->utilisateur = $utilisateur;
+
+        if (null !== $ancienUtilisateur) {
+            $ancienUtilisateur->retirerCommentaire($this);
+        }
+
+        if (null !== $utilisateur) {
+            $utilisateur->ajouterCommentaire($this);
+        }
 
         return $this;
     }
@@ -138,12 +153,25 @@ class Commentaire
 
     /**
      * Rôle : Définir la publication commentée.
-     * Paramètres : La publication associée.
+     * Paramètres : La publication associée ou null pendant une dissociation contrôlée.
      * Retour : Le commentaire modifié.
      */
-    public function setPublication(Publication $publication): static
+    public function setPublication(?Publication $publication): static
     {
+        if ($this->publication === $publication) {
+            return $this;
+        }
+
+        $anciennePublication = $this->publication;
         $this->publication = $publication;
+
+        if (null !== $anciennePublication) {
+            $anciennePublication->retirerCommentaire($this);
+        }
+
+        if (null !== $publication) {
+            $publication->ajouterCommentaire($this);
+        }
 
         return $this;
     }
