@@ -3,7 +3,7 @@
 /*
  * Description générale : Fournit l'accès Doctrine aux demandes d'amitié.
  * Rôle : Centraliser les recherches liées aux demandes d'amitié en attente.
- * Tâches : Compter les demandes reçues et fournir les opérations standard de Doctrine pour DemandeAmitie.
+ * Tâches : Rechercher, compter et comparer les demandes d'amitié encore en attente.
  * Liens avec les autres fichiers : Utilisé par l'entité DemandeAmitie et les fonctionnalités d'amitié.
  */
 
@@ -42,5 +42,44 @@ class DemandeAmitieRepository extends ServiceEntityRepository
             ->setParameter('destinataire', $destinataire)
             ->getQuery()
             ->getSingleScalarResult();
+    }
+
+    /**
+     * Rôle : Retourner les demandes reçues par un utilisateur de la plus récente à la plus ancienne.
+     * Paramètres : L'utilisateur destinataire des demandes.
+     * Retour : La liste des demandes reçues avec leur expéditeur.
+     *
+     * @return list<DemandeAmitie>
+     */
+    public function trouverRecues(Utilisateur $destinataire): array
+    {
+        return $this->createQueryBuilder('demande')
+            ->innerJoin('demande.expediteur', 'expediteur')
+            ->addSelect('expediteur')
+            ->andWhere('demande.destinataire = :destinataire')
+            ->setParameter('destinataire', $destinataire)
+            ->orderBy('demande.dateCreation', 'DESC')
+            ->addOrderBy('demande.id', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Rôle : Rechercher une demande existante entre deux utilisateurs dans les deux sens.
+     * Paramètres : Les deux utilisateurs concernés par la recherche.
+     * Retour : La demande trouvée ou null lorsqu'aucune demande n'existe.
+     */
+    public function trouverEntre(Utilisateur $premier, Utilisateur $second): ?DemandeAmitie
+    {
+        return $this->createQueryBuilder('demande')
+            ->andWhere(
+                '(demande.expediteur = :premier AND demande.destinataire = :second)'
+                .' OR (demande.expediteur = :second AND demande.destinataire = :premier)'
+            )
+            ->setParameter('premier', $premier)
+            ->setParameter('second', $second)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 }

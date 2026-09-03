@@ -55,6 +55,7 @@
     font-family: variables.$font-family-base;
     font-size: variables.$font-size-16;
     font-weight: variables.$font-weight-bold;
+    text-decoration: none;
 }
 
 .friend-request-card__date {
@@ -86,6 +87,7 @@
     font-weight: variables.$font-weight-regular;
     line-height: normal;
     white-space: nowrap;
+    cursor: pointer;
 }
 
 .friend-request-card__decline {

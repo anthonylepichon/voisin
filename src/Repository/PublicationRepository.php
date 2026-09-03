@@ -3,8 +3,8 @@
 /*
  * Description générale : Fournit l'accès Doctrine aux publications.
  * Rôle : Centraliser les recherches de publications et leur visibilité.
- * Tâches : Charger le fil autorisé selon le membre et le filtre sélectionné.
- * Liens avec les autres fichiers : Utilisé par Publication, FeedController et les écrans affichant des publications.
+ * Tâches : Charger le fil autorisé et les publications visibles sur un profil.
+ * Liens avec les autres fichiers : Utilisé par Publication, FeedController, ProfileController et les écrans de publications.
  */
 
 namespace App\Repository;
@@ -98,6 +98,36 @@ class PublicationRepository extends ServiceEntityRepository
             if ([] !== $amisEnregistresParUtilisateur) {
                 $constructeur->setParameter('amisEnregistresParUtilisateur', $amisEnregistresParUtilisateur);
             }
+        }
+
+        return $constructeur->getQuery()->getResult();
+    }
+
+    /**
+     * Rôle : Rechercher les publications visibles sur le profil d'un membre.
+     * Paramètres : Le propriétaire du profil et l'autorisation de voir ses publications réservées aux amis.
+     * Retour : Les publications du profil triées de la plus récente à la plus ancienne.
+     *
+     * @return list<Publication>
+     */
+    public function trouverPourProfil(Utilisateur $profil, bool $inclureReserveesAuxAmis): array
+    {
+        $constructeur = $this->createQueryBuilder('publication')
+            ->innerJoin('publication.auteur', 'auteur')
+            ->addSelect('auteur')
+            ->leftJoin('publication.utilisateursAimant', 'utilisateurAimant')
+            ->addSelect('utilisateurAimant')
+            ->leftJoin('publication.commentaires', 'commentaire')
+            ->addSelect('commentaire')
+            ->andWhere('publication.auteur = :profil')
+            ->setParameter('profil', $profil)
+            ->orderBy('publication.dateCreation', 'DESC')
+            ->addOrderBy('publication.id', 'DESC');
+
+        if (!$inclureReserveesAuxAmis) {
+            $constructeur
+                ->andWhere('publication.visibilite = :visibilitePublique')
+                ->setParameter('visibilitePublique', Publication::VISIBILITE_PUBLIQUE);
         }
 
         return $constructeur->getQuery()->getResult();

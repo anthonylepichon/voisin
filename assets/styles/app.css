@@ -2386,6 +2386,7 @@ body {
   font-family: "Inter", Arial, sans-serif;
   font-size: 16px;
   font-weight: 700;
+  text-decoration: none;
 }
 
 .friend-request-card__date {
@@ -2417,6 +2418,7 @@ body {
   font-weight: 400;
   line-height: normal;
   white-space: nowrap;
+  cursor: pointer;
 }
 
 .friend-request-card__decline {
@@ -2551,6 +2553,7 @@ body {
   font-weight: 700;
   line-height: normal;
   text-align: center;
+  text-decoration: none;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -2577,6 +2580,11 @@ body {
 
 .friend-card__status--offline {
   background-color: #8d8d8d;
+}
+
+.friend-card:focus-visible {
+  outline: 2px solid #c95f30;
+  outline-offset: 3px;
 }
 
 /*
@@ -4071,17 +4079,17 @@ body {
 
 .profile-page__summary--owner,
 .profile-page__summary--stranger {
-  height: 404px;
+  min-height: 404px;
 }
 
 .profile-page__summary--friend,
 .profile-page__summary--request-sent,
 .profile-page__summary--request-received {
-  height: 406px;
+  min-height: 406px;
 }
 
 .profile-page__summary--empty {
-  height: 353px;
+  min-height: 353px;
 }
 
 .profile-page__cover {
@@ -4209,6 +4217,26 @@ body {
   gap: 24px;
   width: 100%;
   overflow: hidden;
+}
+
+.profile-page__friends {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  min-width: 0;
+}
+
+.profile-page__section-title {
+  margin: 0;
+  color: #2c2420;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.profile-page__friends .friend-card {
+  text-decoration: none;
 }
 
 .profile-page__publication-row {
@@ -4479,6 +4507,13 @@ body {
   color: #8d8d8d;
   font-size: 14px;
   font-weight: 400;
+}
+
+.friends > .friends__empty-description {
+  width: 100%;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 8px;
 }
 
 .friends__section-title {
