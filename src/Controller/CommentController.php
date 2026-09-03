@@ -79,7 +79,6 @@ class CommentController extends AbstractController
         $formulaire->handleRequest($request);
 
         if ($formulaire->isSubmitted() && $formulaire->isValid()) {
-            $this->nettoyerContenu($commentaire);
             $entityManager->persist($commentaire);
             $entityManager->flush();
             $userActivityService->enregistrerActivite($utilisateur, new \DateTimeImmutable());
@@ -130,7 +129,6 @@ class CommentController extends AbstractController
         $formulaireEdition->handleRequest($request);
 
         if ($formulaireEdition->isSubmitted() && $formulaireEdition->isValid()) {
-            $this->nettoyerContenu($commentaire);
             $entityManager->flush();
             $userActivityService->enregistrerActivite($utilisateur, new \DateTimeImmutable());
             $this->addFlash('success', 'Ton commentaire a été modifié.');
@@ -333,20 +331,6 @@ class CommentController extends AbstractController
         }
 
         throw $this->createAccessDeniedException('Tu ne peux pas supprimer ce commentaire.');
-    }
-
-    /**
-     * Rôle : Retirer les espaces inutiles avant l'enregistrement du commentaire.
-     * Paramètres : Le commentaire validé.
-     * Retour : Aucun.
-     */
-    private function nettoyerContenu(Commentaire $commentaire): void
-    {
-        $contenu = $commentaire->getContenu();
-
-        if (null !== $contenu) {
-            $commentaire->setContenu(trim($contenu));
-        }
     }
 
     /**

@@ -26,7 +26,7 @@ class Commentaire
 
     #[ORM\Column(name: 'contenu', type: 'text')]
     #[Assert\NotBlank(message: 'Le commentaire ne peut pas être vide.', normalizer: 'trim')]
-    #[Assert\Length(max: 500, maxMessage: 'Le commentaire ne peut pas dépasser {{ limit }} caractères.')]
+    #[Assert\Length(max: 500, normalizer: 'trim', maxMessage: 'Le commentaire ne peut pas dépasser {{ limit }} caractères.')]
     private ?string $contenu = null;
 
     #[ORM\Column(name: 'date_creation')]

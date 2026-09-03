@@ -34,7 +34,7 @@ class Publication
     private ?int $id = null;
 
     #[ORM\Column(name: 'contenu', type: 'text', nullable: true)]
-    #[Assert\Length(max: 2000, maxMessage: 'Le contenu ne peut pas dépasser {{ limit }} caractères.')]
+    #[Assert\Length(max: 2000, normalizer: 'trim', maxMessage: 'Le contenu ne peut pas dépasser {{ limit }} caractères.')]
     private ?string $contenu = null;
 
     #[ORM\OneToOne(cascade: ['persist'])]
@@ -319,6 +319,16 @@ class Publication
             return true;
         }
 
+        return $this->aUnContenuTexte();
+    }
+
+    /**
+     * Rôle : Indiquer si la publication possède un texte réellement renseigné.
+     * Paramètres : Aucun.
+     * Retour : Vrai lorsque le contenu contient au moins un caractère non blanc.
+     */
+    public function aUnContenuTexte(): bool
+    {
         if ($this->contenu === null) {
             return false;
         }

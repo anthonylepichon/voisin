@@ -3,7 +3,7 @@
 /*
  * Description générale : Formulaire Symfony de création d'un compte utilisateur.
  * Rôle : Collecter et valider les données nécessaires à l'inscription.
- * Tâches : Contrôler le pseudonyme, l'e-mail, le mot de passe et la photo de profil obligatoire.
+ * Tâches : Normaliser le pseudonyme et l'e-mail, puis contrôler le mot de passe et la photo de profil obligatoire.
  * Liens avec les autres fichiers : Utilisé par RegistrationController et associé à l'entité Utilisateur.
  */
 
@@ -11,10 +11,14 @@ namespace App\Form;
 
 use App\Entity\Utilisateur;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\Length;
@@ -30,11 +34,13 @@ class RegistrationFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('pseudonyme', null, [
+            ->add('pseudonyme', TextType::class, [
                 'label' => 'Pseudonyme',
+                'trim' => true,
             ])
-            ->add('adresseEmail', null, [
+            ->add('adresseEmail', EmailType::class, [
                 'label' => 'Adresse e-mail',
+                'trim' => true,
             ])
             ->add('photoProfil', FileType::class, [
                 'label' => 'Photo de profil',
@@ -55,8 +61,14 @@ class RegistrationFormType extends AbstractType
                 'label' => 'Mot de passe',
                 'mapped' => false,
                 'invalid_message' => 'Les deux mots de passe doivent être identiques.',
-                'first_options' => ['attr' => ['autocomplete' => 'new-password']],
-                'second_options' => ['attr' => ['autocomplete' => 'new-password']],
+                'first_options' => [
+                    'trim' => false,
+                    'attr' => ['autocomplete' => 'new-password'],
+                ],
+                'second_options' => [
+                    'trim' => false,
+                    'attr' => ['autocomplete' => 'new-password'],
+                ],
                 'constraints' => [
                     new NotBlank(
                         message: 'Le mot de passe est obligatoire.',
@@ -68,7 +80,31 @@ class RegistrationFormType extends AbstractType
                     ),
                 ],
             ])
+            ->addEventListener(FormEvents::PRE_SUBMIT, [$this, 'normaliserAdresseEmail'])
         ;
+    }
+
+    /**
+     * Rôle : Uniformiser l'adresse e-mail avant son association à l'utilisateur.
+     * Paramètres : L'événement contenant les valeurs brutes soumises par le formulaire.
+     * Retour : Aucun.
+     */
+    public function normaliserAdresseEmail(FormEvent $event): void
+    {
+        $donnees = $event->getData();
+
+        if (!is_array($donnees)) {
+            return;
+        }
+
+        $adresseEmail = $donnees['adresseEmail'] ?? null;
+
+        if (!is_string($adresseEmail)) {
+            return;
+        }
+
+        $donnees['adresseEmail'] = mb_strtolower(trim($adresseEmail));
+        $event->setData($donnees);
     }
 
     /**

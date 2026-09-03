@@ -39,8 +39,8 @@ Liens avec les autres fichiers : Inclus dans le fil et les profils, puis relié 
 		</span>
 	</header>
 
-	{% if publication.contenu is not null and publication.contenu|trim != '' %}
-		<p class="publication-card__text">{{ publication.contenu|nl2br }}</p>
+	{% if publication.aUnContenuTexte() %}
+		<p class="publication-card__text">{{ publication.contenu }}</p>
 	{% endif %}
 
 	{% if imagePublication %}

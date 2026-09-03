@@ -41,7 +41,7 @@ Liens avec les autres fichiers : Étend base.html.twig, utilise CommentControlle
 					</span>
 				</header>
 
-				{% if publication.contenu is not null and publication.contenu|trim != '' %}
+				{% if publication.aUnContenuTexte() %}
 					<p class="publication-summary__text">{{ publication.contenu }}</p>
 				{% elseif publication.imageAffichee %}
 					<p class="publication-summary__text">Publication avec une image.</p>

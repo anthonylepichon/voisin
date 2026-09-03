@@ -32,13 +32,13 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(name: 'pseudonyme', length: 50)]
-    #[Assert\NotBlank(message: 'Le pseudonyme est obligatoire.')]
-    #[Assert\Length(min: 3, max: 50, minMessage: 'Le pseudonyme doit contenir au moins {{ limit }} caractères.', maxMessage: 'Le pseudonyme ne peut pas dépasser {{ limit }} caractères.')]
+    #[Assert\NotBlank(message: 'Le pseudonyme est obligatoire.', normalizer: 'trim')]
+    #[Assert\Length(min: 3, max: 50, normalizer: 'trim', minMessage: 'Le pseudonyme doit contenir au moins {{ limit }} caractères.', maxMessage: 'Le pseudonyme ne peut pas dépasser {{ limit }} caractères.')]
     private ?string $pseudonyme = null;
 
     #[ORM\Column(name: 'adresse_email', length: 180)]
-    #[Assert\NotBlank(message: 'L’adresse e-mail est obligatoire.')]
-    #[Assert\Email(message: 'L’adresse e-mail doit être valide.')]
+    #[Assert\NotBlank(message: 'L’adresse e-mail est obligatoire.', normalizer: 'trim')]
+    #[Assert\Email(message: 'L’adresse e-mail doit être valide.', normalizer: 'trim')]
     private ?string $adresseEmail = null;
 
     /** @var list<string> */
@@ -53,7 +53,7 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     private ?UploadFichier $uploadFichier = null;
 
     #[ORM\Column(name: 'biographie', length: 500, nullable: true)]
-    #[Assert\Length(max: 500, maxMessage: 'La biographie ne peut pas dépasser {{ limit }} caractères.')]
+    #[Assert\Length(max: 500, normalizer: 'trim', maxMessage: 'La biographie ne peut pas dépasser {{ limit }} caractères.')]
     private ?string $biographie = null;
 
     #[ORM\Column(name: 'date_inscription')]

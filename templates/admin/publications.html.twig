@@ -42,7 +42,7 @@ Liens avec les autres fichiers : Étend base.html.twig et utilise AdminControlle
                             <span class="moderation-item__details">
                                 <strong class="moderation-item__author">{{ publication.utilisateur.pseudonyme }}</strong>
                                 <span class="moderation-item__excerpt">
-                                    {% if publication.contenu is not null and publication.contenu|trim != '' %}
+                                    {% if publication.aUnContenuTexte() %}
                                         {{ publication.contenu|slice(0, 90) }}{% if publication.contenu|length > 90 %}…{% endif %}
                                     {% else %}
                                         Publication avec une image

@@ -3,7 +3,7 @@
 /*
  * Description générale : Formulaire Symfony de saisie d'un commentaire.
  * Rôle : Autoriser uniquement la saisie du contenu textuel d'un commentaire.
- * Tâches : Afficher un champ limité à 500 caractères et conserver la protection CSRF du formulaire.
+ * Tâches : Normaliser le contenu, afficher un champ limité à 500 caractères et conserver la protection CSRF du formulaire.
  * Liens avec les autres fichiers : Utilise Commentaire et est traité par CommentController dans la page des commentaires.
  */
 
@@ -26,6 +26,7 @@ class CommentFormType extends AbstractType
     {
         $builder->add('contenu', TextareaType::class, [
             'label' => false,
+            'trim' => true,
             'attr' => [
                 'maxlength' => 500,
                 'placeholder' => 'Écrire un commentaire…',
