@@ -3,7 +3,7 @@
 /*
  * Description générale : Service central de gestion des fichiers téléversés par les membres.
  * Rôle : Éviter la duplication du déplacement, du nommage, de la suppression et de la résolution des fichiers.
- * Tâches : Enregistrer les photos et images, créer leurs métadonnées Doctrine, retirer les anciens fichiers et fournir un chemin sûr.
+ * Tâches : Enregistrer les photos et images, préparer leurs métadonnées Doctrine, compenser les échecs et journaliser les suppressions physiques.
  * Liens avec les autres fichiers : Utilise UploadFichier, Utilisateur, Publication et les contrôleurs de médias.
  */
 
@@ -13,6 +13,7 @@ use App\Entity\Publication;
 use App\Entity\UploadFichier;
 use App\Entity\Utilisateur;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -25,13 +26,14 @@ class FileUploadService
 
     /**
      * Rôle : Initialiser les dépendances nécessaires à la gestion centralisée des fichiers.
-     * Paramètres : Le slugger, Doctrine et le noyau Symfony.
+     * Paramètres : Le slugger, Doctrine, le noyau Symfony et le journal applicatif.
      * Retour : Aucun.
      */
     public function __construct(
         private SluggerInterface $slugger,
         private EntityManagerInterface $entityManager,
-        private KernelInterface $kernel
+        private KernelInterface $kernel,
+        private LoggerInterface $logger
     ) {
     }
 
@@ -76,31 +78,78 @@ class FileUploadService
     }
 
     /**
-     * Rôle : Supprimer une ancienne photo de profil et ses métadonnées éventuelles.
+     * Rôle : Préparer la suppression Doctrine d'une ancienne photo sans toucher au fichier physique.
      * Paramètres : L'utilisateur propriétaire et les métadonnées du fichier à supprimer.
      * Retour : Aucun.
      */
-    public function supprimerPhotoProfil(Utilisateur $utilisateur, UploadFichier $upload): void
+    public function preparerSuppressionPhotoProfil(Utilisateur $utilisateur, UploadFichier $upload): void
     {
         if ($utilisateur->getUploadFichier() === $upload) {
             return;
         }
 
-        $this->supprimer($upload);
+        $this->entityManager->remove($upload);
     }
 
     /**
-     * Rôle : Supprimer une ancienne image de publication et ses métadonnées éventuelles.
+     * Rôle : Détacher une ancienne image de publication et préparer la suppression de ses métadonnées.
      * Paramètres : La publication propriétaire et les métadonnées du fichier à supprimer.
      * Retour : Aucun.
      */
-    public function supprimerImagePublication(Publication $publication, UploadFichier $upload): void
+    public function preparerSuppressionImagePublication(Publication $publication, UploadFichier $upload): void
     {
         if ($publication->getUploadFichier() === $upload) {
             $publication->setUploadFichier(null);
         }
 
-        $this->supprimer($upload);
+        $this->entityManager->remove($upload);
+    }
+
+    /**
+     * Rôle : Supprimer le fichier créé par un téléversement dont la sauvegarde Doctrine a échoué.
+     * Paramètres : Les métadonnées du nouveau fichier à compenser.
+     * Retour : Vrai si le fichier est absent ou correctement supprimé.
+     */
+    public function compenserTeleversement(UploadFichier $upload): bool
+    {
+        $suppressionReussie = $this->supprimerFichierPhysique($upload);
+
+        if (!$suppressionReussie) {
+            $this->logger->critical('Le fichier d’un téléversement annulé n’a pas pu être supprimé.', [
+                'type' => $upload->getType(),
+                'nom' => $upload->getNom(),
+            ]);
+        }
+
+        return $suppressionReussie;
+    }
+
+    /**
+     * Rôle : Supprimer physiquement un fichier après la réussite de la sauvegarde Doctrine.
+     * Paramètres : Les métadonnées du fichier devenu inutile.
+     * Retour : Vrai si le fichier est absent ou correctement supprimé.
+     */
+    public function supprimerFichierPhysique(UploadFichier $upload): bool
+    {
+        $type = (string) $upload->getType();
+        $nom = (string) $upload->getNom();
+        $chemin = $this->obtenirCheminFichier($type, $nom, $upload->getChemin());
+
+        if (!is_file($chemin)) {
+            return true;
+        }
+
+        if (!@unlink($chemin)) {
+            $this->logger->error('Un fichier devenu inutile n’a pas pu être supprimé.', [
+                'type' => $type,
+                'nom' => $nom,
+                'chemin' => $upload->getChemin(),
+            ]);
+
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -150,7 +199,13 @@ class FileUploadService
 
         try {
             $fichier->move($this->kernel->getProjectDir().'/'.$chemin, $nom);
-        } catch (FileException) {
+        } catch (FileException $exception) {
+            $this->logger->error('Le déplacement d’un fichier téléversé a échoué.', [
+                'type' => $type,
+                'chemin' => $chemin,
+                'exception' => $exception,
+            ]);
+
             return null;
         }
 
@@ -158,24 +213,6 @@ class FileUploadService
             ->setType($type)
             ->setNom($nom)
             ->setChemin($chemin);
-    }
-
-    /**
-     * Rôle : Supprimer un fichier physique et retirer ses métadonnées Doctrine.
-     * Paramètres : Les métadonnées du fichier à supprimer.
-     * Retour : Aucun.
-     */
-    private function supprimer(UploadFichier $upload): void
-    {
-        $type = (string) $upload->getType();
-        $nom = (string) $upload->getNom();
-        $chemin = $this->obtenirCheminFichier($type, $nom, $upload->getChemin());
-
-        if (is_file($chemin)) {
-            unlink($chemin);
-        }
-
-        $this->entityManager->remove($upload);
     }
 
 }

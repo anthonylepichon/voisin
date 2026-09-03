@@ -3,7 +3,7 @@
 /*
  * Description générale : Contrôleur du fil d'actualité des membres.
  * Rôle : Afficher les publications autorisées et traiter leur création directement dans le fil.
- * Tâches : Créer une publication, actualiser l'activité, normaliser le filtre, paginer les résultats et transmettre les données à Twig.
+ * Tâches : Créer une publication avec compensation du fichier, actualiser l'activité, filtrer et paginer les résultats.
  * Liens avec les autres fichiers : Utilise PublicationFormType, les repositories, FileUploadService, UserActivityService et templates/feed/index.html.twig.
  */
 
@@ -62,6 +62,7 @@ class FeedController extends AbstractController
 
         /** @var UploadedFile|null $image */
         $image = null;
+        $nouveauFichier = null;
 
         if ($formulairePublication->isSubmitted()) {
             $image = $formulairePublication->get('image')->getData();
@@ -69,9 +70,9 @@ class FeedController extends AbstractController
 
         if ($formulairePublication->isSubmitted() && $formulairePublication->isValid()) {
             if (null !== $image) {
-                $upload = $fileUploadService->televerserImagePublication($image, $publication);
+                $nouveauFichier = $fileUploadService->televerserImagePublication($image, $publication);
 
-                if (null === $upload) {
+                if (null === $nouveauFichier) {
                     $publication->setUploadFichier(null);
                     $publication->setImageEnAttente(false);
                     $formulairePublication->get('image')->addError(new FormError('L’image n’a pas pu être enregistrée. Réessaie plus tard.'));
@@ -79,8 +80,17 @@ class FeedController extends AbstractController
             }
 
             if ($formulairePublication->isValid()) {
-                $entityManager->persist($publication);
-                $entityManager->flush();
+                try {
+                    $entityManager->persist($publication);
+                    $entityManager->flush();
+                } catch (\Throwable $exception) {
+                    if (null !== $nouveauFichier) {
+                        $fileUploadService->compenserTeleversement($nouveauFichier);
+                    }
+
+                    throw $exception;
+                }
+
                 $this->addFlash('success', 'Ta publication a été créée.');
 
                 return $this->redirectToRoute('app_feed');

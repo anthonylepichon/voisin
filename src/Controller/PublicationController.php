@@ -3,7 +3,7 @@
 /*
  * Description générale : Contrôleur de gestion des publications d'un membre.
  * Rôle : Modifier, supprimer et aimer les publications selon les autorisations prévues.
- * Tâches : Gérer la modification, déléguer l'image, consulter les règles d'accès centralisées, sécuriser la suppression et traiter les likes.
+ * Tâches : Gérer la modification et la suppression compensatoires des images, contrôler les accès et traiter les likes.
  * Liens avec les autres fichiers : Utilise PublicationFormType, PublicationRepository, PublicationAccessService, FileUploadService, UserActivityService et les gabarits publication.
  */
 
@@ -60,6 +60,7 @@ class PublicationController extends AbstractController
 
         /** @var UploadedFile|null $image */
         $image = null;
+        $nouvelleImage = null;
 
         if ($form->isSubmitted()) {
             $image = $form->get('image')->getData();
@@ -69,9 +70,9 @@ class PublicationController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             if (null !== $image) {
-                $upload = $fileUploadService->televerserImagePublication($image, $publication);
+                $nouvelleImage = $fileUploadService->televerserImagePublication($image, $publication);
 
-                if (null === $upload) {
+                if (null === $nouvelleImage) {
                     $publication->setUploadFichier($ancienneImage);
                     $publication->setImageEnAttente(false);
                     $form->get('image')->addError(new FormError('L’image n’a pas pu être enregistrée. Réessaie plus tard.'));
@@ -85,10 +86,22 @@ class PublicationController extends AbstractController
             }
 
             if ((null !== $image || $supprimerImage) && null !== $ancienneImage) {
-                $fileUploadService->supprimerImagePublication($publication, $ancienneImage);
+                $fileUploadService->preparerSuppressionImagePublication($publication, $ancienneImage);
             }
 
-            $entityManager->flush();
+            try {
+                $entityManager->flush();
+            } catch (\Throwable $exception) {
+                if (null !== $nouvelleImage) {
+                    $fileUploadService->compenserTeleversement($nouvelleImage);
+                }
+
+                throw $exception;
+            }
+
+            if ((null !== $image || $supprimerImage) && null !== $ancienneImage) {
+                $fileUploadService->supprimerFichierPhysique($ancienneImage);
+            }
 
             $this->addFlash('success', 'Ta publication a été mise à jour.');
 
@@ -135,11 +148,15 @@ class PublicationController extends AbstractController
         $image = $publication->getUploadFichier();
 
         if (null !== $image) {
-            $fileUploadService->supprimerImagePublication($publication, $image);
+            $fileUploadService->preparerSuppressionImagePublication($publication, $image);
         }
 
         $entityManager->remove($publication);
         $entityManager->flush();
+
+        if (null !== $image) {
+            $fileUploadService->supprimerFichierPhysique($image);
+        }
 
         $this->addFlash('success', 'La publication a été supprimée.');
 

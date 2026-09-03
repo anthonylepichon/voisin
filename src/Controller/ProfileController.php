@@ -3,7 +3,7 @@
 /*
  * Description générale : Contrôleur des profils membres.
  * Rôle : Afficher un profil avec son état d'amitié et permettre au propriétaire de modifier ses données.
- * Tâches : Contrôler l'identité, charger les relations, paginer les publications visibles et déléguer la gestion de la photo.
+ * Tâches : Contrôler l'identité, remplacer la photo de façon compensatoire, charger les relations et paginer les publications.
  * Liens avec les autres fichiers : Utilise les repositories sociaux, ProfileFormType, FileUploadService, UserActivityService et les gabarits profile.
  */
 
@@ -60,11 +60,12 @@ class ProfileController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var UploadedFile|null $photo */
             $photo = $form->get('photoProfil')->getData();
+            $nouvellePhoto = null;
 
             if (null !== $photo) {
-                $upload = $fileUploadService->televerserPhotoProfil($photo, $utilisateur);
+                $nouvellePhoto = $fileUploadService->televerserPhotoProfil($photo, $utilisateur);
 
-                if (null === $upload) {
+                if (null === $nouvellePhoto) {
                     $form->get('photoProfil')->addError(new FormError('La photo de profil n’a pas pu être enregistrée. Réessaie plus tard.'));
 
                     return $this->render('profile/edit.html.twig', [
@@ -74,11 +75,23 @@ class ProfileController extends AbstractController
                 }
 
                 if (null !== $anciennePhoto) {
-                    $fileUploadService->supprimerPhotoProfil($utilisateur, $anciennePhoto);
+                    $fileUploadService->preparerSuppressionPhotoProfil($utilisateur, $anciennePhoto);
                 }
             }
 
-            $entityManager->flush();
+            try {
+                $entityManager->flush();
+            } catch (\Throwable $exception) {
+                if (null !== $nouvellePhoto) {
+                    $fileUploadService->compenserTeleversement($nouvellePhoto);
+                }
+
+                throw $exception;
+            }
+
+            if (null !== $nouvellePhoto && null !== $anciennePhoto) {
+                $fileUploadService->supprimerFichierPhysique($anciennePhoto);
+            }
 
             $this->addFlash('success', 'Ton profil a été mis à jour.');
 
