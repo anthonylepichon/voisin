@@ -15,8 +15,7 @@
     display: flex;
     flex-direction: column;
     width: variables.$content-width;
-    height: 266px;
-    overflow: hidden;
+    overflow: visible;
     background-color: variables.$color-surface;
     border: 1px solid variables.$color-border;
     border-radius: variables.$radius-surface;
@@ -78,13 +77,11 @@
 
 .moderation-item {
     display: flex;
-    flex: 0 0 90px;
-    gap: 12px;
+    gap: 16px;
     align-items: center;
     width: variables.$content-width;
-    height: 90px;
+    min-height: 104px;
     padding: 16px;
-    overflow: hidden;
     color: variables.$color-text;
     background-color: variables.$color-surface;
     border: 1px solid variables.$color-border;
@@ -98,16 +95,11 @@
 }
 
 .moderation-item__thumbnail {
-    flex: 0 0 336px;
-    width: 336px;
-    height: 40px;
+    flex: 0 0 64px;
+    width: 64px;
+    height: 64px;
     overflow: hidden;
     border-radius: variables.$radius-avatar;
-}
-
-.moderation-item--deleted .moderation-item__thumbnail {
-    flex-basis: 491px;
-    width: 491px;
 }
 
 .moderation-item__thumbnail-image {
@@ -118,20 +110,11 @@
 
 .moderation-item__details {
     display: flex;
-    flex: 0 0 336px;
+    flex: 1 1 auto;
     flex-direction: column;
     gap: 4px;
     align-items: flex-start;
-    width: 336px;
-    height: 56px;
     min-width: 0;
-    overflow: hidden;
-    white-space: nowrap;
-}
-
-.moderation-item--deleted .moderation-item__details {
-    flex-basis: 491px;
-    width: 491px;
 }
 
 .moderation-item__author,
@@ -148,8 +131,12 @@
 }
 
 .moderation-item__excerpt {
+    display: -webkit-box;
     font-size: variables.$font-size-13;
     font-weight: variables.$font-weight-regular;
+    white-space: normal;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
 }
 
 .moderation-item__date {
@@ -164,12 +151,13 @@
 
 .moderation-item__actions {
     display: flex;
-    flex: 0 0 378px;
+    flex: 0 0 auto;
     gap: 12px;
     align-items: center;
-    width: 378px;
-    height: 37px;
-    overflow: hidden;
+}
+
+.moderation-item__actions form {
+    margin: 0;
 }
 
 .moderation-item__comments,
@@ -187,24 +175,16 @@
 }
 
 .moderation-item__comments {
-    flex: 0 0 246px;
-    width: 246px;
     color: variables.$color-text;
     background-color: variables.$color-surface-soft;
     border: 1px solid variables.$color-text;
 }
 
 .moderation-item__delete {
-    flex: 0 0 120px;
-    width: 120px;
-    color: variables.$color-text;
-    background-color: variables.$color-surface-soft;
-    border: 1px solid variables.$color-text;
-}
-
-.moderation-item--single-action .moderation-item__delete {
-    flex-basis: 378px;
-    width: 378px;
+    color: variables.$color-surface;
+    background-color: variables.$color-danger;
+    border: 1px solid variables.$color-danger;
+    cursor: pointer;
 }
 
 .moderation-item__status {
@@ -218,6 +198,23 @@
     white-space: nowrap;
 }
 
+.moderation-item__comments:hover,
+.moderation-item__comments:focus-visible {
+    color: variables.$color-surface;
+    background-color: variables.$color-text;
+}
+
+.moderation-item__delete:hover,
+.moderation-item__delete:focus-visible {
+    filter: brightness(0.9);
+}
+
+.moderation-item__comments:focus-visible,
+.moderation-item__delete:focus-visible {
+    outline: 3px solid rgba(201, 95, 48, 0.25);
+    outline-offset: 2px;
+}
+
 @media (max-width: variables.$breakpoint-tablet-max) {
     .members-table,
     .moderation-list,
@@ -225,28 +222,8 @@
         width: 100%;
     }
 
-    .moderation-item__thumbnail,
-    .moderation-item--deleted .moderation-item__thumbnail {
-        flex: 0 0 120px;
-        width: 120px;
-    }
-
-    .moderation-item__details,
-    .moderation-item--deleted .moderation-item__details {
-        flex: 1 1 auto;
-        width: auto;
-    }
-
     .moderation-item__actions {
         flex: 0 0 auto;
-        width: auto;
-    }
-
-    .moderation-item__comments,
-    .moderation-item__delete,
-    .moderation-item--single-action .moderation-item__delete {
-        flex: 0 0 auto;
-        width: auto;
     }
 }
 
@@ -257,21 +234,14 @@
         padding: 16px;
     }
 
-    .moderation-item__thumbnail,
-    .moderation-item--deleted .moderation-item__thumbnail {
-        flex-basis: 72px;
-        width: 72px;
-        height: 56px;
-    }
-
     .moderation-item__actions {
         flex: 1 0 100%;
+        justify-content: flex-end;
         width: 100%;
     }
 
     .moderation-item__comments,
-    .moderation-item__delete,
-    .moderation-item--single-action .moderation-item__delete {
+    .moderation-item__delete {
         flex: 1 1 auto;
     }
 }
@@ -279,14 +249,14 @@
 @media (max-width: variables.$breakpoint-mobile-max) {
     .members-table {
         overflow-x: auto;
+        border-radius: variables.$radius-field;
     }
 
     .members-table__row {
         min-width: 680px;
     }
 
-    .moderation-item__thumbnail,
-    .moderation-item--deleted .moderation-item__thumbnail {
+    .moderation-item__thumbnail {
         flex-basis: 56px;
         width: 56px;
         height: 56px;
@@ -298,8 +268,9 @@
     }
 
     .moderation-item__comments,
-    .moderation-item__delete,
-    .moderation-item--single-action .moderation-item__delete {
+    .moderation-item__delete {
         flex: 1 1 auto;
+        padding-right: 12px;
+        padding-left: 12px;
     }
 }

@@ -687,7 +687,8 @@ body {
 }
 
 .side-nav--admin-extended {
-  height: 290px;
+  height: auto;
+  min-height: 306px;
 }
 
 .side-nav__title {
@@ -3153,8 +3154,7 @@ body {
   display: flex;
   flex-direction: column;
   width: 1108px;
-  height: 266px;
-  overflow: hidden;
+  overflow: visible;
   background-color: #ffffff;
   border: 1px solid #d8d8d8;
   border-radius: 12px;
@@ -3216,13 +3216,11 @@ body {
 
 .moderation-item {
   display: flex;
-  flex: 0 0 90px;
-  gap: 12px;
+  gap: 16px;
   align-items: center;
   width: 1108px;
-  height: 90px;
+  min-height: 104px;
   padding: 16px;
-  overflow: hidden;
   color: #2c2420;
   background-color: #ffffff;
   border: 1px solid #d8d8d8;
@@ -3236,16 +3234,11 @@ body {
 }
 
 .moderation-item__thumbnail {
-  flex: 0 0 336px;
-  width: 336px;
-  height: 40px;
+  flex: 0 0 64px;
+  width: 64px;
+  height: 64px;
   overflow: hidden;
   border-radius: 33px;
-}
-
-.moderation-item--deleted .moderation-item__thumbnail {
-  flex-basis: 491px;
-  width: 491px;
 }
 
 .moderation-item__thumbnail-image {
@@ -3256,20 +3249,11 @@ body {
 
 .moderation-item__details {
   display: flex;
-  flex: 0 0 336px;
+  flex: 1 1 auto;
   flex-direction: column;
   gap: 4px;
   align-items: flex-start;
-  width: 336px;
-  height: 56px;
   min-width: 0;
-  overflow: hidden;
-  white-space: nowrap;
-}
-
-.moderation-item--deleted .moderation-item__details {
-  flex-basis: 491px;
-  width: 491px;
 }
 
 .moderation-item__author,
@@ -3286,8 +3270,12 @@ body {
 }
 
 .moderation-item__excerpt {
+  display: -webkit-box;
   font-size: 13px;
   font-weight: 400;
+  white-space: normal;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
 }
 
 .moderation-item__date {
@@ -3302,12 +3290,13 @@ body {
 
 .moderation-item__actions {
   display: flex;
-  flex: 0 0 378px;
+  flex: 0 0 auto;
   gap: 12px;
   align-items: center;
-  width: 378px;
-  height: 37px;
-  overflow: hidden;
+}
+
+.moderation-item__actions form {
+  margin: 0;
 }
 
 .moderation-item__comments,
@@ -3325,24 +3314,16 @@ body {
 }
 
 .moderation-item__comments {
-  flex: 0 0 246px;
-  width: 246px;
   color: #2c2420;
   background-color: #faf7f5;
   border: 1px solid #2c2420;
 }
 
 .moderation-item__delete {
-  flex: 0 0 120px;
-  width: 120px;
-  color: #2c2420;
-  background-color: #faf7f5;
-  border: 1px solid #2c2420;
-}
-
-.moderation-item--single-action .moderation-item__delete {
-  flex-basis: 378px;
-  width: 378px;
+  color: #ffffff;
+  background-color: #b94848;
+  border: 1px solid #b94848;
+  cursor: pointer;
 }
 
 .moderation-item__status {
@@ -3356,31 +3337,31 @@ body {
   white-space: nowrap;
 }
 
+.moderation-item__comments:hover,
+.moderation-item__comments:focus-visible {
+  color: #ffffff;
+  background-color: #2c2420;
+}
+
+.moderation-item__delete:hover,
+.moderation-item__delete:focus-visible {
+  filter: brightness(0.9);
+}
+
+.moderation-item__comments:focus-visible,
+.moderation-item__delete:focus-visible {
+  outline: 3px solid rgba(201, 95, 48, 0.25);
+  outline-offset: 2px;
+}
+
 @media (max-width: 1439px) {
   .members-table,
   .moderation-list,
   .moderation-item {
     width: 100%;
   }
-  .moderation-item__thumbnail,
-  .moderation-item--deleted .moderation-item__thumbnail {
-    flex: 0 0 120px;
-    width: 120px;
-  }
-  .moderation-item__details,
-  .moderation-item--deleted .moderation-item__details {
-    flex: 1 1 auto;
-    width: auto;
-  }
   .moderation-item__actions {
     flex: 0 0 auto;
-    width: auto;
-  }
-  .moderation-item__comments,
-  .moderation-item__delete,
-  .moderation-item--single-action .moderation-item__delete {
-    flex: 0 0 auto;
-    width: auto;
   }
 }
 @media (max-width: 1023px) {
@@ -3389,31 +3370,25 @@ body {
     height: auto;
     padding: 16px;
   }
-  .moderation-item__thumbnail,
-  .moderation-item--deleted .moderation-item__thumbnail {
-    flex-basis: 72px;
-    width: 72px;
-    height: 56px;
-  }
   .moderation-item__actions {
     flex: 1 0 100%;
+    justify-content: flex-end;
     width: 100%;
   }
   .moderation-item__comments,
-  .moderation-item__delete,
-  .moderation-item--single-action .moderation-item__delete {
+  .moderation-item__delete {
     flex: 1 1 auto;
   }
 }
 @media (max-width: 767px) {
   .members-table {
     overflow-x: auto;
+    border-radius: 8px;
   }
   .members-table__row {
     min-width: 680px;
   }
-  .moderation-item__thumbnail,
-  .moderation-item--deleted .moderation-item__thumbnail {
+  .moderation-item__thumbnail {
     flex-basis: 56px;
     width: 56px;
     height: 56px;
@@ -3423,9 +3398,10 @@ body {
     width: 100%;
   }
   .moderation-item__comments,
-  .moderation-item__delete,
-  .moderation-item--single-action .moderation-item__delete {
+  .moderation-item__delete {
     flex: 1 1 auto;
+    padding-right: 12px;
+    padding-left: 12px;
   }
 }
 /*
@@ -4745,6 +4721,48 @@ body {
   line-height: normal;
 }
 
+.admin-page__header {
+  display: flex;
+  gap: 24px;
+  align-items: flex-end;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.admin-page__navigation {
+  display: flex;
+  gap: 8px;
+  padding: 4px;
+  background-color: #ffffff;
+  border: 1px solid #d8d8d8;
+  border-radius: 42px;
+}
+
+.admin-page__navigation-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 120px;
+  min-height: 37px;
+  padding: 8px 20px;
+  color: #2c2420;
+  border-radius: 42px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.admin-page__navigation-link--active,
+.admin-page__navigation-link:hover,
+.admin-page__navigation-link:focus-visible {
+  color: #ffffff;
+  background-color: #c95f30;
+}
+
+.admin-page__navigation-link:focus-visible {
+  outline: 3px solid rgba(201, 95, 48, 0.25);
+  outline-offset: 2px;
+}
+
 .admin-page__title {
   font-size: 24px;
   font-weight: 700;
@@ -4860,6 +4878,17 @@ body {
   }
 }
 @media (max-width: 767px) {
+  .admin-page__header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .admin-page__navigation {
+    width: 100%;
+  }
+  .admin-page__navigation-link {
+    flex: 1 1 50%;
+    min-width: 0;
+  }
   .admin-page__title,
   .admin-page__count,
   .admin-page__alert,

@@ -3,8 +3,8 @@
 /*
  * Description générale : Fournit l'accès Doctrine aux publications.
  * Rôle : Centraliser les recherches de publications et leur visibilité.
- * Tâches : Charger le fil autorisé et les publications visibles sur un profil.
- * Liens avec les autres fichiers : Utilisé par Publication, FeedController, ProfileController et les écrans de publications.
+ * Tâches : Charger le fil autorisé, les publications d'un profil et la liste complète de modération.
+ * Liens avec les autres fichiers : Utilisé par Publication, FeedController, ProfileController et AdminController.
  */
 
 namespace App\Repository;
@@ -131,5 +131,25 @@ class PublicationRepository extends ServiceEntityRepository
         }
 
         return $constructeur->getQuery()->getResult();
+    }
+
+    /**
+     * Rôle : Charger toutes les publications pour le tableau de modération.
+     * Paramètres : Aucun.
+     * Retour : Les publications avec leur utilisateur et leurs commentaires, de la plus récente à la plus ancienne.
+     *
+     * @return list<Publication>
+     */
+    public function trouverToutesPourModeration(): array
+    {
+        return $this->createQueryBuilder('publication')
+            ->innerJoin('publication.utilisateur', 'utilisateur')
+            ->addSelect('utilisateur')
+            ->leftJoin('publication.commentaires', 'commentaire')
+            ->addSelect('commentaire')
+            ->orderBy('publication.dateCreation', 'DESC')
+            ->addOrderBy('publication.id', 'DESC')
+            ->getQuery()
+            ->getResult();
     }
 }

@@ -92,6 +92,10 @@ class UploadFichierController extends AbstractController
      */
     private function peutVoirPublication(Publication $publication): bool
     {
+        if ($this->isGranted('ROLE_ADMIN')) {
+            return true;
+        }
+
         if (Publication::VISIBILITE_PUBLIQUE === $publication->getVisibilite()) {
             return true;
         }

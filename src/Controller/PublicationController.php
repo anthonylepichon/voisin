@@ -142,7 +142,7 @@ class PublicationController extends AbstractController
     /**
      * Rôle : Supprimer une publication par son propriétaire ou un administrateur.
      * Paramètres : L'identifiant, la requête, le dépôt, Doctrine et le service des fichiers.
-     * Retour : Une redirection vers le profil du membre connecté.
+     * Retour : Une redirection vers la liste administrative ou le profil du membre connecté.
      */
     #[Route('/publications/{id}/supprimer', name: 'app_publication_delete', methods: ['POST'], requirements: ['id' => '\d+'])]
     public function delete(
@@ -171,6 +171,10 @@ class PublicationController extends AbstractController
         $entityManager->flush();
 
         $this->addFlash('success', 'La publication a été supprimée.');
+
+        if ($this->isGranted('ROLE_ADMIN') && 'administration' === $request->request->get('_retour')) {
+            return $this->redirectToRoute('app_admin_publications');
+        }
 
         return $this->redirectToRoute('app_profile_current');
     }

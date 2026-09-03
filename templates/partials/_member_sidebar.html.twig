@@ -7,7 +7,7 @@ Liens avec les autres fichiers : Inclus dans les pages membre et stylisé par la
 
 {% set routeCourante = app.request.attributes.get('_route') %}
 
-<nav class="side-nav" aria-label="Navigation membre">
+<nav class="side-nav{% if is_granted('ROLE_ADMIN') %} side-nav--admin-extended{% endif %}" aria-label="Navigation membre">
     <div class="side-nav__links">
         <a class="side-nav__link{% if routeCourante == 'app_feed' %} side-nav__link--active{% endif %}" href="{{ path('app_feed') }}"{% if routeCourante == 'app_feed' %} aria-current="page"{% endif %}>Mon fil d’actualité</a>
         <a class="side-nav__link{% if routeCourante starts with 'app_profile' %} side-nav__link--active{% endif %}" href="{{ path('app_profile_current') }}"{% if routeCourante starts with 'app_profile' %} aria-current="page"{% endif %}>Mon profil</a>
@@ -18,6 +18,10 @@ Liens avec les autres fichiers : Inclus dans les pages membre et stylisé par la
             {% endif %}
         </a>
         <a class="side-nav__link{% if routeCourante == 'app_friendship_friends' %} side-nav__link--active{% endif %}" href="{{ path('app_friendship_friends') }}"{% if routeCourante == 'app_friendship_friends' %} aria-current="page"{% endif %}>Mes amis</a>
+        {% if is_granted('ROLE_ADMIN') %}
+            <a class="side-nav__link{% if routeCourante == 'app_admin_index' %} side-nav__link--active{% endif %}" href="{{ path('app_admin_index') }}"{% if routeCourante == 'app_admin_index' %} aria-current="page"{% endif %}>Administration</a>
+            <a class="side-nav__link{% if routeCourante == 'app_admin_publications' %} side-nav__link--active{% endif %}" href="{{ path('app_admin_publications') }}"{% if routeCourante == 'app_admin_publications' %} aria-current="page"{% endif %}>Modération</a>
+        {% endif %}
     </div>
     <hr class="side-nav__separator">
     <form action="{{ path('app_logout') }}" method="post">
