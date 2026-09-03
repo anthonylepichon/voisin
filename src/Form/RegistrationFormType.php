@@ -13,6 +13,7 @@ use App\Entity\Utilisateur;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\File;
@@ -49,10 +50,13 @@ class RegistrationFormType extends AbstractType
                     ),
                 ],
             ])
-            ->add('plainPassword', PasswordType::class, [
+            ->add('plainPassword', RepeatedType::class, [
+                'type' => PasswordType::class,
                 'label' => 'Mot de passe',
                 'mapped' => false,
-                'attr' => ['autocomplete' => 'new-password'],
+                'invalid_message' => 'Les deux mots de passe doivent être identiques.',
+                'first_options' => ['attr' => ['autocomplete' => 'new-password']],
+                'second_options' => ['attr' => ['autocomplete' => 'new-password']],
                 'constraints' => [
                     new NotBlank(
                         message: 'Le mot de passe est obligatoire.',

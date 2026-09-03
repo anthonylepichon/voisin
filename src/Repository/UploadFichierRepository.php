@@ -2,9 +2,9 @@
 
 /*
  * Description générale : Dépôt Doctrine des fichiers téléversés.
- * Rôle : Retrouver les métadonnées d'un fichier rattaché à un profil ou à une publication.
- * Tâches : Fournir les opérations standards Doctrine utilisées par le service de téléversement.
- * Liens avec les autres fichiers : Utilise UploadFichier et est injecté dans FileUploadService.
+ * Rôle : Retrouver les métadonnées centralisées d'un fichier.
+ * Tâches : Fournir les opérations standards Doctrine et la recherche sécurisée par type et nom.
+ * Liens avec les autres fichiers : Utilise UploadFichier et est injecté dans UploadFichierController.
  */
 
 namespace App\Repository;
@@ -29,17 +29,11 @@ class UploadFichierRepository extends ServiceEntityRepository
     /**
      * Rôle : Retrouver un fichier par son type métier et son nom sécurisé.
      * Paramètres : Le type du fichier et son nom enregistré.
-     * Retour : Le fichier avec ses relations ou null lorsqu'il est absent.
+     * Retour : Le fichier ou null lorsqu'il est absent.
      */
     public function trouverParTypeEtNom(string $type, string $nom): ?UploadFichier
     {
         return $this->createQueryBuilder('uploadFichier')
-            ->leftJoin('uploadFichier.utilisateur', 'utilisateur')
-            ->addSelect('utilisateur')
-            ->leftJoin('uploadFichier.publication', 'publication')
-            ->addSelect('publication')
-            ->leftJoin('publication.utilisateur', 'utilisateurPublication')
-            ->addSelect('utilisateurPublication')
             ->andWhere('uploadFichier.type = :type')
             ->andWhere('uploadFichier.nom = :nom')
             ->setParameter('type', $type)

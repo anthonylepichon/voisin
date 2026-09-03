@@ -2,9 +2,9 @@
 
 /*
  * Description générale : Représente un fichier téléversé dans l'application Voisin.
- * Rôle : Centraliser les métadonnées et le rattachement des photos de profil et des images de publication.
- * Tâches : Conserver le type, le nom, le chemin et l'unique propriétaire métier du fichier.
- * Liens avec les autres fichiers : Liée à Utilisateur, Publication, UploadFichierRepository et FileUploadService.
+ * Rôle : Centraliser les métadonnées des photos de profil et des images de publication.
+ * Tâches : Conserver le type, le nom et le chemin de chaque fichier.
+ * Liens avec les autres fichiers : Référencée par Utilisateur, Publication, UploadFichierRepository et FileUploadService.
  */
 
 namespace App\Entity;
@@ -15,12 +15,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UploadFichierRepository::class)]
 #[ORM\Table(name: 'upload_fichier')]
-#[ORM\Index(name: 'idx_upload_utilisateur', fields: ['utilisateur'])]
-#[ORM\Index(name: 'idx_upload_publication', fields: ['publication'])]
-#[Assert\Expression(
-    expression: '(this.getUtilisateur() != null and this.getPublication() == null) or (this.getUtilisateur() == null and this.getPublication() != null)',
-    message: 'Le fichier doit être rattaché soit à un utilisateur, soit à une publication.'
-)]
 class UploadFichier
 {
     public const TYPE_PROFIL = 'profil';
@@ -43,14 +37,6 @@ class UploadFichier
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: 'Le chemin du fichier est obligatoire.')]
     private ?string $chemin = null;
-
-    #[ORM\ManyToOne(inversedBy: 'uploadFichiers')]
-    #[ORM\JoinColumn(name: 'utilisateur_id', nullable: true, onDelete: 'CASCADE')]
-    private ?Utilisateur $utilisateur = null;
-
-    #[ORM\ManyToOne(inversedBy: 'uploadFichiers')]
-    #[ORM\JoinColumn(name: 'publication_id', nullable: true, onDelete: 'CASCADE')]
-    private ?Publication $publication = null;
 
     /**
      * Rôle : Retourner l'identifiant technique du fichier.
@@ -128,47 +114,4 @@ class UploadFichier
         return $this;
     }
 
-    /**
-     * Rôle : Retourner l'utilisateur propriétaire d'une photo de profil.
-     * Paramètres : Aucun.
-     * Retour : L'utilisateur ou null pour une image de publication.
-     */
-    public function getUtilisateur(): ?Utilisateur
-    {
-        return $this->utilisateur;
-    }
-
-    /**
-     * Rôle : Rattacher le fichier à un utilisateur.
-     * Paramètres : L'utilisateur ou null.
-     * Retour : Le fichier modifié.
-     */
-    public function setUtilisateur(?Utilisateur $utilisateur): static
-    {
-        $this->utilisateur = $utilisateur;
-
-        return $this;
-    }
-
-    /**
-     * Rôle : Retourner la publication propriétaire d'une image.
-     * Paramètres : Aucun.
-     * Retour : La publication ou null pour une photo de profil.
-     */
-    public function getPublication(): ?Publication
-    {
-        return $this->publication;
-    }
-
-    /**
-     * Rôle : Rattacher le fichier à une publication.
-     * Paramètres : La publication ou null.
-     * Retour : Le fichier modifié.
-     */
-    public function setPublication(?Publication $publication): static
-    {
-        $this->publication = $publication;
-
-        return $this;
-    }
 }

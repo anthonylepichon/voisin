@@ -7,7 +7,7 @@ Liens avec les autres fichiers : Incluse par friendship/friends.html.twig et sty
 
 <a class="friend-card" href="{{ path('app_profile_show', {pseudonyme: ami.pseudonyme}) }}">
     <span class="friend-card__portrait">
-        <img class="friend-card__portrait-image" src="{{ path('app_upload_fichier', {type: 'profil', nom: ami.nomPhotoProfil}) }}" alt="Photo de profil de {{ ami.pseudonyme }}">
+        <img class="friend-card__portrait-image" src="{{ path('app_upload_fichier', {type: 'profil', nom: ami.uploadFichier.nom}) }}" alt="Photo de profil de {{ ami.pseudonyme }}">
     </span>
     <span class="friend-card__name">{{ ami.pseudonyme }}</span>
     <span class="friend-card__status{% if estEnLigne %} friend-card__status--online{% else %} friend-card__status--offline{% endif %}" aria-label="{% if estEnLigne %}En ligne{% else %}Hors ligne{% endif %}"></span>

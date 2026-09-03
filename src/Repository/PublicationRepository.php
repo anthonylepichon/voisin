@@ -3,8 +3,8 @@
 /*
  * Description générale : Fournit l'accès Doctrine aux publications.
  * Rôle : Centraliser les recherches de publications et leur visibilité.
- * Tâches : Charger le fil autorisé, les publications d'un profil et la liste complète de modération.
- * Liens avec les autres fichiers : Utilisé par Publication, FeedController, ProfileController et AdminController.
+ * Tâches : Charger l'accueil public, le fil autorisé, les publications d'un profil et la modération.
+ * Liens avec les autres fichiers : Utilisé par Publication, HomeController, FeedController, ProfileController et AdminController.
  */
 
 namespace App\Repository;
@@ -49,6 +49,8 @@ class PublicationRepository extends ServiceEntityRepository
             ->addSelect('utilisateurAimant')
             ->leftJoin('publication.commentaires', 'commentaire')
             ->addSelect('commentaire')
+            ->leftJoin('publication.uploadFichier', 'uploadFichier')
+            ->addSelect('uploadFichier')
             ->orderBy('publication.dateCreation', 'DESC')
             ->addOrderBy('publication.id', 'DESC');
 
@@ -119,6 +121,8 @@ class PublicationRepository extends ServiceEntityRepository
             ->addSelect('utilisateurAimant')
             ->leftJoin('publication.commentaires', 'commentaire')
             ->addSelect('commentaire')
+            ->leftJoin('publication.uploadFichier', 'uploadFichier')
+            ->addSelect('uploadFichier')
             ->andWhere('publication.utilisateur = :profil')
             ->setParameter('profil', $profil)
             ->orderBy('publication.dateCreation', 'DESC')
@@ -131,6 +135,29 @@ class PublicationRepository extends ServiceEntityRepository
         }
 
         return $constructeur->getQuery()->getResult();
+    }
+
+    /**
+     * Rôle : Charger les cinq publications publiques les plus récentes pour l'accueil.
+     * Paramètres : Aucun.
+     * Retour : Au maximum cinq publications publiques avec leur utilisateur.
+     *
+     * @return list<Publication>
+     */
+    public function trouverCinqPubliquesRecentes(): array
+    {
+        return $this->createQueryBuilder('publication')
+            ->innerJoin('publication.utilisateur', 'utilisateur')
+            ->addSelect('utilisateur')
+            ->leftJoin('publication.uploadFichier', 'uploadFichier')
+            ->addSelect('uploadFichier')
+            ->andWhere('publication.visibilite = :visibilitePublique')
+            ->setParameter('visibilitePublique', Publication::VISIBILITE_PUBLIQUE)
+            ->orderBy('publication.dateCreation', 'DESC')
+            ->addOrderBy('publication.id', 'DESC')
+            ->setMaxResults(5)
+            ->getQuery()
+            ->getResult();
     }
 
     /**
@@ -147,6 +174,8 @@ class PublicationRepository extends ServiceEntityRepository
             ->addSelect('utilisateur')
             ->leftJoin('publication.commentaires', 'commentaire')
             ->addSelect('commentaire')
+            ->leftJoin('publication.uploadFichier', 'uploadFichier')
+            ->addSelect('uploadFichier')
             ->orderBy('publication.dateCreation', 'DESC')
             ->addOrderBy('publication.id', 'DESC')
             ->getQuery()

@@ -4,7 +4,7 @@
  * Description générale : Formulaire de création et de modification d'une publication.
  * Rôle : Décrire le contenu, l'image et la visibilité que le membre peut choisir.
  * Tâches : Valider l'image téléversée et conserver le choix de visibilité conforme au cahier des charges.
- * Liens avec les autres fichiers : Utilisé par PublicationController avec l'entité Publication.
+ * Liens avec les autres fichiers : Utilisé par FeedController et PublicationController avec l'entité Publication.
  */
 
 namespace App\Form;
@@ -31,6 +31,14 @@ class PublicationFormType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $visibiliteEtendue = true;
+        $libelleVideVisibilite = false;
+
+        if ($options['creation_dans_fil']) {
+            $visibiliteEtendue = false;
+            $libelleVideVisibilite = 'Publication';
+        }
+
         $builder
             ->add('contenu', TextareaType::class, [
                 'label' => 'Contenu',
@@ -48,22 +56,26 @@ class PublicationFormType extends AbstractType
                     ),
                 ],
             ])
-            ->add('supprimerImage', SubmitType::class, [
-                'label' => 'Retirer l’image',
-            ])
             ->add('visibilite', ChoiceType::class, [
                 'label' => 'Visibilité',
-                'expanded' => true,
+                'expanded' => $visibiliteEtendue,
+                'placeholder' => $libelleVideVisibilite,
                 'choices' => [
                     'Publique' => Publication::VISIBILITE_PUBLIQUE,
-                    'Amis uniquement' => Publication::VISIBILITE_AMIS,
+                    'Amis' => Publication::VISIBILITE_AMIS,
                 ],
             ])
             ->addEventListener(FormEvents::SUBMIT, [$this, 'preparerValidation']);
+
+        if (!$options['creation_dans_fil']) {
+            $builder->add('supprimerImage', SubmitType::class, [
+                'label' => 'Retirer l’image',
+            ]);
+        }
     }
 
     /**
-     * Rôle : Préparer le nom de l’image avant la validation globale de la publication.
+     * Rôle : Signaler la présence temporaire d’une image avant la validation globale de la publication.
      * Paramètres : L’événement contenant la publication et les champs soumis.
      * Retour : Aucun.
      */
@@ -77,12 +89,16 @@ class PublicationFormType extends AbstractType
         }
 
         $image = $form->get('image')->getData();
-        $supprimerImage = $form->get('supprimerImage')->isClicked();
+        $supprimerImage = false;
 
-        if ($image instanceof UploadedFile) {
-            $publication->setNomImage('image-en-attente');
-        } elseif ($supprimerImage) {
-            $publication->setNomImage(null);
+        if ($form->has('supprimerImage')) {
+            $supprimerImage = $form->get('supprimerImage')->isClicked();
+        }
+
+        $publication->setImageEnAttente($image instanceof UploadedFile);
+
+        if ($supprimerImage) {
+            $publication->setUploadFichier(null);
         }
     }
 
@@ -93,6 +109,10 @@ class PublicationFormType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults(['data_class' => Publication::class]);
+        $resolver->setDefaults([
+            'data_class' => Publication::class,
+            'creation_dans_fil' => false,
+        ]);
+        $resolver->setAllowedTypes('creation_dans_fil', 'bool');
     }
 }

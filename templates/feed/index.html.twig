@@ -1,8 +1,8 @@
 {#
 Description générale : Page du fil d'actualité d'un membre connecté.
 Rôle : Présenter la création rapide, les filtres et les publications visibles.
-Tâches : Afficher les trois filtres, l'état vide et les cartes triées par date.
-Liens avec les autres fichiers : Étend base.html.twig, utilise FeedController et les composants SCSS du fil.
+Tâches : Afficher le formulaire de publication, les trois filtres, l'état vide et les cartes triées par date.
+Liens avec les autres fichiers : Étend base.html.twig, utilise FeedController, PublicationFormType, le JavaScript et les composants SCSS du fil.
 #}
 
 {% extends 'base.html.twig' %}
@@ -18,25 +18,52 @@ Liens avec les autres fichiers : Étend base.html.twig, utilise FeedController e
         <section class="app-shell__main feed-page" aria-labelledby="titre-fil">
             <h1 class="visually-hidden" id="titre-fil">Fil d’actualité</h1>
 
-            <article class="post-composer">
+            {{ form_start(publicationForm, {'attr': {'id': 'creer-publication', 'class': 'post-composer', 'data-publication-composer': ''}}) }}
+                {% if publicationForm.vars.submitted and not publicationForm.vars.valid %}
+                    <div class="post-composer__errors">
+                        {{ form_errors(publicationForm) }}
+                        {{ form_errors(publicationForm.contenu) }}
+                        {{ form_errors(publicationForm.image) }}
+                        {{ form_errors(publicationForm.visibilite) }}
+                    </div>
+                {% endif %}
                 <div class="post-composer__editor">
-                    <img class="post-composer__avatar" src="{{ path('app_upload_fichier', {type: 'profil', nom: app.user.nomPhotoProfil}) }}" alt="Photo de profil de {{ app.user.pseudonyme }}">
-                    <a class="post-composer__textarea post-composer__prompt" href="{{ path('app_publication_create') }}">Quoi de neuf ?</a>
+                    <img class="post-composer__avatar" src="{{ path('app_upload_fichier', {type: 'profil', nom: app.user.uploadFichier.nom}) }}" alt="Photo de profil de {{ app.user.pseudonyme }}">
+                    {{ form_label(publicationForm.contenu, null, {'label_attr': {'class': 'visually-hidden'}}) }}
+                    {{ form_widget(publicationForm.contenu, {'attr': {
+                        'class': 'post-composer__textarea',
+                        'placeholder': 'Quoi de neuf ?',
+                        'data-composer-text': ''
+                    }}) }}
                 </div>
                 <div class="post-composer__actions">
-                    <a class="post-composer__photo" href="{{ path('app_publication_create') }}">
+                    <label class="post-composer__photo" for="{{ publicationForm.image.vars.id }}">
                         <img class="icon" src="{{ asset('images/icons/icon_image.png') }}" alt="">
                         Photo
                         <img class="icon" src="{{ asset('images/icons/icon_chevron.png') }}" alt="">
-                    </a>
-                    <a class="post-composer__visibility" href="{{ path('app_publication_create') }}">
+                        {{ form_widget(publicationForm.image, {'attr': {
+                            'class': 'post-composer__file-input',
+                            'accept': 'image/jpeg,image/png,image/webp',
+                            'data-composer-image': ''
+                        }}) }}
+                    </label>
+
+                    <span class="post-composer__preview" data-composer-preview hidden>
+                        <img class="post-composer__preview-image" src="" alt="Aperçu de l’image sélectionnée" data-composer-preview-image>
+                    </span>
+                    <button class="post-composer__remove" type="button" data-composer-remove hidden>Retirer l’image</button>
+
+                    <div class="post-composer__visibility">
                         <img class="icon" src="{{ asset('images/icons/icon_GlobeSimple.png') }}" alt="">
-                        public
-                        <img class="icon" src="{{ asset('images/icons/icon_chevron.png') }}" alt="">
-                    </a>
-                    <a class="button button--primary post-composer__submit" href="{{ path('app_publication_create') }}">Partager</a>
+                        {{ form_label(publicationForm.visibilite, null, {'label_attr': {'class': 'visually-hidden'}}) }}
+                        {{ form_widget(publicationForm.visibilite, {'attr': {
+                            'class': 'post-composer__visibility-select',
+                            'data-composer-visibility': ''
+                        }}) }}
+                    </div>
+                    <button class="button button--primary post-composer__submit" type="submit" data-composer-submit disabled>Publier</button>
                 </div>
-            </article>
+            {{ form_end(publicationForm) }}
 
             <nav class="feed-filters" aria-label="Filtrer les publications">
                 <span class="feed-filters__label">Filtrer :</span>
@@ -53,9 +80,12 @@ Liens avec les autres fichiers : Étend base.html.twig, utilise FeedController e
                     <p class="feed-page__empty-description">Les nouvelles publications visibles apparaîtront ici.</p>
                 </div>
             {% else %}
-                <div class="feed-page__posts">
+                <div class="feed-page__posts" data-publication-masonry>
                     {% for publication in publications %}
-                        {% include 'publication/_card.html.twig' with {publication: publication} only %}
+                        {% include 'publication/_card.html.twig' with {
+                            publication: publication,
+                            varianteCarte: ''
+                        } only %}
                     {% endfor %}
                 </div>
             {% endif %}
@@ -72,7 +102,7 @@ Liens avec les autres fichiers : Étend base.html.twig, utilise FeedController e
                         {% for ami in amisEnLigne %}
                             <li>
                                 <a class="online-friends__item" href="{{ path('app_profile_show', {pseudonyme: ami.pseudonyme}) }}">
-                                    <img class="online-friends__avatar" src="{{ path('app_upload_fichier', {type: 'profil', nom: ami.nomPhotoProfil}) }}" alt="">
+                                    <img class="online-friends__avatar" src="{{ path('app_upload_fichier', {type: 'profil', nom: ami.uploadFichier.nom}) }}" alt="">
                                     <span class="online-friends__name">{{ ami.pseudonyme }}</span>
                                     <span class="online-friends__status" aria-label="En ligne"></span>
                                 </a>

@@ -3,7 +3,7 @@
 /*
  * Description générale : Représente un compte utilisateur de l'application Voisin.
  * Rôle : Porter les données de sécurité, de profil et d'activité d'un utilisateur.
- * Tâches : Garantir les contraintes Doctrine, la validation du MPD et la relation avec les fichiers du profil.
+ * Tâches : Garantir les contraintes Doctrine, la validation du MPD et la relation avec la photo du profil.
  * Liens avec les autres fichiers : Utilisée par UtilisateurRepository, UploadFichier, Security, les contrôleurs et les autres entités métier.
  */
 
@@ -48,8 +48,9 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(name: 'mot_de_passe')]
     private ?string $motDePasse = null;
 
-    #[ORM\Column(name: 'nom_photo_profil', length: 255)]
-    private ?string $nomPhotoProfil = null;
+    #[ORM\OneToOne(cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'upload_fichier_id', referencedColumnName: 'id', nullable: false, unique: true, onDelete: 'RESTRICT')]
+    private ?UploadFichier $uploadFichier = null;
 
     #[ORM\Column(name: 'biographie', length: 500, nullable: true)]
     #[Assert\Length(max: 500, maxMessage: 'La biographie ne peut pas dépasser {{ limit }} caractères.')]
@@ -68,10 +69,6 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     /** @var Collection<int, Commentaire> */
     #[ORM\OneToMany(mappedBy: 'utilisateur', targetEntity: Commentaire::class)]
     private Collection $commentaires;
-
-    /** @var Collection<int, UploadFichier> */
-    #[ORM\OneToMany(mappedBy: 'utilisateur', targetEntity: UploadFichier::class)]
-    private Collection $uploadFichiers;
 
     /** @var Collection<int, Publication> */
     #[ORM\ManyToMany(targetEntity: Publication::class, mappedBy: 'utilisateursAimant')]
@@ -94,7 +91,6 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
         $this->dateInscription = new \DateTimeImmutable();
         $this->publications = new ArrayCollection();
         $this->commentaires = new ArrayCollection();
-        $this->uploadFichiers = new ArrayCollection();
         $this->publicationsAimees = new ArrayCollection();
         $this->amis = new ArrayCollection();
     }
@@ -213,23 +209,23 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * Rôle : Retourner le nom du fichier de photo de profil.
+     * Rôle : Retourner le fichier utilisé comme photo de profil.
      * Paramètres : Aucun.
-     * Retour : Le nom du fichier ou null avant sa définition.
+     * Retour : Le fichier ou null avant sa définition.
      */
-    public function getNomPhotoProfil(): ?string
+    public function getUploadFichier(): ?UploadFichier
     {
-        return $this->nomPhotoProfil;
+        return $this->uploadFichier;
     }
 
     /**
-     * Rôle : Définir le nom du fichier de photo de profil.
-     * Paramètres : Le nom du fichier à enregistrer.
+     * Rôle : Définir le fichier utilisé comme photo de profil.
+     * Paramètres : Le fichier à rattacher ou null.
      * Retour : L'utilisateur modifié.
      */
-    public function setNomPhotoProfil(string $nomPhotoProfil): static
+    public function setUploadFichier(?UploadFichier $uploadFichier): static
     {
-        $this->nomPhotoProfil = $nomPhotoProfil;
+        $this->uploadFichier = $uploadFichier;
 
         return $this;
     }
@@ -322,47 +318,6 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     public function getCommentaires(): Collection
     {
         return $this->commentaires;
-    }
-
-    /**
-     * Rôle : Retourner les fichiers téléversés pour le profil de l'utilisateur.
-     * Paramètres : Aucun.
-     * Retour : La collection des fichiers du profil.
-     *
-     * @return Collection<int, UploadFichier>
-     */
-    public function getUploadFichiers(): Collection
-    {
-        return $this->uploadFichiers;
-    }
-
-    /**
-     * Rôle : Ajouter un fichier téléversé au profil.
-     * Paramètres : Le fichier à rattacher.
-     * Retour : L'utilisateur modifié.
-     */
-    public function ajouterUploadFichier(UploadFichier $uploadFichier): static
-    {
-        if (!$this->uploadFichiers->contains($uploadFichier)) {
-            $this->uploadFichiers->add($uploadFichier);
-            $uploadFichier->setUtilisateur($this);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Rôle : Retirer un fichier téléversé du profil.
-     * Paramètres : Le fichier à détacher.
-     * Retour : L'utilisateur modifié.
-     */
-    public function retirerUploadFichier(UploadFichier $uploadFichier): static
-    {
-        if ($this->uploadFichiers->removeElement($uploadFichier)) {
-            $uploadFichier->setUtilisateur(null);
-        }
-
-        return $this;
     }
 
     /**

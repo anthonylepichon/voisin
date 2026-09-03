@@ -6,12 +6,21 @@ Liens avec les autres fichiers : Inclus dans le fil et les profils, puis relié 
 #}
 
 {% set utilisateurConnecteAime = app.user and app.user in publication.utilisateursAimant %}
+{% set imagePublication = publication.imageAffichee %}
+{% set classeVarianteCarte = 'publication-card--feed' %}
+{% if varianteCarte is defined %}
+	{% set classeVarianteCarte = varianteCarte %}
+{% endif %}
+{% set actionsProprietaireVisibles = true %}
+{% if afficherActionsProprietaire is defined and afficherActionsProprietaire == false %}
+	{% set actionsProprietaireVisibles = false %}
+{% endif %}
 
-<article class="publication-card publication-card--feed">
+<article class="publication-card{% if classeVarianteCarte %} {{ classeVarianteCarte }}{% endif %}">
 	<header class="publication-card__header">
 		<a class="publication-card__author" href="{{ path('app_profile_show', {pseudonyme: publication.utilisateur.pseudonyme}) }}">
 			<span class="avatar avatar--medium">
-				<img class="avatar__image" src="{{ path('app_upload_fichier', {type: 'profil', nom: publication.utilisateur.nomPhotoProfil}) }}" alt="Photo de profil de {{ publication.utilisateur.pseudonyme }}">
+				<img class="avatar__image" src="{{ path('app_upload_fichier', {type: 'profil', nom: publication.utilisateur.uploadFichier.nom}) }}" alt="Photo de profil de {{ publication.utilisateur.pseudonyme }}">
 			</span>
 			<span class="publication-card__author-details">
 				<span class="publication-card__author-name">{{ publication.utilisateur.pseudonyme }}</span>
@@ -25,7 +34,7 @@ Liens avec les autres fichiers : Inclus dans le fil et les profils, puis relié 
 				Publique
 			{% else %}
 				<span class="badge__icon"><img src="{{ asset('images/icons/icon_users.png') }}" alt=""></span>
-				Amis uniquement
+				Amis
 			{% endif %}
 		</span>
 	</header>
@@ -34,9 +43,9 @@ Liens avec les autres fichiers : Inclus dans le fil et les profils, puis relié 
 		<p class="publication-card__text">{{ publication.contenu|nl2br }}</p>
 	{% endif %}
 
-	{% if publication.nomImage %}
+	{% if imagePublication %}
 		<div class="publication-card__media">
-			<img class="publication-card__media-image" src="{{ path('app_upload_fichier', {type: 'publication', nom: publication.nomImage}) }}" alt="Image publiée par {{ publication.utilisateur.pseudonyme }}">
+			<img class="publication-card__media-image" src="{{ path('app_upload_fichier', {type: 'publication', nom: imagePublication}) }}" alt="Image publiée par {{ publication.utilisateur.pseudonyme }}">
 		</div>
 	{% endif %}
 
@@ -64,7 +73,7 @@ Liens avec les autres fichiers : Inclus dans le fil et les profils, puis relié 
 		</span>
 	{% endif %}
 
-	{% if app.user and app.user.id == publication.utilisateur.id %}
+	{% if actionsProprietaireVisibles and app.user and app.user.id == publication.utilisateur.id %}
 		<div class="publication-card__owner-actions">
 			<a class="publication-card__owner-action" href="{{ path('app_publication_edit', {id: publication.id}) }}">Modifier</a>
 			<form action="{{ path('app_publication_delete', {id: publication.id}) }}" method="post" onsubmit="return confirm('Supprimer cette publication ?');">

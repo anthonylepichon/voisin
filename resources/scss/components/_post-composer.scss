@@ -15,10 +15,9 @@
     display: flex;
     flex-direction: column;
     width: variables.$feed-content-width;
-    height: 174px;
+    min-height: 174px;
     padding: 20px;
     gap: 12px;
-    overflow: hidden;
     background-color: variables.$color-surface-soft;
     border-radius: variables.$radius-surface;
 }
@@ -55,15 +54,10 @@
     outline: 0;
 }
 
-.post-composer__prompt {
-    display: flex;
-    align-items: flex-start;
-    text-decoration: none;
-}
-
-.post-composer__prompt:focus-visible,
-.post-composer__photo:focus-visible,
-.post-composer__visibility:focus-visible {
+.post-composer__textarea:focus-visible,
+.post-composer__photo:focus-within,
+.post-composer__visibility:focus-within,
+.post-composer__remove:focus-visible {
     outline: 2px solid variables.$color-primary;
     outline-offset: 3px;
 }
@@ -96,16 +90,97 @@
 }
 
 .post-composer__photo {
+    position: relative;
     width: 155px;
+    cursor: pointer;
 }
 
 .post-composer__visibility {
     width: 156px;
+    padding: 0 12px;
+}
+
+.post-composer__file-input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.post-composer__preview {
+    flex: 0 0 54px;
+    width: 54px;
+    height: 42px;
+    overflow: hidden;
+    background-color: variables.$color-preview;
+    border: 1px solid variables.$color-border;
+    border-radius: variables.$radius-field;
+}
+
+.post-composer__preview-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.post-composer__remove {
+    min-height: 35px;
+    padding: 7px 12px;
+    color: variables.$color-danger;
+    font: inherit;
+    font-size: variables.$font-size-13;
+    background-color: variables.$color-surface;
+    border: 1px solid variables.$color-danger;
+    border-radius: variables.$radius-pill;
+    cursor: pointer;
+}
+
+.post-composer__visibility-select {
+    width: 100%;
+    min-width: 0;
+    height: 40px;
+    padding: 0 4px;
+    color: variables.$color-text;
+    font: inherit;
+    font-size: variables.$font-size-14;
+    background-color: transparent;
+    border: 0;
+    outline: 0;
 }
 
 .post-composer__submit {
     width: 106px;
     height: 35px;
+    margin-left: auto;
+}
+
+.post-composer__submit:disabled {
+    color: variables.$color-text-muted;
+    background-color: variables.$color-preview;
+    border-color: variables.$color-preview;
+    cursor: not-allowed;
+}
+
+.post-composer__errors:empty {
+    display: none;
+}
+
+.post-composer__errors ul {
+    margin: 0;
+    padding: 8px 12px;
+    color: variables.$color-danger;
+    font-size: variables.$font-size-13;
+    list-style: none;
+    background-color: variables.$color-danger-background;
+    border-radius: variables.$radius-field;
+}
+
+.post-composer [hidden] {
+    display: none;
 }
 
 @media (max-width: variables.$breakpoint-tablet-max) {
@@ -124,7 +199,6 @@
 
 @media (max-width: variables.$breakpoint-mobile-max) {
     .post-composer {
-        height: auto;
         padding: 16px;
     }
 
@@ -154,6 +228,14 @@
         min-width: 0;
         padding: 8px 10px;
         font-size: variables.$font-size-13;
+    }
+
+    .post-composer__preview {
+        flex: 0 0 56px;
+    }
+
+    .post-composer__remove {
+        flex: 1 1 auto;
     }
 
     .post-composer__submit {
