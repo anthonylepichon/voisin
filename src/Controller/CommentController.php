@@ -81,6 +81,7 @@ class CommentController extends AbstractController
         $publication = $this->trouverPublication($id, $publicationRepository);
         $utilisateur = $this->getUtilisateurConnecte();
         $this->refuserSiPublicationInvisible($publication, $utilisateur);
+        $userActivityService->enregistrerActivite($utilisateur, new \DateTimeImmutable());
 
         $commentaire = new Commentaire();
         $commentaire->setUtilisateur($utilisateur);
@@ -91,13 +92,10 @@ class CommentController extends AbstractController
         if ($formulaire->isSubmitted() && $formulaire->isValid()) {
             $entityManager->persist($commentaire);
             $entityManager->flush();
-            $userActivityService->enregistrerActivite($utilisateur, new \DateTimeImmutable());
             $this->addFlash('success', 'Ton commentaire a été ajouté.');
 
             return $this->redirectToRoute('app_comment_index', ['id' => $publication->getId()]);
         }
-
-        $userActivityService->enregistrerActivite($utilisateur, new \DateTimeImmutable());
 
         return $this->afficherPage(
             $publication,

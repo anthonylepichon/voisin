@@ -49,6 +49,9 @@ class FeedController extends AbstractController
             throw $this->createAccessDeniedException();
         }
 
+        $dateCourante = new \DateTimeImmutable();
+        $userActivityService->enregistrerActivite($utilisateur, $dateCourante);
+
         $publication = new Publication();
         $publication->setUtilisateur($utilisateur);
         $publication->setVisibilite('');
@@ -98,9 +101,6 @@ class FeedController extends AbstractController
         if (!in_array($filtre, $filtresAutorises, true)) {
             $filtre = PublicationRepository::FILTRE_TOUTES;
         }
-
-        $dateCourante = new \DateTimeImmutable();
-        $userActivityService->enregistrerActivite($utilisateur, $dateCourante);
 
         $amisEnLigne = [];
         $statutsEnLigne = [];
