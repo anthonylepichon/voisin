@@ -1,0 +1,18 @@
+{#
+Description générale : Page affichée lorsqu'un utilisateur authentifié ne possède pas l'autorisation nécessaire.
+Rôle : Expliquer le refus d'accès sans révéler de donnée protégée.
+Tâches : Présenter un message générique et un lien sûr vers le fil d'actualité.
+Liens avec les autres fichiers : Étend base.html.twig et est utilisée par Symfony pour les erreurs HTTP 403.
+#}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Accès refusé — Voisin{% endblock %}
+
+{% block body %}
+    <section class="empty-state error-page" aria-labelledby="titre-acces-refuse">
+        <h1 class="empty-state__title" id="titre-acces-refuse">Accès refusé</h1>
+        <p class="empty-state__description">Tu ne disposes pas de l’autorisation nécessaire pour consulter ou modifier ce contenu.</p>
+        <a class="button button--primary" href="{{ path('app_feed') }}">Retourner au fil d’actualité</a>
+    </section>
+{% endblock %}

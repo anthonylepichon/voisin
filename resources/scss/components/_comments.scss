@@ -2,9 +2,9 @@
  * Description générale :
  * Composants des listes, actions, éditions et formulaires de commentaires.
  * Rôle :
- * Reproduire tous les états de commentaire prévus pour les membres, les auteurs et les administrateurs.
+ * Présenter une discussion compacte, lisible et cohérente avec l'identité visuelle de Voisin.
  * Tâches :
- * Dimensionner les cartes de 97, 123 et 168 px ainsi que les formulaires valides et invalides.
+ * Styliser les cartes, les actions, le formulaire de saisie et leurs adaptations responsives.
  * Liens avec les autres fichiers :
  * Utilise resources/scss/abstracts/_variables.scss et compose resources/scss/pages/_comments.scss.
  */
@@ -14,44 +14,36 @@
 .comment-card {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    width: variables.$content-width;
-    height: 97px;
-    padding: 16px;
-    overflow: hidden;
+    gap: 12px;
+    width: 100%;
+    padding: 18px 20px;
     color: variables.$color-text;
     background-color: variables.$color-surface;
-    border: 1px solid variables.$color-border;
-    border-radius: variables.$radius-control;
+    border: 1px solid rgba(44, 36, 32, 0.1);
+    border-radius: variables.$radius-surface;
+    box-shadow: 0 3px 12px rgba(44, 36, 32, 0.04);
     font-family: variables.$font-family-base;
-    line-height: normal;
-}
-
-.comment-card--manageable {
-    height: 123px;
+    line-height: 1.45;
 }
 
 .comment-card--editing {
-    height: 168px;
-    border: 2px solid variables.$color-primary;
+    border-color: variables.$color-primary;
+    box-shadow: 0 0 0 3px rgba(201, 95, 48, 0.1);
 }
 
 .comment-card__header {
     display: flex;
-    flex: 0 0 36px;
     gap: 10px;
     align-items: center;
     width: 100%;
-    height: 36px;
-    overflow: hidden;
 }
 
 .comment-card__avatar {
-    flex: 0 0 36px;
-    width: 36px;
-    height: 36px;
+    flex: 0 0 40px;
+    width: 40px;
+    height: 40px;
     overflow: hidden;
-    border-radius: variables.$radius-avatar-small;
+    border-radius: 50%;
 }
 
 .comment-card__avatar-image {
@@ -64,163 +56,198 @@
     display: flex;
     flex: 1 1 auto;
     flex-direction: column;
-    gap: 2px;
-    align-items: flex-start;
+    gap: 1px;
     min-width: 0;
-    overflow: hidden;
-    white-space: nowrap;
 }
 
 .comment-card__author {
+    width: fit-content;
     max-width: 100%;
     overflow: hidden;
+    color: variables.$color-text;
     font-size: variables.$font-size-14;
     font-weight: variables.$font-weight-semibold;
+    text-decoration: none;
     text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
-.comment-card--editing .comment-card__author {
+.comment-card__author:hover,
+.comment-card__author:focus-visible {
     color: variables.$color-primary;
+}
+
+.comment-card__author:focus-visible {
+    outline: 2px solid variables.$color-primary;
+    outline-offset: 2px;
 }
 
 .comment-card__date {
     color: variables.$color-text-muted;
     font-size: variables.$font-size-12;
-    font-weight: variables.$font-weight-regular;
 }
 
 .comment-card__content {
-    width: 100%;
-    overflow: hidden;
+    margin: 0;
+    padding-left: 50px;
+    overflow-wrap: anywhere;
     font-size: variables.$font-size-14;
-    font-weight: variables.$font-weight-regular;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    white-space: pre-wrap;
 }
 
 .comment-card__actions {
     display: flex;
-    flex: 0 0 16px;
-    gap: 12px;
-    align-items: flex-start;
-    width: 100%;
-    height: 16px;
-    overflow: hidden;
+    gap: 8px;
+    align-items: center;
+    padding-left: 50px;
+}
+
+.comment-card__actions form {
+    display: inline-flex;
+    margin: 0;
 }
 
 .comment-card__action {
-    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    min-height: 30px;
+    padding: 5px 10px;
     color: variables.$color-primary;
-    background: none;
+    background-color: rgba(201, 95, 48, 0.08);
     border: 0;
+    border-radius: variables.$radius-pill;
     font-family: variables.$font-family-base;
-    font-size: variables.$font-size-13;
+    font-size: variables.$font-size-12;
     font-weight: variables.$font-weight-medium;
-    line-height: normal;
-    white-space: nowrap;
+    line-height: 1;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.comment-card__action:hover,
+.comment-card__action:focus-visible {
+    background-color: rgba(201, 95, 48, 0.16);
+}
+
+.comment-card__action:focus-visible,
+.comment-card__save:focus-visible,
+.comment-form__submit:focus-visible {
+    outline: 2px solid variables.$color-primary;
+    outline-offset: 2px;
 }
 
 .comment-card__action--delete {
     color: variables.$color-danger;
+    background-color: variables.$color-danger-background;
 }
 
-.comment-card--publication-owner .comment-card__action--delete {
-    color: variables.$color-primary;
+.comment-card__action--delete:hover,
+.comment-card__action--delete:focus-visible {
+    background-color: #f9dddd;
+}
+
+.comment-card__edit-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    padding-left: 50px;
 }
 
 .comment-card__edit-input {
-    flex: 0 0 41px;
-    width: 1072px;
-    height: 41px;
-    padding: 12px;
+    width: 100%;
+    min-height: 88px;
+    padding: 12px 14px;
     color: variables.$color-text;
     background-color: variables.$color-surface-soft;
-    border: 0;
+    border: 1px solid variables.$color-border;
     border-radius: variables.$radius-field;
     font-family: variables.$font-family-base;
     font-size: variables.$font-size-14;
-    font-weight: variables.$font-weight-regular;
-    line-height: normal;
+    line-height: 1.45;
+    resize: vertical;
+}
+
+.comment-card__edit-input:focus {
+    border-color: variables.$color-primary;
+    box-shadow: 0 0 0 3px rgba(201, 95, 48, 0.1);
+    outline: 0;
+}
+
+.comment-card__edit-form ul,
+.comment-form__error ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.comment-card__edit-form ul {
+    color: variables.$color-danger;
+    font-size: variables.$font-size-12;
 }
 
 .comment-card__edit-actions {
     display: flex;
-    flex: 0 0 35px;
-    gap: 12px;
+    gap: 14px;
     align-items: center;
-    width: 1072px;
-    height: 35px;
-    overflow: hidden;
+    justify-content: flex-end;
+    width: 100%;
 }
 
 .comment-card__save {
-    display: flex;
-    flex: 0 0 934px;
-    align-items: center;
-    justify-content: center;
-    width: 934px;
-    height: 35px;
+    min-width: 150px;
+    min-height: 36px;
     padding: 8px 20px;
     color: variables.$color-surface;
     background-color: variables.$color-primary;
     border: 0;
     border-radius: variables.$radius-pill;
     font-family: variables.$font-family-base;
-    font-size: variables.$font-size-16;
-    font-weight: variables.$font-weight-regular;
-    line-height: normal;
-    white-space: nowrap;
+    font-size: variables.$font-size-14;
+    font-weight: variables.$font-weight-medium;
+    cursor: pointer;
 }
 
-.comment-card__cancel,
-.comment-card__delete {
-    padding: 0;
-    background: none;
-    border: 0;
-    font-family: variables.$font-family-base;
-    font-size: variables.$font-size-13;
-    font-weight: variables.$font-weight-medium;
-    line-height: normal;
-    white-space: nowrap;
+.comment-card__save:hover,
+.comment-form__submit:hover {
+    background-color: #ad4e27;
 }
 
 .comment-card__cancel {
-    color: variables.$color-primary;
+    padding: 8px 4px;
+    color: variables.$color-text-muted;
+    font-size: variables.$font-size-13;
+    font-weight: variables.$font-weight-medium;
+    text-decoration: none;
 }
 
-.comment-card__delete {
-    color: variables.$color-danger;
+.comment-card__cancel:hover,
+.comment-card__cancel:focus-visible {
+    color: variables.$color-text;
 }
 
 .comment-form {
-    display: flex;
-    flex-direction: column;
-    width: variables.$content-width;
-    height: 44px;
+    width: 100%;
+    padding: 16px 18px;
+    background-color: rgba(255, 255, 255, 0.55);
+    border: 1px solid rgba(44, 36, 32, 0.08);
+    border-radius: variables.$radius-surface;
     font-family: variables.$font-family-base;
-    line-height: normal;
-}
-
-.comment-form--invalid {
-    gap: 8px;
-    height: 67px;
 }
 
 .comment-form__row {
     display: grid;
-    flex: 0 0 44px;
-    grid-template-columns: 36px 519px 533px;
-    gap: 10px;
+    grid-template-columns: 40px minmax(0, 1fr) auto;
+    gap: 12px;
     align-items: center;
-    width: variables.$content-width;
-    height: 44px;
+    width: 100%;
 }
 
 .comment-form__avatar {
-    width: 36px;
-    height: 36px;
+    width: 40px;
+    height: 40px;
     overflow: hidden;
-    border-radius: variables.$radius-avatar-small;
+    border-radius: 50%;
 }
 
 .comment-form__avatar-image {
@@ -230,17 +257,24 @@
 }
 
 .comment-form__input {
-    width: 519px;
-    height: 44px;
-    padding: 12px;
+    width: 100%;
+    min-height: 44px;
+    max-height: 160px;
+    padding: 11px 14px;
     color: variables.$color-text;
     background-color: variables.$color-surface;
     border: 1px solid variables.$color-border;
     border-radius: variables.$radius-field;
     font-family: variables.$font-family-base;
     font-size: variables.$font-size-14;
-    font-weight: variables.$font-weight-regular;
-    line-height: normal;
+    line-height: 1.4;
+    resize: vertical;
+}
+
+.comment-form__input:focus {
+    border-color: variables.$color-primary;
+    box-shadow: 0 0 0 3px rgba(201, 95, 48, 0.1);
+    outline: 0;
 }
 
 .comment-form__input::placeholder {
@@ -253,89 +287,64 @@
 }
 
 .comment-form__submit {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 533px;
-    height: 35px;
-    padding: 8px 20px;
+    min-width: 190px;
+    min-height: 40px;
+    padding: 9px 22px;
     color: variables.$color-surface;
     background-color: variables.$color-primary;
     border: 0;
     border-radius: variables.$radius-pill;
     font-family: variables.$font-family-base;
-    font-size: variables.$font-size-16;
-    font-weight: variables.$font-weight-regular;
-    line-height: normal;
+    font-size: variables.$font-size-14;
+    font-weight: variables.$font-weight-medium;
     white-space: nowrap;
+    cursor: pointer;
 }
 
 .comment-form__error {
-    width: 519px;
-    margin-left: 46px;
+    width: calc(100% - 52px);
+    margin-top: 8px;
+    margin-left: 52px;
     color: variables.$color-danger;
     font-size: variables.$font-size-12;
-    font-weight: variables.$font-weight-regular;
-    line-height: normal;
-}
-
-@media (max-width: variables.$breakpoint-tablet-max) {
-    .comment-card,
-    .comment-form,
-    .comment-form__row {
-        width: 100%;
-    }
-
-    .comment-card__edit-input,
-    .comment-card__edit-actions {
-        width: 100%;
-    }
-
-    .comment-card__save {
-        flex: 1 1 auto;
-        width: auto;
-    }
-
-    .comment-form__row {
-        grid-template-columns: 36px minmax(0, 1fr) minmax(160px, 0.65fr);
-    }
-
-    .comment-form__input,
-    .comment-form__submit {
-        width: 100%;
-    }
 }
 
 @media (max-width: variables.$breakpoint-mobile-max) {
-    .comment-card,
-    .comment-card--manageable,
-    .comment-card--editing {
-        height: auto;
-        min-height: 97px;
-        overflow: visible;
+    .comment-card {
+        gap: 10px;
+        padding: 16px;
     }
 
-    .comment-card__content {
-        overflow: visible;
-        text-overflow: initial;
-        white-space: normal;
+    .comment-card__content,
+    .comment-card__actions,
+    .comment-card__edit-form {
+        padding-left: 0;
     }
 
-    .comment-form,
-    .comment-form--invalid {
-        height: auto;
+    .comment-form {
+        padding: 14px;
     }
 
     .comment-form__row {
-        grid-template-columns: 36px minmax(0, 1fr);
-        height: auto;
+        grid-template-columns: 40px minmax(0, 1fr);
+        align-items: start;
     }
 
     .comment-form__submit {
         grid-column: 2;
+        width: 100%;
+        min-width: 0;
     }
 
     .comment-form__error {
-        width: calc(100% - 46px);
+        width: calc(100% - 52px);
+    }
+
+    .comment-card__edit-actions {
+        flex-wrap: wrap;
+    }
+
+    .comment-card__save {
+        flex: 1 1 auto;
     }
 }

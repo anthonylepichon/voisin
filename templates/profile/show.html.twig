@@ -27,7 +27,7 @@
         <section class="app-shell__main profile-page" aria-labelledby="titre-profil">
         <article class="profile-page__summary {{ classeResumeProfil }}">
             <div class="profile-page__cover">
-                <img class="profile-page__cover-image" src="{{ path('app_profile_photo', {nom: utilisateur.nomPhotoProfil}) }}" alt="Photo de profil de {{ utilisateur.pseudonyme }}">
+                <img class="profile-page__cover-image" src="{{ path('app_upload_fichier', {type: 'profil', nom: utilisateur.nomPhotoProfil}) }}" alt="Photo de profil de {{ utilisateur.pseudonyme }}">
             </div>
 
             <h1 class="profile-page__name" id="titre-profil">{{ utilisateur.pseudonyme }}</h1>
@@ -112,7 +112,7 @@
                     {% for ami in amis %}
                         <a class="friend-card" href="{{ path('app_profile_show', {pseudonyme: ami.pseudonyme}) }}">
                             <span class="friend-card__portrait">
-                                <img class="friend-card__portrait-image" src="{{ path('app_profile_photo', {nom: ami.nomPhotoProfil}) }}" alt="Photo de profil de {{ ami.pseudonyme }}">
+                                <img class="friend-card__portrait-image" src="{{ path('app_upload_fichier', {type: 'profil', nom: ami.nomPhotoProfil}) }}" alt="Photo de profil de {{ ami.pseudonyme }}">
                             </span>
                             <span class="friend-card__name">{{ ami.pseudonyme }}</span>
                         </a>

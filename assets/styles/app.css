@@ -1884,7 +1884,7 @@ body {
  * Description générale :
  * Carte de publication et variantes dimensionnelles issues des écrans Figma.
  * Rôle :
- * Afficher l'auteur, la visibilité, le texte, le média et les actions sociales d'une publication.
+ * Afficher l'utilisateur, la visibilité, le texte, le média et les actions sociales d'une publication.
  * Tâches :
  * Reproduire les cartes de l'accueil, du fil et du profil ainsi que l'état aimé et les actions du propriétaire.
  * Liens avec les autres fichiers :
@@ -2006,10 +2006,12 @@ body {
 
 .publication-card__like {
   left: 21px;
+  cursor: pointer;
 }
 
 .publication-card__comments {
   left: 101px;
+  cursor: pointer;
 }
 
 .publication-card__action-icon {
@@ -2029,6 +2031,17 @@ body {
 .publication-card__like--active .publication-card__action-icon,
 .publication-card__like[aria-pressed=true] .publication-card__action-icon {
   color: #c95f30;
+}
+
+.publication-card__like--active .publication-card__action-icon img,
+.publication-card__like[aria-pressed=true] .publication-card__action-icon img {
+  filter: brightness(0) saturate(100%) invert(45%) sepia(62%) saturate(1376%) hue-rotate(337deg) brightness(88%) contrast(88%);
+}
+
+.publication-card__like--active .publication-card__action-count,
+.publication-card__like[aria-pressed=true] .publication-card__action-count {
+  color: #c95f30;
+  font-weight: 600;
 }
 
 .publication-card__like--active .publication-card__action-icon svg,
@@ -2601,7 +2614,7 @@ body {
  * Description générale :
  * Résumé d'une publication affiché au-dessus de sa liste de commentaires.
  * Rôle :
- * Regrouper l'auteur, la visibilité, le texte et les statistiques de la publication.
+ * Regrouper l'utilisateur, la visibilité, le texte et les statistiques de la publication.
  * Tâches :
  * Gérer les variantes complète de 145 px et compacte de 117 px sans modifier leur géométrie.
  * Liens avec les autres fichiers :
@@ -2664,9 +2677,16 @@ body {
 .publication-summary__author {
   max-width: 100%;
   overflow: hidden;
+  color: #2c2420;
   font-size: 15px;
   font-weight: 600;
+  text-decoration: none;
   text-overflow: ellipsis;
+}
+
+.publication-summary__author:focus-visible {
+  outline: 2px solid #c95f30;
+  outline-offset: 2px;
 }
 
 .publication-summary__date {
@@ -2773,53 +2793,45 @@ body {
  * Description générale :
  * Composants des listes, actions, éditions et formulaires de commentaires.
  * Rôle :
- * Reproduire tous les états de commentaire prévus pour les membres, les auteurs et les administrateurs.
+ * Présenter une discussion compacte, lisible et cohérente avec l'identité visuelle de Voisin.
  * Tâches :
- * Dimensionner les cartes de 97, 123 et 168 px ainsi que les formulaires valides et invalides.
+ * Styliser les cartes, les actions, le formulaire de saisie et leurs adaptations responsives.
  * Liens avec les autres fichiers :
  * Utilise resources/scss/abstracts/_variables.scss et compose resources/scss/pages/_comments.scss.
  */
 .comment-card {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  width: 1108px;
-  height: 97px;
-  padding: 16px;
-  overflow: hidden;
+  gap: 12px;
+  width: 100%;
+  padding: 18px 20px;
   color: #2c2420;
   background-color: #ffffff;
-  border: 1px solid #d8d8d8;
-  border-radius: 10px;
+  border: 1px solid rgba(44, 36, 32, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 3px 12px rgba(44, 36, 32, 0.04);
   font-family: "Inter", Arial, sans-serif;
-  line-height: normal;
-}
-
-.comment-card--manageable {
-  height: 123px;
+  line-height: 1.45;
 }
 
 .comment-card--editing {
-  height: 168px;
-  border: 2px solid #c95f30;
+  border-color: #c95f30;
+  box-shadow: 0 0 0 3px rgba(201, 95, 48, 0.1);
 }
 
 .comment-card__header {
   display: flex;
-  flex: 0 0 36px;
   gap: 10px;
   align-items: center;
   width: 100%;
-  height: 36px;
-  overflow: hidden;
 }
 
 .comment-card__avatar {
-  flex: 0 0 36px;
-  width: 36px;
-  height: 36px;
+  flex: 0 0 40px;
+  width: 40px;
+  height: 40px;
   overflow: hidden;
-  border-radius: 18px;
+  border-radius: 50%;
 }
 
 .comment-card__avatar-image {
@@ -2832,163 +2844,198 @@ body {
   display: flex;
   flex: 1 1 auto;
   flex-direction: column;
-  gap: 2px;
-  align-items: flex-start;
+  gap: 1px;
   min-width: 0;
-  overflow: hidden;
-  white-space: nowrap;
 }
 
 .comment-card__author {
+  width: fit-content;
   max-width: 100%;
   overflow: hidden;
+  color: #2c2420;
   font-size: 14px;
   font-weight: 600;
+  text-decoration: none;
   text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.comment-card--editing .comment-card__author {
+.comment-card__author:hover,
+.comment-card__author:focus-visible {
   color: #c95f30;
+}
+
+.comment-card__author:focus-visible {
+  outline: 2px solid #c95f30;
+  outline-offset: 2px;
 }
 
 .comment-card__date {
   color: #8d8d8d;
   font-size: 12px;
-  font-weight: 400;
 }
 
 .comment-card__content {
-  width: 100%;
-  overflow: hidden;
+  margin: 0;
+  padding-left: 50px;
+  overflow-wrap: anywhere;
   font-size: 14px;
-  font-weight: 400;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  white-space: pre-wrap;
 }
 
 .comment-card__actions {
   display: flex;
-  flex: 0 0 16px;
-  gap: 12px;
-  align-items: flex-start;
-  width: 100%;
-  height: 16px;
-  overflow: hidden;
+  gap: 8px;
+  align-items: center;
+  padding-left: 50px;
+}
+
+.comment-card__actions form {
+  display: inline-flex;
+  margin: 0;
 }
 
 .comment-card__action {
-  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 5px 10px;
   color: #c95f30;
-  background: none;
+  background-color: rgba(201, 95, 48, 0.08);
   border: 0;
+  border-radius: 42px;
   font-family: "Inter", Arial, sans-serif;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 500;
-  line-height: normal;
-  white-space: nowrap;
+  line-height: 1;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.comment-card__action:hover,
+.comment-card__action:focus-visible {
+  background-color: rgba(201, 95, 48, 0.16);
+}
+
+.comment-card__action:focus-visible,
+.comment-card__save:focus-visible,
+.comment-form__submit:focus-visible {
+  outline: 2px solid #c95f30;
+  outline-offset: 2px;
 }
 
 .comment-card__action--delete {
   color: #b94848;
+  background-color: #fff2f2;
 }
 
-.comment-card--publication-owner .comment-card__action--delete {
-  color: #c95f30;
+.comment-card__action--delete:hover,
+.comment-card__action--delete:focus-visible {
+  background-color: #f9dddd;
+}
+
+.comment-card__edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  padding-left: 50px;
 }
 
 .comment-card__edit-input {
-  flex: 0 0 41px;
-  width: 1072px;
-  height: 41px;
-  padding: 12px;
+  width: 100%;
+  min-height: 88px;
+  padding: 12px 14px;
   color: #2c2420;
   background-color: #faf7f5;
-  border: 0;
+  border: 1px solid #d8d8d8;
   border-radius: 8px;
   font-family: "Inter", Arial, sans-serif;
   font-size: 14px;
-  font-weight: 400;
-  line-height: normal;
+  line-height: 1.45;
+  resize: vertical;
+}
+
+.comment-card__edit-input:focus {
+  border-color: #c95f30;
+  box-shadow: 0 0 0 3px rgba(201, 95, 48, 0.1);
+  outline: 0;
+}
+
+.comment-card__edit-form ul,
+.comment-form__error ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.comment-card__edit-form ul {
+  color: #b94848;
+  font-size: 12px;
 }
 
 .comment-card__edit-actions {
   display: flex;
-  flex: 0 0 35px;
-  gap: 12px;
+  gap: 14px;
   align-items: center;
-  width: 1072px;
-  height: 35px;
-  overflow: hidden;
+  justify-content: flex-end;
+  width: 100%;
 }
 
 .comment-card__save {
-  display: flex;
-  flex: 0 0 934px;
-  align-items: center;
-  justify-content: center;
-  width: 934px;
-  height: 35px;
+  min-width: 150px;
+  min-height: 36px;
   padding: 8px 20px;
   color: #ffffff;
   background-color: #c95f30;
   border: 0;
   border-radius: 42px;
   font-family: "Inter", Arial, sans-serif;
-  font-size: 16px;
-  font-weight: 400;
-  line-height: normal;
-  white-space: nowrap;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
 }
 
-.comment-card__cancel,
-.comment-card__delete {
-  padding: 0;
-  background: none;
-  border: 0;
-  font-family: "Inter", Arial, sans-serif;
-  font-size: 13px;
-  font-weight: 500;
-  line-height: normal;
-  white-space: nowrap;
+.comment-card__save:hover,
+.comment-form__submit:hover {
+  background-color: #ad4e27;
 }
 
 .comment-card__cancel {
-  color: #c95f30;
+  padding: 8px 4px;
+  color: #8d8d8d;
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
 }
 
-.comment-card__delete {
-  color: #b94848;
+.comment-card__cancel:hover,
+.comment-card__cancel:focus-visible {
+  color: #2c2420;
 }
 
 .comment-form {
-  display: flex;
-  flex-direction: column;
-  width: 1108px;
-  height: 44px;
+  width: 100%;
+  padding: 16px 18px;
+  background-color: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(44, 36, 32, 0.08);
+  border-radius: 12px;
   font-family: "Inter", Arial, sans-serif;
-  line-height: normal;
-}
-
-.comment-form--invalid {
-  gap: 8px;
-  height: 67px;
 }
 
 .comment-form__row {
   display: grid;
-  flex: 0 0 44px;
-  grid-template-columns: 36px 519px 533px;
-  gap: 10px;
+  grid-template-columns: 40px minmax(0, 1fr) auto;
+  gap: 12px;
   align-items: center;
-  width: 1108px;
-  height: 44px;
+  width: 100%;
 }
 
 .comment-form__avatar {
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   overflow: hidden;
-  border-radius: 18px;
+  border-radius: 50%;
 }
 
 .comment-form__avatar-image {
@@ -2998,17 +3045,24 @@ body {
 }
 
 .comment-form__input {
-  width: 519px;
-  height: 44px;
-  padding: 12px;
+  width: 100%;
+  min-height: 44px;
+  max-height: 160px;
+  padding: 11px 14px;
   color: #2c2420;
   background-color: #ffffff;
   border: 1px solid #d8d8d8;
   border-radius: 8px;
   font-family: "Inter", Arial, sans-serif;
   font-size: 14px;
-  font-weight: 400;
-  line-height: normal;
+  line-height: 1.4;
+  resize: vertical;
+}
+
+.comment-form__input:focus {
+  border-color: #c95f30;
+  box-shadow: 0 0 0 3px rgba(201, 95, 48, 0.1);
+  outline: 0;
 }
 
 .comment-form__input::placeholder {
@@ -3021,80 +3075,58 @@ body {
 }
 
 .comment-form__submit {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 533px;
-  height: 35px;
-  padding: 8px 20px;
+  min-width: 190px;
+  min-height: 40px;
+  padding: 9px 22px;
   color: #ffffff;
   background-color: #c95f30;
   border: 0;
   border-radius: 42px;
   font-family: "Inter", Arial, sans-serif;
-  font-size: 16px;
-  font-weight: 400;
-  line-height: normal;
+  font-size: 14px;
+  font-weight: 500;
   white-space: nowrap;
+  cursor: pointer;
 }
 
 .comment-form__error {
-  width: 519px;
-  margin-left: 46px;
+  width: calc(100% - 52px);
+  margin-top: 8px;
+  margin-left: 52px;
   color: #b94848;
   font-size: 12px;
-  font-weight: 400;
-  line-height: normal;
 }
 
-@media (max-width: 1439px) {
-  .comment-card,
-  .comment-form,
-  .comment-form__row {
-    width: 100%;
-  }
-  .comment-card__edit-input,
-  .comment-card__edit-actions {
-    width: 100%;
-  }
-  .comment-card__save {
-    flex: 1 1 auto;
-    width: auto;
-  }
-  .comment-form__row {
-    grid-template-columns: 36px minmax(0, 1fr) minmax(160px, 0.65fr);
-  }
-  .comment-form__input,
-  .comment-form__submit {
-    width: 100%;
-  }
-}
 @media (max-width: 767px) {
-  .comment-card,
-  .comment-card--manageable,
-  .comment-card--editing {
-    height: auto;
-    min-height: 97px;
-    overflow: visible;
+  .comment-card {
+    gap: 10px;
+    padding: 16px;
   }
-  .comment-card__content {
-    overflow: visible;
-    text-overflow: initial;
-    white-space: normal;
+  .comment-card__content,
+  .comment-card__actions,
+  .comment-card__edit-form {
+    padding-left: 0;
   }
-  .comment-form,
-  .comment-form--invalid {
-    height: auto;
+  .comment-form {
+    padding: 14px;
   }
   .comment-form__row {
-    grid-template-columns: 36px minmax(0, 1fr);
-    height: auto;
+    grid-template-columns: 40px minmax(0, 1fr);
+    align-items: start;
   }
   .comment-form__submit {
     grid-column: 2;
+    width: 100%;
+    min-width: 0;
   }
   .comment-form__error {
-    width: calc(100% - 46px);
+    width: calc(100% - 52px);
+  }
+  .comment-card__edit-actions {
+    flex-wrap: wrap;
+  }
+  .comment-card__save {
+    flex: 1 1 auto;
   }
 }
 /*
@@ -3587,7 +3619,7 @@ body {
  * Rôle :
  * Reproduire les cartes de formulaires et leurs états vide, saisi, invalide et confirmé.
  * Tâches :
- * Centrer les formulaires et appliquer leurs largeurs et hauteurs spécifiques à chaque écran Figma.
+ * Centrer les formulaires et appliquer leurs dimensions spécifiques à chaque écran Figma.
  * Liens avec les autres fichiers :
  * Utilise resources/scss/abstracts/_variables.scss et les composants de formulaire, bouton et alerte.
  */
@@ -4602,7 +4634,7 @@ body {
   display: flex;
   flex: 1 1 auto;
   flex-direction: column;
-  gap: 20px;
+  gap: 18px;
   align-items: flex-start;
   width: 1108px;
   min-width: 0;
@@ -4613,6 +4645,7 @@ body {
 }
 
 .comments-page__title {
+  margin: 4px 0 0;
   font-size: 18px;
   font-weight: 600;
   white-space: nowrap;
@@ -4621,7 +4654,7 @@ body {
 .comments-page__list {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 12px;
   width: 1108px;
 }
 
@@ -4632,11 +4665,13 @@ body {
   align-items: center;
   justify-content: center;
   width: 1108px;
-  height: 112px;
+  min-height: 132px;
   padding: 32px;
   overflow: hidden;
   background-color: #ffffff;
+  border: 1px solid rgba(44, 36, 32, 0.08);
   border-radius: 12px;
+  box-shadow: 0 3px 12px rgba(44, 36, 32, 0.04);
   text-align: center;
   white-space: nowrap;
 }
@@ -4653,6 +4688,11 @@ body {
   font-weight: 400;
 }
 
+.error-page {
+  width: min(720px, 100% - 40px);
+  margin: 80px auto;
+}
+
 @media (max-width: 1439px) {
   .comments-page,
   .comments-page__list,
@@ -4667,7 +4707,7 @@ body {
   }
   .comments-page__empty {
     height: auto;
-    min-height: 112px;
+    min-height: 124px;
     padding: 28px 20px;
   }
 }

@@ -35,9 +35,7 @@ Desktop.ini
 
 # Ressources locales de pilotage et de formation
 /AGENTS.md
-/etat-avancement.md
-/documents/pilotage/*
-!/documents/pilotage/rapport-audit-final.md
+/documents/pilotage/
 /documents/outils/
 /documents/cours/
 /documents/conceptualisation/Spécifications/Google sheet/

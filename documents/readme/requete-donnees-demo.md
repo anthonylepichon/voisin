@@ -2,14 +2,14 @@
 Description générale : Documente le jeu de données local de démonstration du projet Voisin.
 Rôle : Expliquer les comptes fictifs et l'import du script SQL qui peuple toutes les tables métier.
 Tâches : Identifier les profils, le mot de passe commun local, les volumes insérés et la source SQL à importer.
-Liens avec les autres fichiers : Décrit documents/base-de-donnees/donnees-demonstration.sql et les images de uploads/profils.
+Liens avec les autres fichiers : Décrit documents/readme/donnees-demonstration.sql et les images de uploads/profils.
 -->
 
 # Requête des données de démonstration
 
 Le script complet à importer est :
 
-[`documents/base-de-donnees/donnees-demonstration.sql`](../base-de-donnees/donnees-demonstration.sql)
+[`documents/readme/donnees-demonstration.sql`](donnees-demonstration.sql)
 
 Il est prévu pour une base locale `voisin` ayant reçu la migration initiale. Il n'est jamais importé en production.
 
@@ -39,6 +39,7 @@ VoisinDemo2026!
 | Table | Données insérées |
 |---|---:|
 | `utilisateur` | 8 profils |
+| `upload_fichier` | 8 photos de profil |
 | `publication` | 24 publications |
 | `commentaire` | 48 commentaires |
 | `asso_utilisateur_publication` | 48 likes |

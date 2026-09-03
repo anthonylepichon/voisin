@@ -20,7 +20,7 @@ Liens avec les autres fichiers : Étend base.html.twig, utilise FeedController e
 
             <article class="post-composer">
                 <div class="post-composer__editor">
-                    <img class="post-composer__avatar" src="{{ path('app_profile_photo', {nom: app.user.nomPhotoProfil}) }}" alt="Photo de profil de {{ app.user.pseudonyme }}">
+                    <img class="post-composer__avatar" src="{{ path('app_upload_fichier', {type: 'profil', nom: app.user.nomPhotoProfil}) }}" alt="Photo de profil de {{ app.user.pseudonyme }}">
                     <a class="post-composer__textarea post-composer__prompt" href="{{ path('app_publication_create') }}">Quoi de neuf ?</a>
                 </div>
                 <div class="post-composer__actions">
@@ -72,7 +72,7 @@ Liens avec les autres fichiers : Étend base.html.twig, utilise FeedController e
                         {% for ami in amisEnLigne %}
                             <li>
                                 <a class="online-friends__item" href="{{ path('app_profile_show', {pseudonyme: ami.pseudonyme}) }}">
-                                    <img class="online-friends__avatar" src="{{ path('app_profile_photo', {nom: ami.nomPhotoProfil}) }}" alt="">
+                                    <img class="online-friends__avatar" src="{{ path('app_upload_fichier', {type: 'profil', nom: ami.nomPhotoProfil}) }}" alt="">
                                     <span class="online-friends__name">{{ ami.pseudonyme }}</span>
                                     <span class="online-friends__status" aria-label="En ligne"></span>
                                 </a>

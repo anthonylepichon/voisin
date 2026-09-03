@@ -2,14 +2,14 @@
  * Description générale :
  * Résumé d'une publication affiché au-dessus de sa liste de commentaires.
  * Rôle :
- * Regrouper l'auteur, la visibilité, le texte et les statistiques de la publication.
+ * Regrouper l'utilisateur, la visibilité, le texte et les statistiques de la publication.
  * Tâches :
  * Gérer les variantes complète de 145 px et compacte de 117 px sans modifier leur géométrie.
  * Liens avec les autres fichiers :
  * Utilise resources/scss/abstracts/_variables.scss et compose resources/scss/pages/_comments.scss.
  */
 
-@use '../abstracts/variables' as variables;
+@use "../abstracts/variables" as variables;
 
 .publication-summary {
     display: flex;
@@ -68,9 +68,16 @@
 .publication-summary__author {
     max-width: 100%;
     overflow: hidden;
+    color: variables.$color-text;
     font-size: variables.$font-size-15;
     font-weight: variables.$font-weight-semibold;
+    text-decoration: none;
     text-overflow: ellipsis;
+}
+
+.publication-summary__author:focus-visible {
+    outline: 2px solid variables.$color-primary;
+    outline-offset: 2px;
 }
 
 .publication-summary__date {

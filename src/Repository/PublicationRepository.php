@@ -43,8 +43,8 @@ class PublicationRepository extends ServiceEntityRepository
     public function trouverPourFil(Utilisateur $utilisateur, string $filtre): array
     {
         $constructeur = $this->createQueryBuilder('publication')
-            ->innerJoin('publication.auteur', 'auteur')
-            ->addSelect('auteur')
+            ->innerJoin('publication.utilisateur', 'utilisateur')
+            ->addSelect('utilisateur')
             ->leftJoin('publication.utilisateursAimant', 'utilisateurAimant')
             ->addSelect('utilisateurAimant')
             ->leftJoin('publication.commentaires', 'commentaire')
@@ -53,13 +53,13 @@ class PublicationRepository extends ServiceEntityRepository
             ->addOrderBy('publication.id', 'DESC');
 
         $conditionAmitie = $constructeur->expr()->orX(
-            ':utilisateur MEMBER OF auteur.amis'
+            ':utilisateur MEMBER OF utilisateur.amis'
         );
 
         $amisEnregistresParUtilisateur = $utilisateur->getAmis()->toArray();
 
         if ([] !== $amisEnregistresParUtilisateur) {
-            $conditionAmitie->add('auteur IN (:amisEnregistresParUtilisateur)');
+            $conditionAmitie->add('utilisateur IN (:amisEnregistresParUtilisateur)');
         }
 
         if (self::FILTRE_PUBLIQUES === $filtre) {
@@ -69,7 +69,7 @@ class PublicationRepository extends ServiceEntityRepository
         } elseif (self::FILTRE_AMIS === $filtre) {
             $constructeur
                 ->andWhere('publication.visibilite = :visibiliteAmis')
-                ->andWhere('auteur != :utilisateur')
+                ->andWhere('utilisateur != :utilisateur')
                 ->andWhere($conditionAmitie)
                 ->setParameter('visibiliteAmis', Publication::VISIBILITE_AMIS)
                 ->setParameter('utilisateur', $utilisateur);
@@ -85,7 +85,7 @@ class PublicationRepository extends ServiceEntityRepository
                         $constructeur->expr()->andX(
                             'publication.visibilite = :visibiliteAmis',
                             $constructeur->expr()->orX(
-                                'auteur = :utilisateur',
+                                'utilisateur = :utilisateur',
                                 $conditionAmitie
                             )
                         )
@@ -113,13 +113,13 @@ class PublicationRepository extends ServiceEntityRepository
     public function trouverPourProfil(Utilisateur $profil, bool $inclureReserveesAuxAmis): array
     {
         $constructeur = $this->createQueryBuilder('publication')
-            ->innerJoin('publication.auteur', 'auteur')
-            ->addSelect('auteur')
+            ->innerJoin('publication.utilisateur', 'utilisateur')
+            ->addSelect('utilisateur')
             ->leftJoin('publication.utilisateursAimant', 'utilisateurAimant')
             ->addSelect('utilisateurAimant')
             ->leftJoin('publication.commentaires', 'commentaire')
             ->addSelect('commentaire')
-            ->andWhere('publication.auteur = :profil')
+            ->andWhere('publication.utilisateur = :profil')
             ->setParameter('profil', $profil)
             ->orderBy('publication.dateCreation', 'DESC')
             ->addOrderBy('publication.id', 'DESC');
