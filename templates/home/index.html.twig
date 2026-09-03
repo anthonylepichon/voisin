@@ -35,6 +35,7 @@
                 {% for publication in publications %}
                     {% include 'publication/_card.html.twig' with {
                         publication: publication,
+                        statistiques: statistiquesPublications[publication.id],
                         varianteCarte: '',
                         afficherActionsProprietaire: false
                     } only %}

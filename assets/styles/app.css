@@ -2364,6 +2364,53 @@ body {
  */
 /*
  * Description générale :
+ * Navigation entre les pages de publications.
+ * Rôle :
+ * Aligner les commandes de pagination sous les grilles du fil et des profils.
+ * Tâches :
+ * Organiser les liens, afficher la page courante et adapter la disposition sur mobile.
+ * Liens avec les autres fichiers :
+ * Utilisé par templates/partials/_pagination.html.twig et chargé depuis resources/scss/app.scss.
+ */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  width: 100%;
+  margin-top: 24px;
+}
+
+.pagination__link {
+  min-width: 112px;
+}
+
+.pagination__position {
+  color: #8d8d8d;
+  font-size: 14px;
+}
+
+@media (max-width: 767px) {
+  .pagination {
+    gap: 8px;
+  }
+  .pagination__link {
+    min-width: auto;
+    padding-inline: 14px;
+  }
+}
+/*
+ * Description générale :
+ * Fondations typographiques communes à toute l'interface Voisin.
+ * Rôle :
+ * Appliquer la police Inter et les niveaux de texte relevés dans la maquette Figma.
+ * Tâches :
+ * Définir le texte courant, les titres principaux et les textes secondaires réutilisables.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
+ */
+/*
+ * Description générale :
  * Carte desktop représentant une demande d'amitié reçue.
  * Rôle :
  * Positionner précisément l'avatar, l'identité et les deux décisions proposées au membre.

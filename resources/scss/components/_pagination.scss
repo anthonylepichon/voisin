@@ -1,0 +1,41 @@
+/*
+ * Description générale :
+ * Navigation entre les pages de publications.
+ * Rôle :
+ * Aligner les commandes de pagination sous les grilles du fil et des profils.
+ * Tâches :
+ * Organiser les liens, afficher la page courante et adapter la disposition sur mobile.
+ * Liens avec les autres fichiers :
+ * Utilisé par templates/partials/_pagination.html.twig et chargé depuis resources/scss/app.scss.
+ */
+
+@use '../abstracts/variables' as variables;
+
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    width: 100%;
+    margin-top: 24px;
+}
+
+.pagination__link {
+    min-width: 112px;
+}
+
+.pagination__position {
+    color: variables.$color-text-muted;
+    font-size: variables.$font-size-14;
+}
+
+@media (max-width: variables.$breakpoint-mobile-max) {
+    .pagination {
+        gap: 8px;
+    }
+
+    .pagination__link {
+        min-width: auto;
+        padding-inline: 14px;
+    }
+}

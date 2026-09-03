@@ -41,7 +41,7 @@
             <div class="profile-page__overview">
                 <div class="profile-page__stats" aria-label="Statistiques du profil">
                     <div class="profile-page__stat">
-                        <p class="profile-page__stat-value">{{ publications|length }}</p>
+                        <p class="profile-page__stat-value">{{ nombrePublications }}</p>
                         <p class="profile-page__stat-label">Publications</p>
                     </div>
                     <div class="profile-page__stat">
@@ -96,10 +96,21 @@
                 </div>
             {% else %}
                 {% for publication in publications %}
-                    {% include 'publication/_card.html.twig' with {publication: publication, varianteCarte: 'publication-card--profile-third'} only %}
+                    {% include 'publication/_card.html.twig' with {
+                        publication: publication,
+                        statistiques: statistiquesPublications[publication.id],
+                        varianteCarte: 'publication-card--profile-third'
+                    } only %}
                 {% endfor %}
             {% endif %}
         </section>
+
+        {% include 'partials/_pagination.html.twig' with {
+            routePagination: 'app_profile_show',
+            parametresPagination: {pseudonyme: utilisateur.pseudonyme},
+            pageActuelle: pageActuelle,
+            nombrePages: nombrePages
+        } only %}
 
         <section class="profile-page__friends" aria-labelledby="titre-amis-profil">
             <h2 class="profile-page__section-title" id="titre-amis-profil">Amis de {{ utilisateur.pseudonyme }}</h2>

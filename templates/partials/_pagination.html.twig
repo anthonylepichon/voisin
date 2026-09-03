@@ -1,0 +1,24 @@
+{#
+Description générale : Navigation réutilisable entre les pages d’une liste de publications.
+Rôle : Permettre de parcourir les publications sans charger la totalité des résultats.
+Tâches : Afficher les liens précédent et suivant ainsi que la position dans la pagination.
+Liens avec les autres fichiers : Inclus par les pages du fil et du profil, avec les styles components/_pagination.scss.
+#}
+
+{% if nombrePages > 1 %}
+    <nav class="pagination" aria-label="Pagination des publications">
+        {% if pageActuelle > 1 %}
+            <a class="button button--secondary pagination__link" href="{{ path(routePagination, parametresPagination|merge({page: pageActuelle - 1})) }}">Précédent</a>
+        {% else %}
+            <span class="button button--secondary pagination__link" aria-disabled="true">Précédent</span>
+        {% endif %}
+
+        <span class="pagination__position" aria-current="page">Page {{ pageActuelle }} sur {{ nombrePages }}</span>
+
+        {% if pageActuelle < nombrePages %}
+            <a class="button button--secondary pagination__link" href="{{ path(routePagination, parametresPagination|merge({page: pageActuelle + 1})) }}">Suivant</a>
+        {% else %}
+            <span class="button button--secondary pagination__link" aria-disabled="true">Suivant</span>
+        {% endif %}
+    </nav>
+{% endif %}

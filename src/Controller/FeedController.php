@@ -3,7 +3,7 @@
 /*
  * Description générale : Contrôleur du fil d'actualité des membres.
  * Rôle : Afficher les publications autorisées et traiter leur création directement dans le fil.
- * Tâches : Créer une publication, actualiser l'activité, normaliser le filtre et transmettre les données à Twig.
+ * Tâches : Créer une publication, actualiser l'activité, normaliser le filtre, paginer les résultats et transmettre les données à Twig.
  * Liens avec les autres fichiers : Utilise PublicationFormType, les repositories, FileUploadService, UserActivityService et templates/feed/index.html.twig.
  */
 
@@ -29,7 +29,7 @@ class FeedController extends AbstractController
 {
     /**
      * Rôle : Afficher le fil filtré et traiter son formulaire de création rapide.
-     * Paramètres : La requête HTTP, Doctrine, les dépôts et les services du fil.
+     * Paramètres : La requête HTTP avec la page demandée, Doctrine, les dépôts et les services du fil.
      * Retour : La réponse Twig du fil ou une redirection après publication.
      */
     #[Route('/fil-actualite', name: 'app_feed', methods: ['GET', 'POST'])]
@@ -102,6 +102,26 @@ class FeedController extends AbstractController
             $filtre = PublicationRepository::FILTRE_TOUTES;
         }
 
+        $page = $request->query->getInt('page', 1);
+
+        if ($page < 1) {
+            $page = 1;
+        }
+
+        $nombrePublications = $publicationRepository->compterPourFil($utilisateur, $filtre);
+        $nombrePages = (int) ceil($nombrePublications / PublicationRepository::PUBLICATIONS_PAR_PAGE);
+
+        if ($nombrePages < 1) {
+            $nombrePages = 1;
+        }
+
+        if ($page > $nombrePages) {
+            $page = $nombrePages;
+        }
+
+        $publications = $publicationRepository->trouverPourFil($utilisateur, $filtre, $page);
+        $statistiquesPublications = $publicationRepository->trouverStatistiquesCartes($publications, $utilisateur);
+
         $amisEnLigne = [];
         $statutsEnLigne = [];
 
@@ -119,8 +139,11 @@ class FeedController extends AbstractController
         }
 
         return $this->render('feed/index.html.twig', [
-            'publications' => $publicationRepository->trouverPourFil($utilisateur, $filtre),
+            'publications' => $publications,
+            'statistiquesPublications' => $statistiquesPublications,
             'filtreActif' => $filtre,
+            'pageActuelle' => $page,
+            'nombrePages' => $nombrePages,
             'amisEnLigne' => $amisEnLigne,
             'statutsEnLigne' => $statutsEnLigne,
             'nombreDemandesAmitieEnAttente' => $demandeAmitieRepository->compterRecues($utilisateur),
