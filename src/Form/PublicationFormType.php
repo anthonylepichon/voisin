@@ -53,6 +53,7 @@ class PublicationFormType extends AbstractType
             ])
             ->add('visibilite', ChoiceType::class, [
                 'label' => 'Visibilité',
+                'expanded' => true,
                 'choices' => [
                     'Publique' => Publication::VISIBILITE_PUBLIQUE,
                     'Amis uniquement' => Publication::VISIBILITE_AMIS,

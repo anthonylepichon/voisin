@@ -62,3 +62,36 @@
     color: variables.$color-surface;
     background-color: variables.$color-primary;
 }
+
+@media (max-width: variables.$breakpoint-tablet-max) {
+    .feed-filters {
+        width: 100%;
+    }
+}
+
+@media (max-width: variables.$breakpoint-mobile-max) {
+    .feed-filters {
+        flex-wrap: wrap;
+        height: auto;
+        gap: 10px;
+    }
+
+    .feed-filters__label {
+        flex: 1 0 100%;
+    }
+
+    .feed-filters__list {
+        flex-wrap: wrap;
+        width: 100%;
+        gap: 8px;
+    }
+
+    .feed-filters__item,
+    .feed-filters__item:nth-child(1),
+    .feed-filters__item:nth-child(2),
+    .feed-filters__item:nth-child(3) {
+        flex: 1 1 auto;
+        width: auto;
+        min-width: max-content;
+    }
+}

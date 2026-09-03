@@ -2,9 +2,9 @@
 
 /*
  * Description générale : Fournit l'accès Doctrine aux comptes utilisateurs.
- * Rôle : Rechercher et mettre à niveau les utilisateurs gérés par Symfony Security.
- * Tâches : Retrouver un compte par e-mail ou pseudonyme et enregistrer un nouveau hachage de mot de passe.
- * Liens avec les autres fichiers : Utilisé par l'entité Utilisateur et le futur authentificateur de connexion.
+ * Rôle : Rechercher les utilisateurs, leurs amis et mettre à niveau leurs accès de sécurité.
+ * Tâches : Retrouver un compte par identifiant, réunir ses amis et enregistrer un nouveau hachage de mot de passe.
+ * Liens avec les autres fichiers : Utilisé par l'entité Utilisateur, Symfony Security et les fonctionnalités sociales.
  */
 
 namespace App\Repository;
@@ -43,6 +43,33 @@ class UtilisateurRepository extends ServiceEntityRepository implements PasswordU
             ->setParameter('identifiant', $identifiant)
             ->getQuery()
             ->getOneOrNullResult();
+    }
+
+    /**
+     * Rôle : Retourner tous les amis d'un utilisateur quelle que soit l'orientation de la relation enregistrée.
+     * Paramètres : L'utilisateur dont les amis doivent être recherchés.
+     * Retour : La liste des amis sans doublon.
+     *
+     * @return list<Utilisateur>
+     */
+    public function trouverAmis(Utilisateur $utilisateur): array
+    {
+        $amis = array_values($utilisateur->getAmis()->toArray());
+
+        $amisRelationsInverses = $this->createQueryBuilder('ami')
+            ->innerJoin('ami.amis', 'utilisateurLie')
+            ->andWhere('utilisateurLie = :utilisateur')
+            ->setParameter('utilisateur', $utilisateur)
+            ->getQuery()
+            ->getResult();
+
+        foreach ($amisRelationsInverses as $ami) {
+            if (!in_array($ami, $amis, true)) {
+                $amis[] = $ami;
+            }
+        }
+
+        return $amis;
     }
 
     /**

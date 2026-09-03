@@ -11,12 +11,17 @@
 {% block body_class %}publication-editor-page{% endblock %}
 
 {% block body %}
-    <section class="publication-editor" aria-labelledby="titre-creation-publication">
-        <h1 class="publication-editor__title" id="titre-creation-publication">Créer une publication</h1>
-        {% include 'publication/_form.html.twig' with {
-            publication: publicationForm.vars.data,
-            afficherSuppressionImage: false,
-            libelleValidation: 'Publier'
-        } %}
-    </section>
+    <div class="app-shell">
+        <aside class="app-shell__sidebar">
+            {% include 'partials/_member_sidebar.html.twig' %}
+        </aside>
+        <section class="app-shell__main publication-editor" aria-labelledby="titre-creation-publication">
+            <h1 class="publication-editor__title" id="titre-creation-publication">Nouvelle publication</h1>
+            {% include 'publication/_form.html.twig' with {
+                publication: publicationForm.vars.data,
+                afficherSuppressionImage: false,
+                libelleValidation: 'Publier'
+            } %}
+        </section>
+    </div>
 {% endblock %}

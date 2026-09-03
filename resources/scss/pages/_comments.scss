@@ -65,3 +65,24 @@
     font-size: variables.$font-size-14;
     font-weight: variables.$font-weight-regular;
 }
+
+@media (max-width: variables.$breakpoint-tablet-max) {
+    .comments-page,
+    .comments-page__list,
+    .comments-page__empty {
+        width: 100%;
+    }
+}
+
+@media (max-width: variables.$breakpoint-mobile-max) {
+    .comments-page__title,
+    .comments-page__empty {
+        white-space: normal;
+    }
+
+    .comments-page__empty {
+        height: auto;
+        min-height: 112px;
+        padding: 28px 20px;
+    }
+}

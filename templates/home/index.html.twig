@@ -13,17 +13,17 @@
 
 {% block body %}
     <section class="public-home__hero">
-        <h1 class="public-home__title">Le réseau de quartier qui rapproche les voisins.</h1>
-        <p class="public-home__subtitle">Partagez, échangez et restez en contact avec votre voisinage.</p>
+        <h1 class="public-home__title">Chez Voisin.<br>Partagez ce qui compte vraiment</h1>
+        <p class="public-home__subtitle">Retrouvez vos amis, créez du lien</p>
 
         <div class="public-home__actions">
-            <a class="button button--primary public-home__primary-action" href="/inscription">Créer un compte</a>
-            <a class="button button--secondary public-home__secondary-action" href="/connexion">Se connecter</a>
+            <a class="button button--primary public-home__primary-action" href="{{ path('app_register') }}">Je rejoins la communauté</a>
+            <a class="button button--secondary public-home__secondary-action" href="#publications-recentes">Voir les publications</a>
         </div>
     </section>
 
     <section class="public-home__recent" aria-labelledby="publications-recentes">
-        <h2 class="public-home__recent-title" id="publications-recentes">Publications récentes</h2>
+        <h2 class="public-home__recent-title" id="publications-recentes">Ils ont partagé récemment leurs expériences</h2>
 
         <div class="public-home__empty">
             <p class="public-home__empty-title">Les publications apparaîtront bientôt ici.</p>

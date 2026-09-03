@@ -8,13 +8,20 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Profil de {{ utilisateur.pseudonyme }} — Voisin{% endblock %}
-{% block body_class %}app-shell{% endblock %}
-
 {% block body %}
-    <section class="profile-page" aria-labelledby="titre-profil">
-        <article class="profile-page__summary {{ estProprietaire ? 'profile-page__summary--owner' : 'profile-page__summary--stranger' }}">
-            <div class="avatar avatar--profile">
-                <img class="avatar__image" src="{{ path('app_profile_photo', {nom: utilisateur.nomPhotoProfil}) }}" alt="Photo de profil de {{ utilisateur.pseudonyme }}">
+    {% set classeResumeProfil = 'profile-page__summary--stranger' %}
+    {% if estProprietaire %}
+        {% set classeResumeProfil = 'profile-page__summary--owner' %}
+    {% endif %}
+
+    <div class="app-shell">
+        <aside class="app-shell__sidebar">
+            {% include 'partials/_member_sidebar.html.twig' %}
+        </aside>
+        <section class="app-shell__main profile-page" aria-labelledby="titre-profil">
+        <article class="profile-page__summary {{ classeResumeProfil }}">
+            <div class="profile-page__cover">
+                <img class="profile-page__cover-image" src="{{ path('app_profile_photo', {nom: utilisateur.nomPhotoProfil}) }}" alt="Photo de profil de {{ utilisateur.pseudonyme }}">
             </div>
 
             <h1 class="profile-page__name" id="titre-profil">{{ utilisateur.pseudonyme }}</h1>
@@ -58,5 +65,6 @@
                 <p class="empty-state__title">Les publications de {{ utilisateur.pseudonyme }} apparaîtront bientôt ici.</p>
             </div>
         </section>
-    </section>
+        </section>
+    </div>
 {% endblock %}

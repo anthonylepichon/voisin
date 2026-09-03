@@ -278,3 +278,64 @@
     font-weight: variables.$font-weight-regular;
     line-height: normal;
 }
+
+@media (max-width: variables.$breakpoint-tablet-max) {
+    .comment-card,
+    .comment-form,
+    .comment-form__row {
+        width: 100%;
+    }
+
+    .comment-card__edit-input,
+    .comment-card__edit-actions {
+        width: 100%;
+    }
+
+    .comment-card__save {
+        flex: 1 1 auto;
+        width: auto;
+    }
+
+    .comment-form__row {
+        grid-template-columns: 36px minmax(0, 1fr) minmax(160px, 0.65fr);
+    }
+
+    .comment-form__input,
+    .comment-form__submit {
+        width: 100%;
+    }
+}
+
+@media (max-width: variables.$breakpoint-mobile-max) {
+    .comment-card,
+    .comment-card--manageable,
+    .comment-card--editing {
+        height: auto;
+        min-height: 97px;
+        overflow: visible;
+    }
+
+    .comment-card__content {
+        overflow: visible;
+        text-overflow: initial;
+        white-space: normal;
+    }
+
+    .comment-form,
+    .comment-form--invalid {
+        height: auto;
+    }
+
+    .comment-form__row {
+        grid-template-columns: 36px minmax(0, 1fr);
+        height: auto;
+    }
+
+    .comment-form__submit {
+        grid-column: 2;
+    }
+
+    .comment-form__error {
+        width: calc(100% - 46px);
+    }
+}

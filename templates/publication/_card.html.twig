@@ -1,0 +1,59 @@
+{#
+Description générale : Carte réutilisable d'une publication.
+Rôle : Afficher l'auteur, la visibilité, le contenu, l'image et les compteurs sociaux.
+Tâches : Proposer les actions de gestion uniquement au propriétaire de la publication.
+Liens avec les autres fichiers : Inclus dans le fil d'actualité et stylisé par components/_publication-card.scss.
+#}
+
+<article class="publication-card publication-card--feed">
+    <header class="publication-card__header">
+        <a class="publication-card__author" href="{{ path('app_profile_show', {pseudonyme: publication.auteur.pseudonyme}) }}">
+            <span class="avatar avatar--medium">
+                <img class="avatar__image" src="{{ path('app_profile_photo', {nom: publication.auteur.nomPhotoProfil}) }}" alt="Photo de profil de {{ publication.auteur.pseudonyme }}">
+            </span>
+            <span class="publication-card__author-details">
+                <span class="publication-card__author-name">{{ publication.auteur.pseudonyme }}</span>
+                <time class="publication-card__date" datetime="{{ publication.dateCreation|date('c') }}">{{ publication.dateCreation|date('d/m/Y à H:i') }}</time>
+            </span>
+        </a>
+
+        <span class="badge">
+            {% if publication.visibilite == 'publique' %}
+                <span class="badge__icon"><img src="{{ asset('images/icons/icon_GlobeSimple.png') }}" alt=""></span>
+                Publique
+            {% else %}
+                <span class="badge__icon"><img src="{{ asset('images/icons/icon_users.png') }}" alt=""></span>
+                Amis uniquement
+            {% endif %}
+        </span>
+    </header>
+
+    {% if publication.contenu is not null and publication.contenu|trim != '' %}
+        <p class="publication-card__text">{{ publication.contenu|nl2br }}</p>
+    {% endif %}
+
+    {% if publication.nomImage %}
+        <div class="publication-card__media">
+            <img class="publication-card__media-image" src="{{ path('app_publication_image', {nom: publication.nomImage}) }}" alt="Image publiée par {{ publication.auteur.pseudonyme }}">
+        </div>
+    {% endif %}
+
+    <span class="publication-card__like" aria-label="{{ publication.utilisateursAimant|length }} mentions J’aime">
+        <span class="publication-card__action-icon"><img src="{{ asset('images/icons/icon_heart.png') }}" alt=""></span>
+        <span class="publication-card__action-count">{{ publication.utilisateursAimant|length }}</span>
+    </span>
+    <span class="publication-card__comments" aria-label="{{ publication.commentaires|length }} commentaires">
+        <span class="publication-card__action-icon"><img src="{{ asset('images/icons/icon_chatCircle.png') }}" alt=""></span>
+        <span class="publication-card__action-count">{{ publication.commentaires|length }}</span>
+    </span>
+
+    {% if app.user and app.user.id == publication.auteur.id %}
+        <div class="publication-card__owner-actions">
+            <a class="publication-card__owner-action" href="{{ path('app_publication_edit', {id: publication.id}) }}">Modifier</a>
+            <form action="{{ path('app_publication_delete', {id: publication.id}) }}" method="post" onsubmit="return confirm('Supprimer cette publication ?');">
+                <input type="hidden" name="_token" value="{{ csrf_token('supprimer-publication-' ~ publication.id) }}">
+                <button class="publication-card__owner-action publication-card__owner-action--delete" type="submit">Supprimer</button>
+            </form>
+        </div>
+    {% endif %}
+</article>

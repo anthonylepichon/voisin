@@ -18,7 +18,7 @@
 
 .publication-editor-page #contenu-principal {
     width: 100%;
-    padding: 60px;
+    padding: 0;
 }
 
 .publication-editor {
@@ -139,4 +139,58 @@
 
 .publication-editor--unauthorized {
     height: 157px;
+}
+
+@media (max-width: variables.$breakpoint-tablet-max) {
+    .publication-editor__form,
+    .publication-editor__alert {
+        width: min(700px, 100%);
+    }
+
+    .publication-editor__textarea {
+        width: 100%;
+    }
+}
+
+@media (max-width: variables.$breakpoint-mobile-max) {
+    .publication-editor {
+        gap: 16px;
+    }
+
+    .publication-editor__title {
+        font-size: variables.$font-size-22;
+        text-align: center;
+    }
+
+    .publication-editor__form,
+    .publication-editor__form--initial,
+    .publication-editor__form--with-preview,
+    .publication-editor__form--invalid,
+    .publication-editor__form--image-kept,
+    .publication-editor__form--image-removed {
+        width: 100%;
+        height: auto;
+        min-height: 0;
+        padding: 24px 16px;
+        gap: 16px;
+    }
+
+    .publication-editor__upload {
+        width: 100%;
+    }
+
+    .publication-editor__current-image {
+        align-items: flex-start;
+        width: 100%;
+        height: auto;
+    }
+
+    .publication-editor__current-image-preview {
+        flex-basis: min(150px, 48%);
+        width: min(150px, 48%);
+    }
+
+    .publication-editor__alert {
+        width: 100%;
+    }
 }

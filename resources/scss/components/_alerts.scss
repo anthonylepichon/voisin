@@ -54,3 +54,12 @@
     font-weight: variables.$font-weight-regular;
     background-color: variables.$color-pending-background;
 }
+
+@media (max-width: variables.$breakpoint-mobile-max) {
+    .alert {
+        align-items: flex-start;
+        height: auto;
+        padding: 14px;
+        overflow: visible;
+    }
+}

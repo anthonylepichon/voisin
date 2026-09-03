@@ -43,3 +43,14 @@
     font-weight: variables.$font-weight-regular;
     line-height: normal;
 }
+
+@media (max-width: variables.$breakpoint-mobile-max) {
+    .empty-state {
+        min-height: 120px;
+        padding: 28px 20px;
+    }
+
+    .empty-state__title {
+        font-size: variables.$font-size-16;
+    }
+}

@@ -11,17 +11,22 @@
 {% block body_class %}publication-editor-page{% endblock %}
 
 {% block body %}
-    <section class="publication-editor" aria-labelledby="titre-modification-publication">
-        <h1 class="publication-editor__title" id="titre-modification-publication">Modifier une publication</h1>
-        {% include 'publication/_form.html.twig' with {
-            publication: publication,
-            afficherSuppressionImage: true,
-            libelleValidation: 'Enregistrer'
-        } %}
+    <div class="app-shell">
+        <aside class="app-shell__sidebar">
+            {% include 'partials/_member_sidebar.html.twig' %}
+        </aside>
+        <section class="app-shell__main publication-editor" aria-labelledby="titre-modification-publication">
+            <h1 class="publication-editor__title" id="titre-modification-publication">Modifier la publication</h1>
+            {% include 'publication/_form.html.twig' with {
+                publication: publication,
+                afficherSuppressionImage: true,
+                libelleValidation: 'Enregistrer'
+            } %}
 
-        <form action="{{ path('app_publication_delete', {id: publication.id}) }}" method="post">
-            <input type="hidden" name="_token" value="{{ csrf_token('supprimer-publication-' ~ publication.id) }}">
-            <button class="button button--danger-outline" type="submit">Supprimer la publication</button>
-        </form>
-    </section>
+            <form action="{{ path('app_publication_delete', {id: publication.id}) }}" method="post">
+                <input type="hidden" name="_token" value="{{ csrf_token('supprimer-publication-' ~ publication.id) }}">
+                <button class="button button--danger-outline" type="submit">Supprimer la publication</button>
+            </form>
+        </section>
+    </div>
 {% endblock %}

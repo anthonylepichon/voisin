@@ -11,10 +11,10 @@
 {% block body_class %}auth-page{% endblock %}
 
 {% block body %}
-    <section class="auth-card auth-card--registration" aria-labelledby="titre-inscription">
+    <section class="auth-card auth-card--registration{% if registrationForm.vars.submitted and not registrationForm.vars.valid %} auth-card--registration-invalid{% endif %}" aria-labelledby="titre-inscription">
         <div class="auth-card__heading">
             <h1 class="auth-card__title" id="titre-inscription">Créer un compte</h1>
-            <p class="auth-card__subtitle">Rejoins ton voisinage en quelques instants.</p>
+            <p class="auth-card__subtitle">Rejoignez la communauté Voisin</p>
         </div>
 
         {{ form_start(registrationForm, {'attr': {'class': 'auth-card__form'}}) }}
@@ -29,8 +29,13 @@
                 {{ form_widget(registrationForm.adresseEmail, {'attr': {'class': 'form-field__control', 'placeholder': 'ton.email@exemple.fr'}}) }}
                 {{ form_errors(registrationForm.adresseEmail) }}
             </div>
-            <div class="file-upload file-upload--avatar" data-photo-profil>
-                {{ form_label(registrationForm.photoProfil, null, {'label_attr': {'class': 'file-upload__label'}}) }}
+            <div class="form-field">
+                {{ form_label(registrationForm.plainPassword, null, {'label_attr': {'class': 'form-field__label'}}) }}
+                {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'form-field__control', 'placeholder': '8 caractères minimum'}}) }}
+                {{ form_errors(registrationForm.plainPassword) }}
+            </div>
+            <div class="file-upload file-upload--avatar auth-card__avatar-upload" data-photo-profil>
+                {{ form_label(registrationForm.photoProfil, 'Photo de profil (obligatoire)', {'label_attr': {'class': 'file-upload__label'}}) }}
                 <label class="file-upload__zone" for="{{ registrationForm.photoProfil.vars.id }}">Choisir une photo
                     {{ form_widget(registrationForm.photoProfil, {'attr': {'class': 'file-upload__input', 'accept': 'image/jpeg,image/png,image/webp', 'data-photo-profil-input': ''}}) }}
                 </label>
@@ -39,11 +44,6 @@
                     <span class="file-upload__filename" data-photo-profil-name></span>
                 </div>
                 {{ form_errors(registrationForm.photoProfil) }}
-            </div>
-            <div class="form-field">
-                {{ form_label(registrationForm.plainPassword, null, {'label_attr': {'class': 'form-field__label'}}) }}
-                {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'form-field__control', 'placeholder': '8 caractères minimum'}}) }}
-                {{ form_errors(registrationForm.plainPassword) }}
             </div>
             <button class="button button--primary auth-card__submit" type="submit">Créer mon compte</button>
         {{ form_end(registrationForm) }}

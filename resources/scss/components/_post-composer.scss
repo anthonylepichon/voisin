@@ -25,7 +25,7 @@
 
 .post-composer__editor {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     width: 804px;
     height: 80px;
     gap: 12px;
@@ -55,6 +55,19 @@
     outline: 0;
 }
 
+.post-composer__prompt {
+    display: flex;
+    align-items: flex-start;
+    text-decoration: none;
+}
+
+.post-composer__prompt:focus-visible,
+.post-composer__photo:focus-visible,
+.post-composer__visibility:focus-visible {
+    outline: 2px solid variables.$color-primary;
+    outline-offset: 3px;
+}
+
 .post-composer__textarea::placeholder {
     color: variables.$color-text-muted;
     opacity: 1;
@@ -79,7 +92,7 @@
     font-size: variables.$font-size-14;
     background-color: variables.$color-surface;
     border: 1px solid variables.$color-border;
-    border-radius: variables.$radius-field;
+    border-radius: variables.$radius-pill;
 }
 
 .post-composer__photo {
@@ -93,5 +106,59 @@
 .post-composer__submit {
     width: 106px;
     height: 35px;
-    margin-left: auto;
+}
+
+@media (max-width: variables.$breakpoint-tablet-max) {
+    .post-composer,
+    .post-composer__editor,
+    .post-composer__actions {
+        width: 100%;
+    }
+
+    .post-composer__textarea {
+        flex: 1 1 auto;
+        width: auto;
+        min-width: 0;
+    }
+}
+
+@media (max-width: variables.$breakpoint-mobile-max) {
+    .post-composer {
+        height: auto;
+        padding: 16px;
+    }
+
+    .post-composer__editor {
+        height: 72px;
+    }
+
+    .post-composer__avatar {
+        flex-basis: 40px;
+        width: 40px;
+        height: 40px;
+    }
+
+    .post-composer__textarea {
+        height: 72px;
+    }
+
+    .post-composer__actions {
+        flex-wrap: wrap;
+        height: auto;
+    }
+
+    .post-composer__photo,
+    .post-composer__visibility {
+        flex: 1 1 calc(50% - 6px);
+        width: auto;
+        min-width: 0;
+        padding: 8px 10px;
+        font-size: variables.$font-size-13;
+    }
+
+    .post-composer__submit {
+        flex: 1 0 100%;
+        width: 100%;
+        margin-left: 0;
+    }
 }

@@ -8,13 +8,19 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Modifier mon profil — Voisin{% endblock %}
-{% block body_class %}app-shell{% endblock %}
-
 {% block body %}
-    <section class="profile-editor" aria-labelledby="titre-modification-profil">
-        <h1 class="profile-editor__title" id="titre-modification-profil">Modifier mon profil</h1>
+    <div class="app-shell">
+        <aside class="app-shell__sidebar">
+            {% include 'partials/_member_sidebar.html.twig' %}
+        </aside>
+        <section class="app-shell__main profile-editor" aria-labelledby="titre-modification-profil">
+            <h1 class="profile-editor__title" id="titre-modification-profil">Modifier mon profil</h1>
 
-        {{ form_start(profileForm, {'attr': {'class': 'profile-editor__form profile-editor__form--default'}}) }}
+        {% set classeEtatFormulaireProfil = 'profile-editor__form--default' %}
+        {% if profileForm.vars.submitted and not profileForm.vars.valid %}
+            {% set classeEtatFormulaireProfil = 'profile-editor__form--invalid' %}
+        {% endif %}
+        {{ form_start(profileForm, {'attr': {'class': 'profile-editor__form ' ~ classeEtatFormulaireProfil}}) }}
             {{ form_errors(profileForm) }}
 
             <div class="profile-editor__field form-field">
@@ -47,5 +53,6 @@
                 <a class="button button--secondary" href="{{ path('app_profile_current') }}">Annuler</a>
             </div>
         {{ form_end(profileForm) }}
-    </section>
+        </section>
+    </div>
 {% endblock %}

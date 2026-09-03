@@ -73,6 +73,17 @@ p {
   margin: 0;
 }
 
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
 /*
  * Description générale :
  * Fondations typographiques communes à toute l'interface Voisin.
@@ -102,10 +113,20 @@ body {
   line-height: normal;
 }
 
-body {
-  min-width: 1440px;
-  min-height: 100vh;
+html {
   background-color: #f0e8e3;
+}
+
+body {
+  width: 100%;
+  max-width: 1440px;
+  min-height: 100vh;
+  margin: 0 auto;
+  background-color: #f0e8e3;
+}
+
+#contenu-principal {
+  width: 100%;
 }
 
 .page-title {
@@ -124,6 +145,14 @@ body {
   color: #8d8d8d;
 }
 
+@media (max-width: 767px) {
+  .page-title {
+    font-size: 22px;
+  }
+  .section-title {
+    font-size: 18px;
+  }
+}
 /*
  * Description générale :
  * Fondations typographiques communes à toute l'interface Voisin.
@@ -187,13 +216,9 @@ body {
 }
 
 .site-header__actions--authenticated {
-  display: flex;
-  flex: 0 0 auto !important;
-  align-items: center;
-  justify-content: flex-end;
-  width: auto !important;
-  height: auto !important;
-  gap: 12px;
+  flex: 0 0 515px;
+  width: 515px;
+  height: 60px;
 }
 
 .site-header__publication,
@@ -211,6 +236,10 @@ body {
   font-weight: 400;
   white-space: nowrap;
   border-radius: 42px;
+}
+
+.site-header__member-link {
+  display: block;
 }
 
 .site-header__publication,
@@ -296,6 +325,15 @@ body {
   opacity: 1;
 }
 
+.site-header__search-placeholder {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  color: #8d8d8d;
+  font-size: 16px;
+  white-space: nowrap;
+}
+
 .site-header__search-icon {
   flex: 0 0 24px;
   width: 24px;
@@ -318,10 +356,29 @@ body {
   height: 100%;
 }
 
+.site-header__notification-badge {
+  position: absolute;
+  top: -7px;
+  right: -9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding-inline: 5px;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1;
+  background-color: #b94848;
+  border-radius: 42px;
+}
+
 .site-header__avatar {
   position: absolute;
   top: 0;
   right: 0;
+  display: block;
   width: 60px;
   height: 60px;
   overflow: hidden;
@@ -348,6 +405,118 @@ body {
   display: none;
 }
 
+@media (max-width: 1439px) {
+  .site-header {
+    height: 72px;
+    padding: 10px 24px;
+  }
+  .site-header__brand {
+    flex-basis: 132px;
+    width: 132px;
+    height: 47px;
+  }
+  .site-header__actions--authenticated {
+    flex-basis: 430px;
+    width: 430px;
+    height: 52px;
+  }
+  .site-header__search {
+    top: 5px;
+    width: 300px;
+  }
+  .site-header__notification {
+    top: 14px;
+    left: 322px;
+  }
+  .site-header__avatar {
+    width: 52px;
+    height: 52px;
+  }
+  .site-header--public .site-header__actions {
+    flex-basis: 310px;
+    width: 310px;
+  }
+  .site-header__login {
+    width: 142px;
+  }
+  .site-header__register {
+    left: 154px;
+    width: 156px;
+  }
+}
+@media (max-width: 767px) {
+  .site-header {
+    height: 64px;
+    padding: 8px 16px;
+  }
+  .site-header__brand {
+    flex-basis: 108px;
+    width: 108px;
+    height: 39px;
+  }
+  .site-header__actions--authenticated,
+  .site-header--compact .site-header__actions--authenticated {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    width: auto;
+    height: 48px;
+    gap: 12px;
+  }
+  .site-header__search,
+  .site-header__notification {
+    display: none;
+  }
+  .site-header__avatar {
+    position: relative;
+    top: auto;
+    right: auto;
+    width: 48px;
+    height: 48px;
+  }
+  .site-header--public .site-header__actions {
+    position: static;
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    width: auto;
+    height: auto;
+    gap: 8px;
+  }
+  .site-header__login,
+  .site-header__register {
+    position: static;
+    width: auto;
+    height: 34px;
+    padding: 7px 12px;
+    font-size: 13px;
+  }
+}
+@media (max-width: 419px) {
+  .site-header--public {
+    flex-wrap: wrap;
+    height: auto;
+    min-height: 104px;
+    padding-block: 8px;
+    gap: 8px;
+    overflow: visible;
+  }
+  .site-header__brand {
+    flex-basis: 92px;
+    width: 92px;
+    height: 33px;
+  }
+  .site-header--public .site-header__actions {
+    flex: 1 0 100%;
+    width: 100%;
+  }
+  .site-header__login,
+  .site-header__register {
+    flex: 1 1 0;
+    padding-inline: 8px;
+    font-size: 12px;
+  }
+}
 /*
  * Description générale :
  * Fondations typographiques communes à toute l'interface Voisin.
@@ -432,6 +601,51 @@ body {
   font-weight: 400;
 }
 
+@media (max-width: 1439px) {
+  .app-shell,
+  .app-shell--feed {
+    display: grid;
+    grid-template-columns: minmax(200px, 240px) minmax(0, 1fr);
+    width: 100%;
+    padding: 24px;
+    gap: 24px;
+  }
+  .app-shell__sidebar {
+    width: 100%;
+  }
+  .app-shell__main,
+  .app-shell--feed .app-shell__main {
+    width: 100%;
+  }
+  .app-shell__aside {
+    display: none;
+  }
+  .app-shell--single-column {
+    display: block;
+    padding: 40px 24px;
+  }
+}
+@media (max-width: 767px) {
+  .app-shell,
+  .app-shell--feed {
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    gap: 16px;
+  }
+  .app-shell__sidebar,
+  .app-shell__main,
+  .app-shell--feed .app-shell__main {
+    flex: 0 0 auto;
+    width: 100%;
+  }
+  .app-shell--single-column {
+    padding: 32px 16px;
+  }
+  .page-content {
+    gap: 16px;
+  }
+}
 /*
  * Description générale :
  * Fondations typographiques communes à toute l'interface Voisin.
@@ -546,6 +760,40 @@ body {
   border-radius: 42px;
 }
 
+@media (max-width: 1439px) {
+  .side-nav,
+  .side-nav--with-badge,
+  .side-nav--admin,
+  .side-nav--admin-extended {
+    width: 100%;
+    height: auto;
+  }
+  .side-nav__separator {
+    width: 100%;
+  }
+  .side-nav__logout {
+    width: 100%;
+  }
+}
+@media (max-width: 767px) {
+  .side-nav,
+  .side-nav--with-badge,
+  .side-nav--admin,
+  .side-nav--admin-extended {
+    padding: 16px;
+    gap: 12px;
+  }
+  .side-nav__links {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+    gap: 12px 16px;
+  }
+  .side-nav__link {
+    width: 100%;
+    font-size: 14px;
+  }
+}
 /*
  * Description générale :
  * Fondations typographiques communes à toute l'interface Voisin.
@@ -624,6 +872,11 @@ body {
   width: 24px;
   height: 24px;
   margin-right: 8px;
+}
+
+.button:focus-visible {
+  outline: 2px solid #c95f30;
+  outline-offset: 3px;
 }
 
 /*
@@ -862,11 +1115,37 @@ body {
 }
 
 .visibility-selector__option--active,
-.visibility-selector__option[aria-pressed=true] {
+.visibility-selector__option[aria-pressed=true],
+.visibility-selector__option:has(.visibility-selector__input:checked) {
   color: #ffffff;
   background-color: #c95f30;
 }
 
+.visibility-selector__input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+
+.visibility-selector__input:focus-visible + .visibility-selector__text {
+  outline: 2px solid #c95f30;
+  outline-offset: 4px;
+}
+
+@media (max-width: 767px) {
+  .visibility-selector {
+    flex-wrap: wrap;
+    width: 100%;
+  }
+  .visibility-selector__label {
+    flex: 1 0 100%;
+  }
+  .visibility-selector__options {
+    flex-wrap: wrap;
+  }
+}
 /*
  * Description générale :
  * Fondations typographiques communes à toute l'interface Voisin.
@@ -935,6 +1214,12 @@ body {
   border-color: #b94848;
 }
 
+.form-field__control:focus-visible {
+  border-color: #c95f30;
+  outline: 2px solid #c95f30;
+  outline-offset: 2px;
+}
+
 .form-field__error {
   color: #b94848;
   font-family: "Inter", Arial, sans-serif;
@@ -996,6 +1281,12 @@ body {
   border: 0;
 }
 
+.file-upload__zone:has(.file-upload__input:focus-visible) {
+  border-color: #c95f30;
+  outline: 2px solid #c95f30;
+  outline-offset: 2px;
+}
+
 .file-upload__preview {
   display: flex;
   flex-direction: column;
@@ -1024,6 +1315,19 @@ body {
 
 .file-upload__filename {
   color: #8d8d8d;
+  font-family: "Inter", Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.form-field > ul,
+.file-upload > ul,
+.auth-card__form > ul,
+.publication-editor__form > ul,
+.profile-editor__form > ul,
+.visibility-selector > ul {
+  color: #b94848;
   font-family: "Inter", Arial, sans-serif;
   font-size: 12px;
   font-weight: 400;
@@ -1063,6 +1367,26 @@ body {
   min-height: 168px;
 }
 
+@media (max-width: 767px) {
+  .form-actions {
+    flex-wrap: wrap;
+    width: 100%;
+  }
+  .form-actions .button {
+    flex: 1 1 140px;
+  }
+  .file-upload,
+  .file-upload__zone,
+  .file-upload__preview {
+    width: 100%;
+    max-width: 300px;
+  }
+  .file-upload--avatar,
+  .file-upload--avatar .file-upload__zone,
+  .file-upload--avatar .file-upload__preview {
+    width: min(200px, 100%);
+  }
+}
 /*
  * Description générale :
  * Fondations typographiques communes à toute l'interface Voisin.
@@ -1127,6 +1451,14 @@ body {
   background-color: #fffaed;
 }
 
+@media (max-width: 767px) {
+  .alert {
+    align-items: flex-start;
+    height: auto;
+    padding: 14px;
+    overflow: visible;
+  }
+}
 /*
  * Description générale :
  * Fondations typographiques communes à toute l'interface Voisin.
@@ -1180,6 +1512,15 @@ body {
   line-height: normal;
 }
 
+@media (max-width: 767px) {
+  .empty-state {
+    min-height: 120px;
+    padding: 28px 20px;
+  }
+  .empty-state__title {
+    font-size: 16px;
+  }
+}
 /*
  * Description générale :
  * Fondations typographiques communes à toute l'interface Voisin.
@@ -1252,6 +1593,34 @@ body {
   background-color: #c95f30;
 }
 
+@media (max-width: 1439px) {
+  .feed-filters {
+    width: 100%;
+  }
+}
+@media (max-width: 767px) {
+  .feed-filters {
+    flex-wrap: wrap;
+    height: auto;
+    gap: 10px;
+  }
+  .feed-filters__label {
+    flex: 1 0 100%;
+  }
+  .feed-filters__list {
+    flex-wrap: wrap;
+    width: 100%;
+    gap: 8px;
+  }
+  .feed-filters__item,
+  .feed-filters__item:nth-child(1),
+  .feed-filters__item:nth-child(2),
+  .feed-filters__item:nth-child(3) {
+    flex: 1 1 auto;
+    width: auto;
+    min-width: max-content;
+  }
+}
 /*
  * Description générale :
  * Fondations typographiques communes à toute l'interface Voisin.
@@ -1286,7 +1655,7 @@ body {
 
 .post-composer__editor {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   width: 804px;
   height: 80px;
   gap: 12px;
@@ -1316,6 +1685,19 @@ body {
   outline: 0;
 }
 
+.post-composer__prompt {
+  display: flex;
+  align-items: flex-start;
+  text-decoration: none;
+}
+
+.post-composer__prompt:focus-visible,
+.post-composer__photo:focus-visible,
+.post-composer__visibility:focus-visible {
+  outline: 2px solid #c95f30;
+  outline-offset: 3px;
+}
+
 .post-composer__textarea::placeholder {
   color: #8d8d8d;
   opacity: 1;
@@ -1340,7 +1722,7 @@ body {
   font-size: 14px;
   background-color: #ffffff;
   border: 1px solid #d8d8d8;
-  border-radius: 8px;
+  border-radius: 42px;
 }
 
 .post-composer__photo {
@@ -1354,9 +1736,54 @@ body {
 .post-composer__submit {
   width: 106px;
   height: 35px;
-  margin-left: auto;
 }
 
+@media (max-width: 1439px) {
+  .post-composer,
+  .post-composer__editor,
+  .post-composer__actions {
+    width: 100%;
+  }
+  .post-composer__textarea {
+    flex: 1 1 auto;
+    width: auto;
+    min-width: 0;
+  }
+}
+@media (max-width: 767px) {
+  .post-composer {
+    height: auto;
+    padding: 16px;
+  }
+  .post-composer__editor {
+    height: 72px;
+  }
+  .post-composer__avatar {
+    flex-basis: 40px;
+    width: 40px;
+    height: 40px;
+  }
+  .post-composer__textarea {
+    height: 72px;
+  }
+  .post-composer__actions {
+    flex-wrap: wrap;
+    height: auto;
+  }
+  .post-composer__photo,
+  .post-composer__visibility {
+    flex: 1 1 calc(50% - 6px);
+    width: auto;
+    min-width: 0;
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+  .post-composer__submit {
+    flex: 1 0 100%;
+    width: 100%;
+    margin-left: 0;
+  }
+}
 /*
  * Description générale :
  * Fondations typographiques communes à toute l'interface Voisin.
@@ -1381,7 +1808,7 @@ body {
   display: flex;
   flex-direction: column;
   width: 240px;
-  height: 189px;
+  min-height: 189px;
   padding: 20px;
   gap: 12px;
   overflow: hidden;
@@ -1435,6 +1862,12 @@ body {
   height: 8px;
   background-color: #1ba030;
   border-radius: 50%;
+}
+
+.online-friends__empty {
+  color: #8d8d8d;
+  font-size: 13px;
+  line-height: 1.4;
 }
 
 /*
@@ -1625,8 +2058,12 @@ body {
 }
 
 .publication-card__owner-action {
+  padding: 0;
   color: #c95f30;
+  font: inherit;
   text-decoration: none;
+  background: transparent;
+  border: 0;
 }
 
 .publication-card__owner-action--delete {
@@ -1634,7 +2071,7 @@ body {
 }
 
 .publication-card--feed {
-  flex-basis: 844px;
+  flex-basis: auto;
   width: 844px;
 }
 
@@ -1658,11 +2095,16 @@ body {
 }
 
 .publication-card--feed .publication-card__like {
-  left: 53px;
+  left: 19px;
 }
 
 .publication-card--feed .publication-card__comments {
-  left: 111px;
+  left: 77px;
+}
+
+.publication-card:not(:has(.publication-card__text)) .publication-card__media {
+  top: 109px;
+  height: 289px;
 }
 
 .publication-card--profile-third {
@@ -1734,6 +2176,152 @@ body {
   width: 542px;
 }
 
+@media (max-width: 1439px) {
+  .publication-card,
+  .publication-card--feed,
+  .publication-card--profile-third,
+  .publication-card--profile-half,
+  .publication-card--profile-compact {
+    flex-basis: auto;
+    width: 100%;
+    min-width: 0;
+  }
+  .publication-card .publication-card__header,
+  .publication-card--feed .publication-card__header,
+  .publication-card--profile-third .publication-card__header,
+  .publication-card--profile-half .publication-card__header {
+    left: 19px;
+    width: calc(100% - 38px);
+  }
+  .publication-card .publication-card__text,
+  .publication-card--feed .publication-card__text,
+  .publication-card--profile-third .publication-card__text,
+  .publication-card--profile-half .publication-card__text {
+    left: 19px;
+    width: calc(100% - 38px);
+  }
+  .publication-card .publication-card__media,
+  .publication-card--feed .publication-card__media,
+  .publication-card--profile-third .publication-card__media,
+  .publication-card--profile-half .publication-card__media {
+    left: 19px;
+    width: calc(100% - 38px);
+  }
+}
+@media (max-width: 767px) {
+  .publication-card,
+  .publication-card--feed,
+  .publication-card--profile-third,
+  .publication-card--profile-half,
+  .publication-card--profile-compact {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    min-height: 230px;
+    padding: 16px 16px 56px;
+    gap: 16px;
+  }
+  .publication-card .publication-card__header,
+  .publication-card--feed .publication-card__header,
+  .publication-card--profile-third .publication-card__header,
+  .publication-card--profile-half .publication-card__header {
+    position: static;
+    width: 100%;
+    height: auto;
+    padding: 0;
+  }
+  .publication-card__author {
+    min-width: 0;
+    gap: 10px;
+  }
+  .publication-card__author .avatar {
+    flex-basis: 48px;
+    width: 48px;
+    height: 48px;
+  }
+  .publication-card__author-details {
+    width: auto;
+    min-width: 0;
+  }
+  .publication-card__author-name,
+  .publication-card__date {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .publication-card .publication-card__text,
+  .publication-card--feed .publication-card__text,
+  .publication-card--profile-third .publication-card__text,
+  .publication-card--profile-half .publication-card__text {
+    position: static;
+    width: 100%;
+    max-height: none;
+  }
+  .publication-card .publication-card__media,
+  .publication-card--feed .publication-card__media,
+  .publication-card--profile-third .publication-card__media,
+  .publication-card--profile-half .publication-card__media {
+    position: static;
+    width: 100%;
+    height: 210px;
+  }
+  .publication-card:not(:has(.publication-card__text)) .publication-card__media {
+    top: auto;
+    height: 210px;
+  }
+  .publication-card__report,
+  .publication-card--feed .publication-card__report,
+  .publication-card--profile-third .publication-card__report,
+  .publication-card--profile-half .publication-card__report {
+    top: auto;
+    bottom: 16px;
+    left: 16px;
+  }
+  .publication-card__like,
+  .publication-card--feed .publication-card__like,
+  .publication-card--profile-third .publication-card__like,
+  .publication-card--profile-half .publication-card__like {
+    top: auto;
+    bottom: 16px;
+    left: 16px;
+  }
+  .publication-card__comments,
+  .publication-card--feed .publication-card__comments,
+  .publication-card--profile-third .publication-card__comments,
+  .publication-card--profile-half .publication-card__comments {
+    top: auto;
+    bottom: 16px;
+    left: 74px;
+  }
+  .publication-card__owner-actions {
+    top: auto;
+    right: 16px;
+    bottom: 20px;
+  }
+  .badge {
+    flex: 0 0 auto;
+    font-size: 13px;
+  }
+  .badge__icon {
+    flex-basis: 18px;
+    width: 18px;
+    height: 18px;
+  }
+}
+@media (max-width: 479px) {
+  .publication-card .publication-card__media,
+  .publication-card--feed .publication-card__media,
+  .publication-card--profile-third .publication-card__media,
+  .publication-card--profile-half .publication-card__media {
+    height: 180px;
+  }
+  .publication-card:not(:has(.publication-card__text)) .publication-card__media {
+    height: 180px;
+  }
+  .publication-card__owner-actions {
+    gap: 8px;
+    font-size: 12px;
+  }
+}
 /*
  * Description générale :
  * Fondations typographiques communes à toute l'interface Voisin.
@@ -1847,6 +2435,63 @@ body {
   border: 0;
 }
 
+@media (max-width: 1439px) {
+  .friend-request-card {
+    width: 100%;
+  }
+  .friend-request-card__actions {
+    right: 24px;
+    left: auto;
+  }
+}
+@media (max-width: 1023px) {
+  .friend-request-card {
+    display: grid;
+    grid-template-columns: 64px minmax(0, 1fr);
+    height: auto;
+    min-height: 154px;
+    padding: 20px;
+    gap: 16px;
+  }
+  .friend-request-card__avatar,
+  .friend-request-card__identity,
+  .friend-request-card__actions {
+    position: static;
+  }
+  .friend-request-card__avatar {
+    width: 64px;
+    height: 64px;
+  }
+  .friend-request-card__identity {
+    align-self: center;
+    min-width: 0;
+  }
+  .friend-request-card__actions {
+    grid-column: 1/-1;
+    width: 100%;
+  }
+  .friend-request-card__decline,
+  .friend-request-card__accept {
+    flex: 1 1 0;
+    width: auto;
+  }
+}
+@media (max-width: 767px) {
+  .friend-request-card {
+    display: grid;
+    grid-template-columns: 64px minmax(0, 1fr);
+    height: auto;
+    min-height: 154px;
+    padding: 20px;
+    gap: 16px;
+  }
+  .friend-request-card__name,
+  .friend-request-card__date {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
 /*
  * Description générale :
  * Fondations typographiques communes à toute l'interface Voisin.
@@ -2072,6 +2717,40 @@ body {
   display: none;
 }
 
+@media (max-width: 1439px) {
+  .publication-summary {
+    width: 100%;
+  }
+  .publication-summary__header {
+    width: 100%;
+  }
+  .publication-summary__identity,
+  .publication-summary__visibility {
+    flex: 1 1 0;
+    width: auto;
+  }
+}
+@media (max-width: 767px) {
+  .publication-summary,
+  .publication-summary--compact {
+    height: auto;
+    min-height: 117px;
+    padding: 16px;
+  }
+  .publication-summary__visibility {
+    flex: 0 0 auto;
+    font-size: 13px;
+  }
+  .publication-summary__visibility-icon {
+    flex-basis: 18px;
+    width: 18px;
+    height: 18px;
+  }
+  .publication-summary__text {
+    overflow: visible;
+    white-space: normal;
+  }
+}
 /*
  * Description générale :
  * Fondations typographiques communes à toute l'interface Voisin.
@@ -2360,6 +3039,56 @@ body {
   line-height: normal;
 }
 
+@media (max-width: 1439px) {
+  .comment-card,
+  .comment-form,
+  .comment-form__row {
+    width: 100%;
+  }
+  .comment-card__edit-input,
+  .comment-card__edit-actions {
+    width: 100%;
+  }
+  .comment-card__save {
+    flex: 1 1 auto;
+    width: auto;
+  }
+  .comment-form__row {
+    grid-template-columns: 36px minmax(0, 1fr) minmax(160px, 0.65fr);
+  }
+  .comment-form__input,
+  .comment-form__submit {
+    width: 100%;
+  }
+}
+@media (max-width: 767px) {
+  .comment-card,
+  .comment-card--manageable,
+  .comment-card--editing {
+    height: auto;
+    min-height: 97px;
+    overflow: visible;
+  }
+  .comment-card__content {
+    overflow: visible;
+    text-overflow: initial;
+    white-space: normal;
+  }
+  .comment-form,
+  .comment-form--invalid {
+    height: auto;
+  }
+  .comment-form__row {
+    grid-template-columns: 36px minmax(0, 1fr);
+    height: auto;
+  }
+  .comment-form__submit {
+    grid-column: 2;
+  }
+  .comment-form__error {
+    width: calc(100% - 46px);
+  }
+}
 /*
  * Description générale :
  * Fondations typographiques communes à toute l'interface Voisin.
@@ -2587,6 +3316,78 @@ body {
   white-space: nowrap;
 }
 
+@media (max-width: 1439px) {
+  .members-table,
+  .moderation-list,
+  .moderation-item {
+    width: 100%;
+  }
+  .moderation-item__thumbnail,
+  .moderation-item--deleted .moderation-item__thumbnail {
+    flex: 0 0 120px;
+    width: 120px;
+  }
+  .moderation-item__details,
+  .moderation-item--deleted .moderation-item__details {
+    flex: 1 1 auto;
+    width: auto;
+  }
+  .moderation-item__actions {
+    flex: 0 0 auto;
+    width: auto;
+  }
+  .moderation-item__comments,
+  .moderation-item__delete,
+  .moderation-item--single-action .moderation-item__delete {
+    flex: 0 0 auto;
+    width: auto;
+  }
+}
+@media (max-width: 1023px) {
+  .moderation-item {
+    flex-wrap: wrap;
+    height: auto;
+    padding: 16px;
+  }
+  .moderation-item__thumbnail,
+  .moderation-item--deleted .moderation-item__thumbnail {
+    flex-basis: 72px;
+    width: 72px;
+    height: 56px;
+  }
+  .moderation-item__actions {
+    flex: 1 0 100%;
+    width: 100%;
+  }
+  .moderation-item__comments,
+  .moderation-item__delete,
+  .moderation-item--single-action .moderation-item__delete {
+    flex: 1 1 auto;
+  }
+}
+@media (max-width: 767px) {
+  .members-table {
+    overflow-x: auto;
+  }
+  .members-table__row {
+    min-width: 680px;
+  }
+  .moderation-item__thumbnail,
+  .moderation-item--deleted .moderation-item__thumbnail {
+    flex-basis: 56px;
+    width: 56px;
+    height: 56px;
+  }
+  .moderation-item__actions {
+    flex: 1 0 100%;
+    width: 100%;
+  }
+  .moderation-item__comments,
+  .moderation-item__delete,
+  .moderation-item--single-action .moderation-item__delete {
+    flex: 1 1 auto;
+  }
+}
 /*
  * Description générale :
  * Fondations typographiques communes à toute l'interface Voisin.
@@ -2706,6 +3507,62 @@ body {
   font-size: 16px;
 }
 
+@media (max-width: 1439px) {
+  .public-home__hero {
+    height: auto;
+    min-height: 340px;
+    padding: 64px 32px;
+  }
+  .public-home__title {
+    width: min(646px, 100%);
+  }
+  .public-home__recent {
+    padding: 32px 24px;
+  }
+  .public-home__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+  }
+}
+@media (max-width: 767px) {
+  .public-home__hero {
+    min-height: 360px;
+    padding: 48px 20px;
+    gap: 20px;
+  }
+  .public-home__title {
+    min-height: 0;
+    font-size: 28px;
+  }
+  .public-home__subtitle {
+    font-size: 16px;
+  }
+  .public-home__actions {
+    flex-direction: column;
+    width: 100%;
+    height: auto;
+    gap: 12px;
+  }
+  .public-home__primary-action,
+  .public-home__secondary-action {
+    width: min(100%, 280px);
+  }
+  .public-home__recent {
+    padding: 28px 16px;
+  }
+  .public-home__grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+  .public-home__empty {
+    height: auto;
+    min-height: 240px;
+    padding: 48px 20px;
+  }
+  .public-home__empty-title {
+    font-size: 18px;
+  }
+}
 /*
  * Description générale :
  * Fondations typographiques communes à toute l'interface Voisin.
@@ -2746,27 +3603,27 @@ body {
   width: 500px;
   padding: 40px;
   gap: 20px;
-  overflow: hidden;
+  overflow: visible;
   background-color: #ffffff;
   border-radius: 16px;
 }
 
 .auth-card--registration {
-  height: 756px;
+  min-height: 756px;
 }
 
 .auth-card--registration-invalid {
-  height: 863px;
+  min-height: 863px;
 }
 
 .auth-card--login {
   width: 460px;
-  height: 417px;
+  min-height: 417px;
 }
 
 .auth-card--login-with-alert {
   width: 460px;
-  height: 488px;
+  min-height: 488px;
 }
 
 .auth-card__heading {
@@ -2842,6 +3699,45 @@ body {
   text-decoration: none;
 }
 
+@media (max-width: 1439px) {
+  .auth-page #contenu-principal {
+    padding: 48px 24px;
+  }
+}
+@media (max-width: 767px) {
+  .auth-page #contenu-principal {
+    min-height: calc(100vh - 64px);
+    padding: 32px 16px;
+  }
+  .auth-card,
+  .auth-card--registration,
+  .auth-card--registration-invalid,
+  .auth-card--login,
+  .auth-card--login-with-alert {
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    padding: 28px 20px;
+  }
+  .auth-card__title {
+    font-size: 24px;
+  }
+  .auth-card--registration .auth-card__form,
+  .auth-card--login .auth-card__form,
+  .auth-card--login-with-alert .auth-card__form {
+    width: 100%;
+  }
+  .auth-card__alert--danger,
+  .auth-card__alert--success {
+    width: 100%;
+    margin-left: 0;
+  }
+}
+@media (max-width: 419px) {
+  .auth-page #contenu-principal {
+    min-height: calc(100vh - 104px);
+  }
+}
 /*
  * Description générale :
  * Fondations typographiques communes à toute l'interface Voisin.
@@ -2919,6 +3815,24 @@ body {
   stroke: currentColor;
 }
 
+@media (max-width: 1439px) {
+  .feed-page,
+  .feed-page__posts,
+  .feed-page__empty {
+    width: 100%;
+  }
+}
+@media (max-width: 767px) {
+  .feed-page,
+  .feed-page__posts {
+    gap: 16px;
+  }
+  .feed-page__empty {
+    height: auto;
+    min-height: 131px;
+    padding: 28px 20px;
+  }
+}
 /*
  * Description générale :
  * Fondations typographiques communes à toute l'interface Voisin.
@@ -2946,7 +3860,7 @@ body {
 
 .publication-editor-page #contenu-principal {
   width: 100%;
-  padding: 60px;
+  padding: 0;
 }
 
 .publication-editor {
@@ -3069,6 +3983,51 @@ body {
   height: 157px;
 }
 
+@media (max-width: 1439px) {
+  .publication-editor__form,
+  .publication-editor__alert {
+    width: min(700px, 100%);
+  }
+  .publication-editor__textarea {
+    width: 100%;
+  }
+}
+@media (max-width: 767px) {
+  .publication-editor {
+    gap: 16px;
+  }
+  .publication-editor__title {
+    font-size: 22px;
+    text-align: center;
+  }
+  .publication-editor__form,
+  .publication-editor__form--initial,
+  .publication-editor__form--with-preview,
+  .publication-editor__form--invalid,
+  .publication-editor__form--image-kept,
+  .publication-editor__form--image-removed {
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    padding: 24px 16px;
+    gap: 16px;
+  }
+  .publication-editor__upload {
+    width: 100%;
+  }
+  .publication-editor__current-image {
+    align-items: flex-start;
+    width: 100%;
+    height: auto;
+  }
+  .publication-editor__current-image-preview {
+    flex-basis: min(150px, 48%);
+    width: min(150px, 48%);
+  }
+  .publication-editor__alert {
+    width: 100%;
+  }
+}
 /*
  * Description générale :
  * Fondations typographiques communes à toute l'interface Voisin.
@@ -3296,21 +4255,22 @@ body {
   gap: 20px;
   width: 600px;
   padding: 32px;
-  overflow: hidden;
+  min-height: 531px;
+  overflow: visible;
   background-color: #ffffff;
   border-radius: 12px;
 }
 
 .profile-editor__form--default {
-  height: 531px;
+  min-height: 531px;
 }
 
 .profile-editor__form--photo-selected {
-  height: 558px;
+  min-height: 558px;
 }
 
 .profile-editor__form--invalid {
-  height: 573px;
+  min-height: 573px;
 }
 
 .profile-editor__photo {
@@ -3318,7 +4278,7 @@ body {
   flex-direction: column;
   align-items: center;
   gap: 12px;
-  width: 173px;
+  width: 200px;
   overflow: hidden;
 }
 
@@ -3340,6 +4300,74 @@ body {
   gap: 12px;
 }
 
+@media (max-width: 1439px) {
+  .profile-page,
+  .profile-editor,
+  .profile-editor__alert,
+  .profile-editor__form {
+    width: 100%;
+  }
+  .profile-page__publication-row,
+  .profile-page__publication-row--member {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+  }
+  .profile-editor__field {
+    width: 100%;
+  }
+}
+@media (max-width: 767px) {
+  .profile-page {
+    gap: 16px;
+  }
+  .profile-page__summary,
+  .profile-page__summary--owner,
+  .profile-page__summary--stranger,
+  .profile-page__summary--friend,
+  .profile-page__summary--request-sent,
+  .profile-page__summary--request-received,
+  .profile-page__summary--empty {
+    height: auto;
+    min-height: 353px;
+    padding: 24px 16px;
+  }
+  .profile-page__cover {
+    height: 100px;
+  }
+  .profile-page__stats,
+  .profile-page__actions {
+    justify-content: center;
+  }
+  .profile-page__publication-row,
+  .profile-page__publication-row--member {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+  .profile-editor__title {
+    font-size: 22px;
+    text-align: center;
+  }
+  .profile-editor__form,
+  .profile-editor__form--default,
+  .profile-editor__form--photo-selected,
+  .profile-editor__form--invalid {
+    width: 100%;
+    height: auto;
+    padding: 24px 16px;
+    gap: 16px;
+  }
+  .profile-editor__photo {
+    width: min(200px, 100%);
+  }
+  .profile-editor__actions {
+    flex-wrap: wrap;
+    width: 100%;
+  }
+  .profile-editor__actions .button {
+    flex: 1 1 140px;
+  }
+}
 /*
  * Description générale :
  * Fondations typographiques communes à toute l'interface Voisin.
@@ -3479,6 +4507,42 @@ body {
   grid-template-columns: repeat(2, 544px);
 }
 
+@media (max-width: 1439px) {
+  .friend-requests,
+  .friends,
+  .friend-requests__alert,
+  .friend-requests__list,
+  .friend-requests__empty,
+  .friends__empty,
+  .friends__grid {
+    width: 100%;
+  }
+  .friends__grid--three-columns,
+  .friends__grid--two-columns {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 767px) {
+  .friend-requests__title,
+  .friends__title,
+  .friend-requests__alert,
+  .friend-requests__empty,
+  .friends__empty,
+  .friends__section-title {
+    white-space: normal;
+  }
+  .friend-requests__alert,
+  .friend-requests__empty,
+  .friends__empty {
+    height: auto;
+    min-height: 120px;
+  }
+  .friends__grid--three-columns,
+  .friends__grid--two-columns {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+}
 /*
  * Description générale :
  * Fondations typographiques communes à toute l'interface Voisin.
@@ -3554,6 +4618,24 @@ body {
   font-weight: 400;
 }
 
+@media (max-width: 1439px) {
+  .comments-page,
+  .comments-page__list,
+  .comments-page__empty {
+    width: 100%;
+  }
+}
+@media (max-width: 767px) {
+  .comments-page__title,
+  .comments-page__empty {
+    white-space: normal;
+  }
+  .comments-page__empty {
+    height: auto;
+    min-height: 112px;
+    padding: 28px 20px;
+  }
+}
 /*
  * Description générale :
  * Fondations typographiques communes à toute l'interface Voisin.
@@ -3692,4 +4774,40 @@ body {
   font-size: 16px;
   font-weight: 400;
   white-space: nowrap;
+}
+
+@media (max-width: 1439px) {
+  .admin-page,
+  .admin-page__alert,
+  .admin-page__empty,
+  .access-denied {
+    width: 100%;
+  }
+}
+@media (max-width: 767px) {
+  .admin-page__title,
+  .admin-page__count,
+  .admin-page__alert,
+  .admin-page__empty,
+  .access-denied__alert {
+    white-space: normal;
+  }
+  .admin-page__alert,
+  .admin-page__empty,
+  .access-denied,
+  .access-denied__alert {
+    height: auto;
+  }
+  .admin-page__empty {
+    min-height: 120px;
+    padding: 28px 20px;
+  }
+  .access-denied {
+    min-height: 300px;
+    padding: 48px 16px;
+  }
+  .access-denied__alert {
+    flex-basis: auto;
+    width: 100%;
+  }
 }

@@ -98,7 +98,36 @@
 }
 
 .visibility-selector__option--active,
-.visibility-selector__option[aria-pressed='true'] {
+.visibility-selector__option[aria-pressed='true'],
+.visibility-selector__option:has(.visibility-selector__input:checked) {
     color: variables.$color-surface;
     background-color: variables.$color-primary;
+}
+
+.visibility-selector__input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+}
+
+.visibility-selector__input:focus-visible + .visibility-selector__text {
+    outline: 2px solid variables.$color-primary;
+    outline-offset: 4px;
+}
+
+@media (max-width: variables.$breakpoint-mobile-max) {
+    .visibility-selector {
+        flex-wrap: wrap;
+        width: 100%;
+    }
+
+    .visibility-selector__label {
+        flex: 1 0 100%;
+    }
+
+    .visibility-selector__options {
+        flex-wrap: wrap;
+    }
 }

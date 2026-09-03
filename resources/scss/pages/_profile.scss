@@ -218,21 +218,22 @@
     gap: 20px;
     width: 600px;
     padding: 32px;
-    overflow: hidden;
+    min-height: 531px;
+    overflow: visible;
     background-color: variables.$color-surface;
     border-radius: variables.$radius-surface;
 }
 
 .profile-editor__form--default {
-    height: 531px;
+    min-height: 531px;
 }
 
 .profile-editor__form--photo-selected {
-    height: 558px;
+    min-height: 558px;
 }
 
 .profile-editor__form--invalid {
-    height: 573px;
+    min-height: 573px;
 }
 
 .profile-editor__photo {
@@ -240,7 +241,7 @@
     flex-direction: column;
     align-items: center;
     gap: 12px;
-    width: 173px;
+    width: 200px;
     overflow: hidden;
 }
 
@@ -260,4 +261,85 @@
     display: flex;
     align-items: flex-start;
     gap: 12px;
+}
+
+@media (max-width: variables.$breakpoint-tablet-max) {
+    .profile-page,
+    .profile-editor,
+    .profile-editor__alert,
+    .profile-editor__form {
+        width: 100%;
+    }
+
+    .profile-page__publication-row,
+    .profile-page__publication-row--member {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 20px;
+    }
+
+    .profile-editor__field {
+        width: 100%;
+    }
+}
+
+@media (max-width: variables.$breakpoint-mobile-max) {
+    .profile-page {
+        gap: 16px;
+    }
+
+    .profile-page__summary,
+    .profile-page__summary--owner,
+    .profile-page__summary--stranger,
+    .profile-page__summary--friend,
+    .profile-page__summary--request-sent,
+    .profile-page__summary--request-received,
+    .profile-page__summary--empty {
+        height: auto;
+        min-height: 353px;
+        padding: 24px 16px;
+    }
+
+    .profile-page__cover {
+        height: 100px;
+    }
+
+    .profile-page__stats,
+    .profile-page__actions {
+        justify-content: center;
+    }
+
+    .profile-page__publication-row,
+    .profile-page__publication-row--member {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 16px;
+    }
+
+    .profile-editor__title {
+        font-size: variables.$font-size-22;
+        text-align: center;
+    }
+
+    .profile-editor__form,
+    .profile-editor__form--default,
+    .profile-editor__form--photo-selected,
+    .profile-editor__form--invalid {
+        width: 100%;
+        height: auto;
+        padding: 24px 16px;
+        gap: 16px;
+    }
+
+    .profile-editor__photo {
+        width: min(200px, 100%);
+    }
+
+    .profile-editor__actions {
+        flex-wrap: wrap;
+        width: 100%;
+    }
+
+    .profile-editor__actions .button {
+        flex: 1 1 140px;
+    }
 }

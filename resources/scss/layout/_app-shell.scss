@@ -74,3 +74,57 @@
     font-size: variables.$font-size-14;
     font-weight: variables.$font-weight-regular;
 }
+
+@media (max-width: variables.$breakpoint-tablet-max) {
+    .app-shell,
+    .app-shell--feed {
+        display: grid;
+        grid-template-columns: minmax(200px, 240px) minmax(0, 1fr);
+        width: 100%;
+        padding: variables.$tablet-page-padding;
+        gap: variables.$layout-gap;
+    }
+
+    .app-shell__sidebar {
+        width: 100%;
+    }
+
+    .app-shell__main,
+    .app-shell--feed .app-shell__main {
+        width: 100%;
+    }
+
+    .app-shell__aside {
+        display: none;
+    }
+
+    .app-shell--single-column {
+        display: block;
+        padding: 40px variables.$tablet-page-padding;
+    }
+}
+
+@media (max-width: variables.$breakpoint-mobile-max) {
+    .app-shell,
+    .app-shell--feed {
+        display: flex;
+        flex-direction: column;
+        padding: variables.$mobile-page-padding;
+        gap: variables.$mobile-page-padding;
+    }
+
+    .app-shell__sidebar,
+    .app-shell__main,
+    .app-shell--feed .app-shell__main {
+        flex: 0 0 auto;
+        width: 100%;
+    }
+
+    .app-shell--single-column {
+        padding: 32px variables.$mobile-page-padding;
+    }
+
+    .page-content {
+        gap: variables.$mobile-page-padding;
+    }
+}

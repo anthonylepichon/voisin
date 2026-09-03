@@ -130,3 +130,44 @@
     font-weight: variables.$font-weight-regular;
     white-space: nowrap;
 }
+
+@media (max-width: variables.$breakpoint-tablet-max) {
+    .admin-page,
+    .admin-page__alert,
+    .admin-page__empty,
+    .access-denied {
+        width: 100%;
+    }
+}
+
+@media (max-width: variables.$breakpoint-mobile-max) {
+    .admin-page__title,
+    .admin-page__count,
+    .admin-page__alert,
+    .admin-page__empty,
+    .access-denied__alert {
+        white-space: normal;
+    }
+
+    .admin-page__alert,
+    .admin-page__empty,
+    .access-denied,
+    .access-denied__alert {
+        height: auto;
+    }
+
+    .admin-page__empty {
+        min-height: 120px;
+        padding: 28px 20px;
+    }
+
+    .access-denied {
+        min-height: 300px;
+        padding: 48px variables.$mobile-page-padding;
+    }
+
+    .access-denied__alert {
+        flex-basis: auto;
+        width: 100%;
+    }
+}
