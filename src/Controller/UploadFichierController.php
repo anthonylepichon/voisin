@@ -3,8 +3,8 @@
 /*
  * Description générale : Distribution centralisée des fichiers téléversés.
  * Rôle : Servir une photo de profil ou une image de publication selon les autorisations applicables.
- * Tâches : Retrouver le fichier, identifier sa publication, contrôler la visibilité et retourner l'image.
- * Liens avec les autres fichiers : Utilise UploadFichierRepository, PublicationRepository, FileUploadService, Publication et Utilisateur.
+ * Tâches : Retrouver le fichier, identifier sa publication, consulter les règles d'accès centralisées et retourner l'image.
+ * Liens avec les autres fichiers : Utilise UploadFichierRepository, PublicationRepository, PublicationAccessService, FileUploadService et Publication.
  */
 
 namespace App\Controller;
@@ -15,6 +15,7 @@ use App\Entity\Utilisateur;
 use App\Repository\PublicationRepository;
 use App\Repository\UploadFichierRepository;
 use App\Service\FileUploadService;
+use App\Service\PublicationAccessService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,7 +25,7 @@ class UploadFichierController extends AbstractController
 {
     /**
      * Rôle : Distribuer un fichier existant en appliquant les autorisations de son type.
-     * Paramètres : Le type, le nom, les dépôts Doctrine et le service central des fichiers.
+     * Paramètres : Le type, le nom, les dépôts Doctrine et les services d'accès et de fichiers.
      * Retour : Le fichier image ou une erreur 404.
      */
     #[Route(
@@ -41,14 +42,21 @@ class UploadFichierController extends AbstractController
         string $nom,
         UploadFichierRepository $uploadFichierRepository,
         PublicationRepository $publicationRepository,
-        FileUploadService $fileUploadService
+        FileUploadService $fileUploadService,
+        PublicationAccessService $publicationAccessService
     ): Response {
         $uploadFichier = $uploadFichierRepository->trouverParTypeEtNom($type, $nom);
 
         if (UploadFichier::TYPE_PUBLICATION === $type) {
             $publication = $this->obtenirPublication($uploadFichier, $publicationRepository);
 
-            if (null === $publication || !$this->peutVoirPublication($publication)) {
+            $utilisateur = $this->getUser();
+
+            if (!$utilisateur instanceof Utilisateur) {
+                $utilisateur = null;
+            }
+
+            if (null === $publication || !$publicationAccessService->peutVoir($publication, $utilisateur)) {
                 throw $this->createNotFoundException();
             }
         }
@@ -84,33 +92,4 @@ class UploadFichierController extends AbstractController
         return $publicationRepository->findOneBy(['uploadFichier' => $uploadFichier]);
     }
 
-    /**
-     * Rôle : Vérifier si le visiteur peut consulter une publication donnée.
-     * Paramètres : La publication dont la visibilité doit être contrôlée.
-     * Retour : Vrai lorsque la publication est visible.
-     */
-    private function peutVoirPublication(Publication $publication): bool
-    {
-        if ($this->isGranted('ROLE_ADMIN')) {
-            return true;
-        }
-
-        if (Publication::VISIBILITE_PUBLIQUE === $publication->getVisibilite()) {
-            return true;
-        }
-
-        $utilisateurConnecte = $this->getUser();
-        $utilisateurPublication = $publication->getUtilisateur();
-
-        if (!$utilisateurConnecte instanceof Utilisateur || null === $utilisateurPublication) {
-            return false;
-        }
-
-        if ($utilisateurConnecte->getId() === $utilisateurPublication->getId()) {
-            return true;
-        }
-
-        return $utilisateurConnecte->getAmis()->contains($utilisateurPublication)
-            || $utilisateurPublication->getAmis()->contains($utilisateurConnecte);
-    }
 }

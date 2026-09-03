@@ -3,8 +3,8 @@
 /*
  * Description générale : Contrôleur de consultation et de gestion des commentaires.
  * Rôle : Afficher, créer, modifier et supprimer les commentaires selon les autorisations prévues.
- * Tâches : Contrôler la visibilité, traiter CommentFormType, appliquer les droits de propriété et protéger les suppressions.
- * Liens avec les autres fichiers : Utilise Commentaire, Publication, leurs repositories, CommentFormType, UserActivityService et templates/comment/index.html.twig.
+ * Tâches : Consulter les règles d'accès centralisées, traiter CommentFormType, appliquer les droits de propriété et protéger les suppressions.
+ * Liens avec les autres fichiers : Utilise Commentaire, Publication, leurs repositories, CommentFormType, PublicationAccessService, UserActivityService et templates/comment/index.html.twig.
  */
 
 namespace App\Controller;
@@ -15,6 +15,7 @@ use App\Entity\Utilisateur;
 use App\Form\CommentFormType;
 use App\Repository\CommentaireRepository;
 use App\Repository\PublicationRepository;
+use App\Service\PublicationAccessService;
 use App\Service\UserActivityService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -25,6 +26,15 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class CommentController extends AbstractController
 {
+    /**
+     * Rôle : Initialiser le contrôleur avec les règles centralisées d'accès aux publications.
+     * Paramètres : Le service d'autorisation des publications.
+     * Retour : Aucun.
+     */
+    public function __construct(private readonly PublicationAccessService $publicationAccessService)
+    {
+    }
+
     /**
      * Rôle : Afficher une publication visible et ses commentaires dans l'ordre chronologique.
      * Paramètres : L'identifiant, les dépôts et le service d'activité.
@@ -265,25 +275,7 @@ class CommentController extends AbstractController
      */
     private function refuserSiPublicationInvisible(Publication $publication, Utilisateur $utilisateurConnecte): void
     {
-        if ($this->isGranted('ROLE_ADMIN')) {
-            return;
-        }
-
-        if (Publication::VISIBILITE_PUBLIQUE === $publication->getVisibilite()) {
-            return;
-        }
-
-        $utilisateurPublication = $publication->getUtilisateur();
-
-        if (null !== $utilisateurPublication && $utilisateurPublication->getId() === $utilisateurConnecte->getId()) {
-            return;
-        }
-
-        if (null !== $utilisateurPublication && $utilisateurConnecte->getAmis()->contains($utilisateurPublication)) {
-            return;
-        }
-
-        if (null !== $utilisateurPublication && $utilisateurPublication->getAmis()->contains($utilisateurConnecte)) {
+        if ($this->publicationAccessService->peutVoir($publication, $utilisateurConnecte)) {
             return;
         }
 
