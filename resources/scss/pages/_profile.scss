@@ -1,4 +1,5 @@
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Profil membre et formulaire de modification issus des sections 07 et 08 de Figma.
  * Rôle :
@@ -166,11 +167,11 @@
 }
 
 .profile-page__publications {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 24px;
+    --masonry-gap: 16px;
+
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     width: 100%;
+    column-gap: 16px;
     overflow: hidden;
 }
 
@@ -298,6 +299,10 @@
         gap: 20px;
     }
 
+    .profile-page__publications {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
     .profile-editor__field {
         width: 100%;
     }
@@ -333,6 +338,10 @@
     .profile-page__publication-row--member {
         grid-template-columns: minmax(0, 1fr);
         gap: 16px;
+    }
+
+    .profile-page__publications {
+        grid-template-columns: minmax(0, 1fr);
     }
 
     .profile-editor__title {

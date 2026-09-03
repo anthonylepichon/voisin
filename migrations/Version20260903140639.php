@@ -1,5 +1,7 @@
 <?php
 
+/* Origine du code : Structure générée par Symfony puis modifiée par le développeur. */
+
 /*
  * Description générale : Migration de la propriété des fichiers téléversés vers les entités qui les utilisent.
  * Rôle : Aligner la base de données sur le MPD corrigé sans perdre les noms de fichiers existants.

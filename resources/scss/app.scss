@@ -1,4 +1,5 @@
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Point d'entrée Sass de l'application Voisin.
  * Rôle :
@@ -27,6 +28,7 @@
 @use 'components/post-composer';
 @use 'components/online-friends';
 @use 'components/publication-card';
+@use 'components/pagination';
 @use 'components/friend-request-card';
 @use 'components/friend-card';
 @use 'components/publication-summary';

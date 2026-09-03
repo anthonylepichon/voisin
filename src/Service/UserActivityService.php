@@ -1,9 +1,11 @@
 <?php
 
+/* Origine du code : Code créé par le développeur. */
+
 /*
  * Description générale : Gère l'activité récente des utilisateurs de l'application Voisin.
  * Rôle : Enregistrer une activité et déterminer si un utilisateur est actuellement en ligne.
- * Tâches : Mettre à jour la date de dernière activité et appliquer le délai de présence de cinq minutes.
+ * Tâches : Limiter la mise à jour de l'activité à une fois par minute et appliquer le délai de présence de cinq minutes.
  * Liens avec les autres fichiers : Utilise l'entité Utilisateur et Doctrine pour conserver l'activité affichée dans le fil.
  */
 
@@ -15,6 +17,8 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class UserActivityService
 {
+    private const DELAI_ACTUALISATION = '-1 minute';
+
     /**
      * Rôle : Initialiser le service de suivi de l'activité utilisateur.
      * Paramètres : Le gestionnaire d'entités Doctrine.
@@ -25,12 +29,19 @@ class UserActivityService
     }
 
     /**
-     * Rôle : Enregistrer la date de dernière activité d'un utilisateur.
+     * Rôle : Enregistrer une activité uniquement si la précédente date d'au moins une minute.
      * Paramètres : L'utilisateur concerné et la date d'activité à enregistrer.
      * Retour : Aucun.
      */
     public function enregistrerActivite(Utilisateur $utilisateur, DateTimeImmutable $dateActivite): void
     {
+        $derniereActivite = $utilisateur->getDateDerniereActivite();
+        $limiteActualisation = $dateActivite->modify(self::DELAI_ACTUALISATION);
+
+        if (null !== $derniereActivite && $derniereActivite > $limiteActualisation) {
+            return;
+        }
+
         $utilisateur->setDateDerniereActivite($dateActivite);
 
         $this->entityManager->persist($utilisateur);

@@ -1,5 +1,7 @@
 <?php
 
+/* Origine du code : Code créé par le développeur. */
+
 /*
  * Description générale : Provider Symfony des comptes utilisateurs de Voisin.
  * Rôle : Charger un compte à partir de son adresse e-mail ou de son pseudonyme.

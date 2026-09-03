@@ -1,3 +1,4 @@
+# Origine du code : Code généré par Symfony et conservé sans modification fonctionnelle, hors commentaire de traçabilité.
 #
 # Description générale : Règles Apache de réécriture des URL publiques de l'application.
 # Rôle : Transmettre à Symfony les requêtes qui ne ciblent pas un fichier ou un dossier existant.

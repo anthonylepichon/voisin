@@ -1,10 +1,12 @@
 <?php
 
+/* Origine du code : Code créé par le développeur. */
+
 /*
  * Description générale : Contrôleur de gestion des publications d'un membre.
  * Rôle : Modifier, supprimer et aimer les publications selon les autorisations prévues.
- * Tâches : Gérer la modification, déléguer l'image, contrôler la propriété, sécuriser la suppression et traiter les likes.
- * Liens avec les autres fichiers : Utilise PublicationFormType, PublicationRepository, FileUploadService, UserActivityService et les gabarits publication.
+ * Tâches : Gérer la modification et la suppression compensatoires des images, contrôler les accès et traiter les likes.
+ * Liens avec les autres fichiers : Utilise PublicationFormType, PublicationRepository, PublicationAccessService, FileUploadService, UserActivityService et les gabarits publication.
  */
 
 namespace App\Controller;
@@ -14,6 +16,7 @@ use App\Entity\Utilisateur;
 use App\Form\PublicationFormType;
 use App\Repository\PublicationRepository;
 use App\Service\FileUploadService;
+use App\Service\PublicationAccessService;
 use App\Service\UserActivityService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -25,6 +28,15 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class PublicationController extends AbstractController
 {
+    /**
+     * Rôle : Initialiser le contrôleur avec les règles centralisées d'accès aux publications.
+     * Paramètres : Le service d'autorisation des publications.
+     * Retour : Aucun.
+     */
+    public function __construct(private readonly PublicationAccessService $publicationAccessService)
+    {
+    }
+
     /**
      * Rôle : Afficher et traiter la modification d'une publication par son propriétaire.
      * Paramètres : L'identifiant, la requête, le dépôt, Doctrine et le service des fichiers.
@@ -39,20 +51,30 @@ class PublicationController extends AbstractController
         FileUploadService $fileUploadService
     ): Response {
         $publication = $this->trouverPublication($id, $publicationRepository);
-        $this->refuserSiNonUtilisateur($publication);
+        $utilisateur = $this->getUtilisateurConnecte();
+
+        if (!$this->publicationAccessService->peutModifier($publication, $utilisateur)) {
+            throw $this->createAccessDeniedException('Tu ne peux modifier que tes propres publications.');
+        }
         $ancienneImage = $publication->getUploadFichier();
         $form = $this->createForm(PublicationFormType::class, $publication);
         $form->handleRequest($request);
 
         /** @var UploadedFile|null $image */
-        $image = $form->isSubmitted() ? $form->get('image')->getData() : null;
+        $image = null;
+        $nouvelleImage = null;
+
+        if ($form->isSubmitted()) {
+            $image = $form->get('image')->getData();
+        }
+
         $supprimerImage = $form->isSubmitted() && $form->get('supprimerImage')->isClicked();
 
         if ($form->isSubmitted() && $form->isValid()) {
             if (null !== $image) {
-                $upload = $fileUploadService->televerserImagePublication($image, $publication);
+                $nouvelleImage = $fileUploadService->televerserImagePublication($image, $publication);
 
-                if (null === $upload) {
+                if (null === $nouvelleImage) {
                     $publication->setUploadFichier($ancienneImage);
                     $publication->setImageEnAttente(false);
                     $form->get('image')->addError(new FormError('L’image n’a pas pu être enregistrée. Réessaie plus tard.'));
@@ -66,10 +88,22 @@ class PublicationController extends AbstractController
             }
 
             if ((null !== $image || $supprimerImage) && null !== $ancienneImage) {
-                $fileUploadService->supprimerImagePublication($publication, $ancienneImage);
+                $fileUploadService->preparerSuppressionImagePublication($publication, $ancienneImage);
             }
 
-            $entityManager->flush();
+            try {
+                $entityManager->flush();
+            } catch (\Throwable $exception) {
+                if (null !== $nouvelleImage) {
+                    $fileUploadService->compenserTeleversement($nouvelleImage);
+                }
+
+                throw $exception;
+            }
+
+            if ((null !== $image || $supprimerImage) && null !== $ancienneImage) {
+                $fileUploadService->supprimerFichierPhysique($ancienneImage);
+            }
 
             $this->addFlash('success', 'Ta publication a été mise à jour.');
 
@@ -101,7 +135,11 @@ class PublicationController extends AbstractController
         FileUploadService $fileUploadService
     ): Response {
         $publication = $this->trouverPublication($id, $publicationRepository);
-        $this->refuserSiSuppressionInterdite($publication);
+        $utilisateur = $this->getUtilisateurConnecte();
+
+        if (!$this->publicationAccessService->peutSupprimer($publication, $utilisateur)) {
+            throw $this->createAccessDeniedException('Tu ne peux pas supprimer cette publication.');
+        }
 
         $jeton = (string) $request->request->get('_token');
 
@@ -112,11 +150,15 @@ class PublicationController extends AbstractController
         $image = $publication->getUploadFichier();
 
         if (null !== $image) {
-            $fileUploadService->supprimerImagePublication($publication, $image);
+            $fileUploadService->preparerSuppressionImagePublication($publication, $image);
         }
 
         $entityManager->remove($publication);
         $entityManager->flush();
+
+        if (null !== $image) {
+            $fileUploadService->supprimerFichierPhysique($image);
+        }
 
         $this->addFlash('success', 'La publication a été supprimée.');
 
@@ -142,7 +184,9 @@ class PublicationController extends AbstractController
     ): Response {
         $publication = $this->trouverPublication($id, $publicationRepository);
         $utilisateur = $this->getUtilisateurConnecte();
-        $this->refuserSiPublicationInvisible($publication, $utilisateur);
+        if (!$this->publicationAccessService->peutVoir($publication, $utilisateur)) {
+            throw $this->createAccessDeniedException('Cette publication ne t’est pas accessible.');
+        }
 
         $jeton = (string) $request->request->get('_token');
 
@@ -176,62 +220,6 @@ class PublicationController extends AbstractController
         }
 
         return $publication;
-    }
-
-    /**
-     * Rôle : Refuser la modification d'une publication qui n'appartient pas au membre connecté.
-     * Paramètres : La publication demandée.
-     * Retour : Aucun.
-     */
-    private function refuserSiNonUtilisateur(Publication $publication): void
-    {
-        $utilisateurPublication = $publication->getUtilisateur();
-
-        if (null === $utilisateurPublication || $utilisateurPublication->getId() !== $this->getUtilisateurConnecte()->getId()) {
-            throw $this->createAccessDeniedException('Tu ne peux modifier que tes propres publications.');
-        }
-    }
-
-    /**
-     * Rôle : Refuser une suppression qui n'est autorisée ni à l'utilisateur ni à un administrateur.
-     * Paramètres : La publication demandée.
-     * Retour : Aucun.
-     */
-    private function refuserSiSuppressionInterdite(Publication $publication): void
-    {
-        if ($this->isGranted('ROLE_ADMIN')) {
-            return;
-        }
-
-        $this->refuserSiNonUtilisateur($publication);
-    }
-
-    /**
-     * Rôle : Refuser une interaction avec une publication invisible pour le membre.
-     * Paramètres : La publication et le membre qui souhaite interagir.
-     * Retour : Aucun.
-     */
-    private function refuserSiPublicationInvisible(Publication $publication, Utilisateur $utilisateurConnecte): void
-    {
-        if (Publication::VISIBILITE_PUBLIQUE === $publication->getVisibilite()) {
-            return;
-        }
-
-        $utilisateurPublication = $publication->getUtilisateur();
-
-        if (null !== $utilisateurPublication && $utilisateurPublication->getId() === $utilisateurConnecte->getId()) {
-            return;
-        }
-
-        if (null !== $utilisateurPublication && $utilisateurConnecte->getAmis()->contains($utilisateurPublication)) {
-            return;
-        }
-
-        if (null !== $utilisateurPublication && $utilisateurPublication->getAmis()->contains($utilisateurConnecte)) {
-            return;
-        }
-
-        throw $this->createAccessDeniedException('Cette publication ne t’est pas accessible.');
     }
 
     /**

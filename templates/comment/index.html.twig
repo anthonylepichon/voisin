@@ -1,4 +1,5 @@
 {#
+Origine du code : Code créé par le développeur.
 Description générale : Page de consultation et de gestion des commentaires d'une publication.
 Rôle : Afficher la publication, ses commentaires et les formulaires autorisés.
 Tâches : Gérer les états vide, ajout invalide, édition et actions conditionnelles de suppression.
@@ -41,7 +42,7 @@ Liens avec les autres fichiers : Étend base.html.twig, utilise CommentControlle
 					</span>
 				</header>
 
-				{% if publication.contenu is not null and publication.contenu|trim != '' %}
+				{% if publication.aUnContenuTexte() %}
 					<p class="publication-summary__text">{{ publication.contenu }}</p>
 				{% elseif publication.imageAffichee %}
 					<p class="publication-summary__text">Publication avec une image.</p>

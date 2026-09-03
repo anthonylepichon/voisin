@@ -1,9 +1,11 @@
 <?php
 
+/* Origine du code : Code créé par le développeur. */
+
 /*
  * Description générale : Formulaire de création et de modification d'une publication.
  * Rôle : Décrire le contenu, l'image et la visibilité que le membre peut choisir.
- * Tâches : Valider l'image téléversée et conserver le choix de visibilité conforme au cahier des charges.
+ * Tâches : Normaliser le texte, valider l'image téléversée et conserver le choix de visibilité conforme au cahier des charges.
  * Liens avec les autres fichiers : Utilisé par FeedController et PublicationController avec l'entité Publication.
  */
 
@@ -43,6 +45,8 @@ class PublicationFormType extends AbstractType
             ->add('contenu', TextareaType::class, [
                 'label' => 'Contenu',
                 'required' => false,
+                'trim' => true,
+                'empty_data' => null,
             ])
             ->add('image', FileType::class, [
                 'label' => 'Image',

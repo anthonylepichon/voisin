@@ -1,5 +1,7 @@
 <?php
 
+/* Origine du code : Structure générée par Symfony puis modifiée par le développeur. */
+
 declare(strict_types=1);
 
 namespace DoctrineMigrations;

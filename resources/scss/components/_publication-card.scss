@@ -1,4 +1,5 @@
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Carte de publication et variantes dimensionnelles issues des écrans Figma.
  * Rôle :
@@ -10,6 +11,21 @@
  */
 
 @use "../abstracts/variables" as variables;
+
+.publication-masonry {
+    display: grid;
+    grid-auto-rows: 1px;
+    align-items: start;
+    row-gap: 1px;
+}
+
+.publication-masonry > .publication-card {
+    min-width: 0;
+}
+
+.publication-masonry > .publication-card:not(:has(.publication-card__media)) {
+    height: calc((455px - var(--masonry-gap)) / 2);
+}
 
 .publication-card {
     position: relative;
@@ -81,6 +97,7 @@
     color: variables.$color-text;
     font-size: variables.$font-size-16;
     font-weight: variables.$font-weight-regular;
+    white-space: pre-line;
 }
 
 .publication-card__media {
@@ -209,6 +226,21 @@
     color: variables.$color-danger;
 }
 
+.publication-card:not(:has(.publication-card__media)) {
+    height: 190px;
+}
+
+.publication-card:not(:has(.publication-card__media)) .publication-card__like,
+.publication-card:not(:has(.publication-card__media)) .publication-card__comments {
+    top: auto;
+    bottom: 16px;
+}
+
+.publication-card:not(:has(.publication-card__media)) .publication-card__owner-actions {
+    top: auto;
+    bottom: 20px;
+}
+
 // Carte de 844 pixels du fil d'actualité.
 .publication-card--feed {
     flex-basis: auto;
@@ -217,17 +249,17 @@
 
 .publication-card--feed .publication-card__header {
     left: 19px;
-    width: 804px;
+    width: calc(100% - 40px);
 }
 
 .publication-card--feed .publication-card__text {
     left: 19px;
-    width: 804px;
+    width: calc(100% - 40px);
 }
 
 .publication-card--feed .publication-card__media {
     left: 19px;
-    width: 804px;
+    width: 374px;
 }
 
 .publication-card--feed .publication-card__report {
@@ -250,22 +282,23 @@
 // Carte de la première rangée du profil : trois colonnes de 358,667 pixels.
 .publication-card--profile-third {
     flex-basis: 358.667px;
-    width: 358.667px;
+    width: 100%;
+    min-width: 0;
 }
 
 .publication-card--profile-third .publication-card__header {
     left: 9px;
-    width: 339px;
+    width: calc(100% - 18px);
 }
 
 .publication-card--profile-third .publication-card__text {
     left: 9px;
-    width: 339px;
+    width: calc(100% - 18px);
 }
 
 .publication-card--profile-third .publication-card__media {
     left: 9px;
-    width: 339px;
+    width: calc(100% - 18px);
 }
 
 .publication-card--profile-third .publication-card__report {
@@ -273,11 +306,11 @@
 }
 
 .publication-card--profile-third .publication-card__like {
-    left: 43px;
+    left: 9px;
 }
 
 .publication-card--profile-third .publication-card__comments {
-    left: 91px;
+    left: 67px;
 }
 
 // Carte de propriétaire de 546 pixels utilisée dans la seconde rangée du profil.
@@ -353,6 +386,10 @@
         left: 19px;
         width: calc(100% - 38px);
     }
+
+    .publication-card--feed .publication-card__media {
+        width: min(374px, calc(100% - 38px));
+    }
 }
 
 @media (max-width: variables.$breakpoint-mobile-max) {
@@ -423,6 +460,16 @@
         .publication-card__media {
         top: auto;
         height: 210px;
+    }
+
+    .publication-masonry > .publication-card:not(:has(.publication-card__media)) {
+        height: auto;
+        min-height: 230px;
+    }
+
+    .publication-card:not(:has(.publication-card__media)) {
+        height: auto;
+        min-height: 190px;
     }
 
     .publication-card__report,

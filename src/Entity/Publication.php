@@ -1,9 +1,11 @@
 <?php
 
+/* Origine du code : Structure générée par Symfony puis modifiée par le développeur. */
+
 /*
  * Description générale : Représente une publication publiée par un membre.
  * Rôle : Conserver son contenu, son image, sa visibilité, son propriétaire et les utilisateurs qui l'aiment.
- * Tâches : Appliquer les champs, contraintes et relations de la publication, des fichiers et des likes.
+ * Tâches : Appliquer les champs et contraintes, puis synchroniser les relations avec l'utilisateur, les commentaires et les likes.
  * Liens avec les autres fichiers : Liée à Utilisateur, UploadFichier, Commentaire, PublicationRepository et aux contrôleurs métier.
  */
 
@@ -12,6 +14,7 @@ namespace App\Entity;
 use App\Repository\PublicationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ReadableCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -34,7 +37,7 @@ class Publication
     private ?int $id = null;
 
     #[ORM\Column(name: 'contenu', type: 'text', nullable: true)]
-    #[Assert\Length(max: 2000, maxMessage: 'Le contenu ne peut pas dépasser {{ limit }} caractères.')]
+    #[Assert\Length(max: 2000, normalizer: 'trim', maxMessage: 'Le contenu ne peut pas dépasser {{ limit }} caractères.')]
     private ?string $contenu = null;
 
     #[ORM\OneToOne(cascade: ['persist'])]
@@ -56,6 +59,7 @@ class Publication
 
     #[ORM\ManyToOne(inversedBy: 'publications')]
     #[ORM\JoinColumn(name: 'utilisateur_id', nullable: false, onDelete: 'RESTRICT')]
+    #[Assert\NotNull(message: 'L’utilisateur de la publication est obligatoire.')]
     private ?Utilisateur $utilisateur = null;
 
     /**
@@ -207,12 +211,25 @@ class Publication
 
     /**
      * Rôle : Définir l'utilisateur de la publication.
-     * Paramètres : L'utilisateur propriétaire de la publication.
+     * Paramètres : L'utilisateur propriétaire de la publication ou null pendant une dissociation contrôlée.
      * Retour : La publication modifiée.
      */
-    public function setUtilisateur(Utilisateur $utilisateur): static
+    public function setUtilisateur(?Utilisateur $utilisateur): static
     {
+        if ($this->utilisateur === $utilisateur) {
+            return $this;
+        }
+
+        $ancienUtilisateur = $this->utilisateur;
         $this->utilisateur = $utilisateur;
+
+        if (null !== $ancienUtilisateur) {
+            $ancienUtilisateur->retirerPublication($this);
+        }
+
+        if (null !== $utilisateur) {
+            $utilisateur->ajouterPublication($this);
+        }
 
         return $this;
     }
@@ -220,11 +237,11 @@ class Publication
     /**
      * Rôle : Retourner les utilisateurs ayant aimé cette publication.
      * Paramètres : Aucun.
-     * Retour : La collection des utilisateurs ayant aimé la publication.
+     * Retour : La collection consultable des utilisateurs ayant aimé la publication.
      *
-     * @return Collection<int, Utilisateur>
+     * @return ReadableCollection<int, Utilisateur>
      */
-    public function getUtilisateursAimant(): Collection
+    public function getUtilisateursAimant(): ReadableCollection
     {
         return $this->utilisateursAimant;
     }
@@ -238,6 +255,7 @@ class Publication
     {
         if (!$this->utilisateursAimant->contains($utilisateur)) {
             $this->utilisateursAimant->add($utilisateur);
+            $utilisateur->ajouterPublicationAimee($this);
         }
 
         return $this;
@@ -250,7 +268,9 @@ class Publication
      */
     public function retirerUtilisateurAimant(Utilisateur $utilisateur): static
     {
-        $this->utilisateursAimant->removeElement($utilisateur);
+        if ($this->utilisateursAimant->removeElement($utilisateur)) {
+            $utilisateur->retirerPublicationAimee($this);
+        }
 
         return $this;
     }
@@ -258,11 +278,11 @@ class Publication
     /**
      * Rôle : Retourner les commentaires rattachés à la publication.
      * Paramètres : Aucun.
-     * Retour : La collection des commentaires.
+     * Retour : La collection consultable des commentaires.
      *
-     * @return Collection<int, Commentaire>
+     * @return ReadableCollection<int, Commentaire>
      */
-    public function getCommentaires(): Collection
+    public function getCommentaires(): ReadableCollection
     {
         return $this->commentaires;
     }
@@ -303,7 +323,9 @@ class Publication
      */
     public function retirerCommentaire(Commentaire $commentaire): static
     {
-        $this->commentaires->removeElement($commentaire);
+        if ($this->commentaires->removeElement($commentaire) && $commentaire->getPublication() === $this) {
+            $commentaire->setPublication(null);
+        }
 
         return $this;
     }
@@ -319,6 +341,16 @@ class Publication
             return true;
         }
 
+        return $this->aUnContenuTexte();
+    }
+
+    /**
+     * Rôle : Indiquer si la publication possède un texte réellement renseigné.
+     * Paramètres : Aucun.
+     * Retour : Vrai lorsque le contenu contient au moins un caractère non blanc.
+     */
+    public function aUnContenuTexte(): bool
+    {
         if ($this->contenu === null) {
             return false;
         }

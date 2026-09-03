@@ -1,3 +1,4 @@
+# Origine du code : Code généré par Symfony et conservé sans modification fonctionnelle, hors commentaire de traçabilité.
 framework:
     asset_mapper:
         # The paths to make available to the asset mapper.

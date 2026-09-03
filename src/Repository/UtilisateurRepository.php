@@ -1,5 +1,7 @@
 <?php
 
+/* Origine du code : Structure générée par Symfony puis modifiée par le développeur. */
+
 /*
  * Description générale : Fournit l'accès Doctrine aux comptes utilisateurs.
  * Rôle : Rechercher les utilisateurs, leurs amis et mettre à niveau leurs accès de sécurité.

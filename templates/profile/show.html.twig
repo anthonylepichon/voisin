@@ -1,4 +1,5 @@
 {#
+Origine du code : Code créé par le développeur.
  Description générale : Page de consultation d'un profil membre.
  Rôle : Présenter les informations publiques du membre connecté ou visité.
  Tâches : Afficher la photo, les compteurs, l'état d'amitié, les amis et les publications autorisées.
@@ -41,7 +42,7 @@
             <div class="profile-page__overview">
                 <div class="profile-page__stats" aria-label="Statistiques du profil">
                     <div class="profile-page__stat">
-                        <p class="profile-page__stat-value">{{ publications|length }}</p>
+                        <p class="profile-page__stat-value">{{ nombrePublications }}</p>
                         <p class="profile-page__stat-label">Publications</p>
                     </div>
                     <div class="profile-page__stat">
@@ -87,7 +88,7 @@
             <a class="profile-page__tab" href="#titre-amis-profil">Amis</a>
         </nav>
 
-        <section class="profile-page__publications" aria-labelledby="titre-publications" data-publication-masonry>
+        <section class="profile-page__publications publication-masonry" aria-labelledby="titre-publications" data-publication-masonry>
             <h2 class="visually-hidden" id="titre-publications">Publications de {{ utilisateur.pseudonyme }}</h2>
             {% if publications is empty %}
                 <div class="empty-state profile-page__empty-state">
@@ -96,10 +97,21 @@
                 </div>
             {% else %}
                 {% for publication in publications %}
-                    {% include 'publication/_card.html.twig' with {publication: publication, varianteCarte: 'publication-card--profile-third'} only %}
+                    {% include 'publication/_card.html.twig' with {
+                        publication: publication,
+                        statistiques: statistiquesPublications[publication.id],
+                        varianteCarte: 'publication-card--profile-third'
+                    } only %}
                 {% endfor %}
             {% endif %}
         </section>
+
+        {% include 'partials/_pagination.html.twig' with {
+            routePagination: 'app_profile_show',
+            parametresPagination: {pseudonyme: utilisateur.pseudonyme},
+            pageActuelle: pageActuelle,
+            nombrePages: nombrePages
+        } only %}
 
         <section class="profile-page__friends" aria-labelledby="titre-amis-profil">
             <h2 class="profile-page__section-title" id="titre-amis-profil">Amis de {{ utilisateur.pseudonyme }}</h2>

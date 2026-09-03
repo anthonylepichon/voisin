@@ -1,9 +1,11 @@
 <?php
 
+/* Origine du code : Code créé par le développeur. */
+
 /*
  * Description générale : Service central de gestion des fichiers téléversés par les membres.
  * Rôle : Éviter la duplication du déplacement, du nommage, de la suppression et de la résolution des fichiers.
- * Tâches : Enregistrer les photos et images, créer leurs métadonnées Doctrine, retirer les anciens fichiers et fournir un chemin sûr.
+ * Tâches : Déduire le répertoire du type, enregistrer les images, préparer leurs métadonnées Doctrine, compenser les échecs et journaliser les suppressions physiques.
  * Liens avec les autres fichiers : Utilise UploadFichier, Utilisateur, Publication et les contrôleurs de médias.
  */
 
@@ -13,6 +15,7 @@ use App\Entity\Publication;
 use App\Entity\UploadFichier;
 use App\Entity\Utilisateur;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -25,13 +28,14 @@ class FileUploadService
 
     /**
      * Rôle : Initialiser les dépendances nécessaires à la gestion centralisée des fichiers.
-     * Paramètres : Le slugger, Doctrine et le noyau Symfony.
+     * Paramètres : Le slugger, Doctrine, le noyau Symfony et le journal applicatif.
      * Retour : Aucun.
      */
     public function __construct(
         private SluggerInterface $slugger,
         private EntityManagerInterface $entityManager,
-        private KernelInterface $kernel
+        private KernelInterface $kernel,
+        private LoggerInterface $logger
     ) {
     }
 
@@ -43,7 +47,7 @@ class FileUploadService
     public function televerserPhotoProfil(UploadedFile $fichier, Utilisateur $utilisateur): ?UploadFichier
     {
         $baseNom = 'profil-'.(string) $utilisateur->getPseudonyme();
-        $upload = $this->televerser($fichier, UploadFichier::TYPE_PROFIL, self::CHEMIN_PROFILS, $baseNom);
+        $upload = $this->televerser($fichier, UploadFichier::TYPE_PROFIL, $baseNom);
 
         if (null === $upload) {
             return null;
@@ -63,7 +67,7 @@ class FileUploadService
     public function televerserImagePublication(UploadedFile $fichier, Publication $publication): ?UploadFichier
     {
         $baseNom = pathinfo($fichier->getClientOriginalName(), PATHINFO_FILENAME);
-        $upload = $this->televerser($fichier, UploadFichier::TYPE_PUBLICATION, self::CHEMIN_PUBLICATIONS, $baseNom);
+        $upload = $this->televerser($fichier, UploadFichier::TYPE_PUBLICATION, $baseNom);
 
         if (null === $upload) {
             return null;
@@ -76,64 +80,105 @@ class FileUploadService
     }
 
     /**
-     * Rôle : Supprimer une ancienne photo de profil et ses métadonnées éventuelles.
+     * Rôle : Préparer la suppression Doctrine d'une ancienne photo sans toucher au fichier physique.
      * Paramètres : L'utilisateur propriétaire et les métadonnées du fichier à supprimer.
      * Retour : Aucun.
      */
-    public function supprimerPhotoProfil(Utilisateur $utilisateur, UploadFichier $upload): void
+    public function preparerSuppressionPhotoProfil(Utilisateur $utilisateur, UploadFichier $upload): void
     {
         if ($utilisateur->getUploadFichier() === $upload) {
             return;
         }
 
-        $this->supprimer($upload);
+        $this->entityManager->remove($upload);
     }
 
     /**
-     * Rôle : Supprimer une ancienne image de publication et ses métadonnées éventuelles.
+     * Rôle : Détacher une ancienne image de publication et préparer la suppression de ses métadonnées.
      * Paramètres : La publication propriétaire et les métadonnées du fichier à supprimer.
      * Retour : Aucun.
      */
-    public function supprimerImagePublication(Publication $publication, UploadFichier $upload): void
+    public function preparerSuppressionImagePublication(Publication $publication, UploadFichier $upload): void
     {
         if ($publication->getUploadFichier() === $upload) {
             $publication->setUploadFichier(null);
         }
 
-        $this->supprimer($upload);
+        $this->entityManager->remove($upload);
     }
 
     /**
-     * Rôle : Construire le chemin sûr d'un fichier centralisé ou historique.
-     * Paramètres : Le type, le nom sécurisé et le chemin enregistré lorsqu'il existe.
+     * Rôle : Supprimer le fichier créé par un téléversement dont la sauvegarde Doctrine a échoué.
+     * Paramètres : Les métadonnées du nouveau fichier à compenser.
+     * Retour : Vrai si le fichier est absent ou correctement supprimé.
+     */
+    public function compenserTeleversement(UploadFichier $upload): bool
+    {
+        $suppressionReussie = $this->supprimerFichierPhysique($upload);
+
+        if (!$suppressionReussie) {
+            $this->logger->critical('Le fichier d’un téléversement annulé n’a pas pu être supprimé.', [
+                'type' => $upload->getType(),
+                'nom' => $upload->getNom(),
+            ]);
+        }
+
+        return $suppressionReussie;
+    }
+
+    /**
+     * Rôle : Supprimer physiquement un fichier après la réussite de la sauvegarde Doctrine.
+     * Paramètres : Les métadonnées du fichier devenu inutile.
+     * Retour : Vrai si le fichier est absent ou correctement supprimé.
+     */
+    public function supprimerFichierPhysique(UploadFichier $upload): bool
+    {
+        $type = (string) $upload->getType();
+        $nom = (string) $upload->getNom();
+        $cheminRelatif = $this->determinerCheminParType($type);
+        $chemin = $this->obtenirCheminFichier($type, $nom);
+
+        if (!is_file($chemin)) {
+            return true;
+        }
+
+        if (!@unlink($chemin)) {
+            $this->logger->error('Un fichier devenu inutile n’a pas pu être supprimé.', [
+                'type' => $type,
+                'nom' => $nom,
+                'chemin' => $cheminRelatif,
+            ]);
+
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Rôle : Construire le chemin sûr d'un fichier à partir de son type métier.
+     * Paramètres : Le type et le nom sécurisé du fichier.
      * Retour : Le chemin absolu attendu.
      */
-    public function obtenirCheminFichier(string $type, string $nom, ?string $cheminEnregistre = null): string
+    public function obtenirCheminFichier(string $type, string $nom): string
     {
         if (basename($nom) !== $nom) {
             return $this->kernel->getProjectDir().'/uploads/fichier-invalide';
         }
 
-        $chemin = self::CHEMIN_PUBLICATIONS;
-
-        if (UploadFichier::TYPE_PROFIL === $type) {
-            $chemin = self::CHEMIN_PROFILS;
-        }
-
-        if (null !== $cheminEnregistre && in_array($cheminEnregistre, [self::CHEMIN_PROFILS, self::CHEMIN_PUBLICATIONS], true)) {
-            $chemin = $cheminEnregistre;
-        }
+        $chemin = $this->determinerCheminParType($type);
 
         return $this->kernel->getProjectDir().'/'.$chemin.'/'.$nom;
     }
 
     /**
      * Rôle : Déplacer un fichier validé et créer ses métadonnées communes.
-     * Paramètres : Le fichier, son type, son répertoire relatif et la base de son nom.
+     * Paramètres : Le fichier, son type et la base de son nom.
      * Retour : Les métadonnées non rattachées ou null en cas d'échec.
      */
-    private function televerser(UploadedFile $fichier, string $type, string $chemin, string $baseNom): ?UploadFichier
+    private function televerser(UploadedFile $fichier, string $type, string $baseNom): ?UploadFichier
     {
+        $chemin = $this->determinerCheminParType($type);
         $extension = $fichier->guessExtension();
 
         if (null === $extension) {
@@ -150,7 +195,13 @@ class FileUploadService
 
         try {
             $fichier->move($this->kernel->getProjectDir().'/'.$chemin, $nom);
-        } catch (FileException) {
+        } catch (FileException $exception) {
+            $this->logger->error('Le déplacement d’un fichier téléversé a échoué.', [
+                'type' => $type,
+                'chemin' => $chemin,
+                'exception' => $exception,
+            ]);
+
             return null;
         }
 
@@ -161,21 +212,21 @@ class FileUploadService
     }
 
     /**
-     * Rôle : Supprimer un fichier physique et retirer ses métadonnées Doctrine.
-     * Paramètres : Les métadonnées du fichier à supprimer.
-     * Retour : Aucun.
+     * Rôle : Déterminer l'unique répertoire autorisé pour un type de fichier.
+     * Paramètres : Le type métier du fichier.
+     * Retour : Le répertoire relatif correspondant au type.
      */
-    private function supprimer(UploadFichier $upload): void
+    private function determinerCheminParType(string $type): string
     {
-        $type = (string) $upload->getType();
-        $nom = (string) $upload->getNom();
-        $chemin = $this->obtenirCheminFichier($type, $nom, $upload->getChemin());
-
-        if (is_file($chemin)) {
-            unlink($chemin);
+        if (UploadFichier::TYPE_PROFIL === $type) {
+            return self::CHEMIN_PROFILS;
         }
 
-        $this->entityManager->remove($upload);
+        if (UploadFichier::TYPE_PUBLICATION === $type) {
+            return self::CHEMIN_PUBLICATIONS;
+        }
+
+        throw new \InvalidArgumentException('Le type de fichier est invalide.');
     }
 
 }

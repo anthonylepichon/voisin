@@ -1,10 +1,12 @@
 <?php
 
+/* Origine du code : Code créé par le développeur. */
+
 /*
  * Description générale : Contrôleur de consultation et de gestion des commentaires.
  * Rôle : Afficher, créer, modifier et supprimer les commentaires selon les autorisations prévues.
- * Tâches : Contrôler la visibilité, traiter CommentFormType, appliquer les droits de propriété et protéger les suppressions.
- * Liens avec les autres fichiers : Utilise Commentaire, Publication, leurs repositories, CommentFormType, UserActivityService et templates/comment/index.html.twig.
+ * Tâches : Consulter les règles d'accès centralisées, traiter CommentFormType, appliquer les droits de propriété et protéger les suppressions.
+ * Liens avec les autres fichiers : Utilise Commentaire, Publication, leurs repositories, CommentFormType, PublicationAccessService, UserActivityService et templates/comment/index.html.twig.
  */
 
 namespace App\Controller;
@@ -15,6 +17,7 @@ use App\Entity\Utilisateur;
 use App\Form\CommentFormType;
 use App\Repository\CommentaireRepository;
 use App\Repository\PublicationRepository;
+use App\Service\PublicationAccessService;
 use App\Service\UserActivityService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -25,6 +28,15 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class CommentController extends AbstractController
 {
+    /**
+     * Rôle : Initialiser le contrôleur avec les règles centralisées d'accès aux publications.
+     * Paramètres : Le service d'autorisation des publications.
+     * Retour : Aucun.
+     */
+    public function __construct(private readonly PublicationAccessService $publicationAccessService)
+    {
+    }
+
     /**
      * Rôle : Afficher une publication visible et ses commentaires dans l'ordre chronologique.
      * Paramètres : L'identifiant, les dépôts et le service d'activité.
@@ -71,6 +83,7 @@ class CommentController extends AbstractController
         $publication = $this->trouverPublication($id, $publicationRepository);
         $utilisateur = $this->getUtilisateurConnecte();
         $this->refuserSiPublicationInvisible($publication, $utilisateur);
+        $userActivityService->enregistrerActivite($utilisateur, new \DateTimeImmutable());
 
         $commentaire = new Commentaire();
         $commentaire->setUtilisateur($utilisateur);
@@ -79,16 +92,12 @@ class CommentController extends AbstractController
         $formulaire->handleRequest($request);
 
         if ($formulaire->isSubmitted() && $formulaire->isValid()) {
-            $this->nettoyerContenu($commentaire);
             $entityManager->persist($commentaire);
             $entityManager->flush();
-            $userActivityService->enregistrerActivite($utilisateur, new \DateTimeImmutable());
             $this->addFlash('success', 'Ton commentaire a été ajouté.');
 
             return $this->redirectToRoute('app_comment_index', ['id' => $publication->getId()]);
         }
-
-        $userActivityService->enregistrerActivite($utilisateur, new \DateTimeImmutable());
 
         return $this->afficherPage(
             $publication,
@@ -130,7 +139,6 @@ class CommentController extends AbstractController
         $formulaireEdition->handleRequest($request);
 
         if ($formulaireEdition->isSubmitted() && $formulaireEdition->isValid()) {
-            $this->nettoyerContenu($commentaire);
             $entityManager->flush();
             $userActivityService->enregistrerActivite($utilisateur, new \DateTimeImmutable());
             $this->addFlash('success', 'Ton commentaire a été modifié.');
@@ -267,25 +275,7 @@ class CommentController extends AbstractController
      */
     private function refuserSiPublicationInvisible(Publication $publication, Utilisateur $utilisateurConnecte): void
     {
-        if ($this->isGranted('ROLE_ADMIN')) {
-            return;
-        }
-
-        if (Publication::VISIBILITE_PUBLIQUE === $publication->getVisibilite()) {
-            return;
-        }
-
-        $utilisateurPublication = $publication->getUtilisateur();
-
-        if (null !== $utilisateurPublication && $utilisateurPublication->getId() === $utilisateurConnecte->getId()) {
-            return;
-        }
-
-        if (null !== $utilisateurPublication && $utilisateurConnecte->getAmis()->contains($utilisateurPublication)) {
-            return;
-        }
-
-        if (null !== $utilisateurPublication && $utilisateurPublication->getAmis()->contains($utilisateurConnecte)) {
+        if ($this->publicationAccessService->peutVoir($publication, $utilisateurConnecte)) {
             return;
         }
 
@@ -333,20 +323,6 @@ class CommentController extends AbstractController
         }
 
         throw $this->createAccessDeniedException('Tu ne peux pas supprimer ce commentaire.');
-    }
-
-    /**
-     * Rôle : Retirer les espaces inutiles avant l'enregistrement du commentaire.
-     * Paramètres : Le commentaire validé.
-     * Retour : Aucun.
-     */
-    private function nettoyerContenu(Commentaire $commentaire): void
-    {
-        $contenu = $commentaire->getContenu();
-
-        if (null !== $contenu) {
-            $commentaire->setContenu(trim($contenu));
-        }
     }
 
     /**

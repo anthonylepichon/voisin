@@ -1,4 +1,5 @@
 {#
+Origine du code : Code créé par le développeur.
 Description générale : Page du fil d'actualité d'un membre connecté.
 Rôle : Présenter la création rapide, les filtres et les publications visibles.
 Tâches : Afficher le formulaire de publication, les trois filtres, l'état vide et les cartes triées par date.
@@ -80,15 +81,23 @@ Liens avec les autres fichiers : Étend base.html.twig, utilise FeedController, 
                     <p class="feed-page__empty-description">Les nouvelles publications visibles apparaîtront ici.</p>
                 </div>
             {% else %}
-                <div class="feed-page__posts" data-publication-masonry>
+                <div class="feed-page__posts publication-masonry" data-publication-masonry>
                     {% for publication in publications %}
                         {% include 'publication/_card.html.twig' with {
                             publication: publication,
+                            statistiques: statistiquesPublications[publication.id],
                             varianteCarte: ''
                         } only %}
                     {% endfor %}
                 </div>
             {% endif %}
+
+            {% include 'partials/_pagination.html.twig' with {
+                routePagination: 'app_feed',
+                parametresPagination: {filtre: filtreActif},
+                pageActuelle: pageActuelle,
+                nombrePages: nombrePages
+            } only %}
         </section>
 
         <aside class="app-shell__aside" aria-label="Présence des amis">

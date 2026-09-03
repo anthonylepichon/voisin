@@ -1,5 +1,9 @@
+# Origine du code : Structure générée par Symfony puis modifiée par le développeur.
 twig:
     file_name_pattern: '*.twig'
+    date:
+        # Les dates restent stockées en UTC et sont converties uniquement pour l'affichage.
+        timezone: 'Europe/Paris'
 
 when@test:
     twig:

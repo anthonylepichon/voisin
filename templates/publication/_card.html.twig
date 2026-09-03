@@ -1,11 +1,11 @@
 {#
+Origine du code : Code créé par le développeur.
 Description générale : Carte réutilisable d'une publication.
 Rôle : Afficher l'utilisateur, la visibilité, le contenu, l'image et les interactions sociales.
-Tâches : Proposer le like, l'accès aux commentaires et les actions réservées au propriétaire.
-Liens avec les autres fichiers : Inclus dans le fil et les profils, puis relié à PublicationController et CommentController.
+Tâches : Afficher les compteurs agrégés, proposer le like, l'accès aux commentaires et les actions réservées au propriétaire.
+Liens avec les autres fichiers : Inclus dans l'accueil, le fil et les profils avec les statistiques préparées par PublicationRepository.
 #}
 
-{% set utilisateurConnecteAime = app.user and app.user in publication.utilisateursAimant %}
 {% set imagePublication = publication.imageAffichee %}
 {% set classeVarianteCarte = 'publication-card--feed' %}
 {% if varianteCarte is defined %}
@@ -39,8 +39,8 @@ Liens avec les autres fichiers : Inclus dans le fil et les profils, puis relié 
 		</span>
 	</header>
 
-	{% if publication.contenu is not null and publication.contenu|trim != '' %}
-		<p class="publication-card__text">{{ publication.contenu|nl2br }}</p>
+	{% if publication.aUnContenuTexte() %}
+		<p class="publication-card__text">{{ publication.contenu }}</p>
 	{% endif %}
 
 	{% if imagePublication %}
@@ -53,23 +53,23 @@ Liens avec les autres fichiers : Inclus dans le fil et les profils, puis relié 
 		<form action="{{ path('app_publication_like', {id: publication.id}) }}" method="post">
 			<input type="hidden" name="_token" value="{{ csrf_token('aimer-publication-' ~ publication.id) }}">
 			<input type="hidden" name="retour" value="{{ app.request.requestUri }}">
-			<button class="publication-card__like{% if utilisateurConnecteAime %} publication-card__like--active{% endif %}" type="submit" aria-pressed="{% if utilisateurConnecteAime %}true{% else %}false{% endif %}" aria-label="{% if utilisateurConnecteAime %}Retirer mon like{% else %}Aimer cette publication{% endif %}, {{ publication.utilisateursAimant|length }} mention{% if publication.utilisateursAimant|length > 1 %}s{% endif %} J’aime">
+			<button class="publication-card__like{% if statistiques.utilisateurConnecteAime %} publication-card__like--active{% endif %}" type="submit" aria-pressed="{% if statistiques.utilisateurConnecteAime %}true{% else %}false{% endif %}" aria-label="{% if statistiques.utilisateurConnecteAime %}Retirer mon like{% else %}Aimer cette publication{% endif %}, {{ statistiques.nombreMentionsJaime }} mention{% if statistiques.nombreMentionsJaime > 1 %}s{% endif %} J’aime">
 				<span class="publication-card__action-icon"><img src="{{ asset('images/icons/icon_heart.png') }}" alt=""></span>
-				<span class="publication-card__action-count">{{ publication.utilisateursAimant|length }}</span>
+				<span class="publication-card__action-count">{{ statistiques.nombreMentionsJaime }}</span>
 			</button>
 		</form>
-		<a class="publication-card__comments" href="{{ path('app_comment_index', {id: publication.id}) }}" aria-label="Consulter {{ publication.commentaires|length }} commentaire{% if publication.commentaires|length > 1 %}s{% endif %}">
+		<a class="publication-card__comments" href="{{ path('app_comment_index', {id: publication.id}) }}" aria-label="Consulter {{ statistiques.nombreCommentaires }} commentaire{% if statistiques.nombreCommentaires > 1 %}s{% endif %}">
 			<span class="publication-card__action-icon"><img src="{{ asset('images/icons/icon_chatCircle.png') }}" alt=""></span>
-			<span class="publication-card__action-count">{{ publication.commentaires|length }}</span>
+			<span class="publication-card__action-count">{{ statistiques.nombreCommentaires }}</span>
 		</a>
 	{% else %}
-		<span class="publication-card__like" aria-label="{{ publication.utilisateursAimant|length }} mentions J’aime">
+		<span class="publication-card__like" aria-label="{{ statistiques.nombreMentionsJaime }} mentions J’aime">
 			<span class="publication-card__action-icon"><img src="{{ asset('images/icons/icon_heart.png') }}" alt=""></span>
-			<span class="publication-card__action-count">{{ publication.utilisateursAimant|length }}</span>
+			<span class="publication-card__action-count">{{ statistiques.nombreMentionsJaime }}</span>
 		</span>
-		<span class="publication-card__comments" aria-label="{{ publication.commentaires|length }} commentaires">
+		<span class="publication-card__comments" aria-label="{{ statistiques.nombreCommentaires }} commentaires">
 			<span class="publication-card__action-icon"><img src="{{ asset('images/icons/icon_chatCircle.png') }}" alt=""></span>
-			<span class="publication-card__action-count">{{ publication.commentaires|length }}</span>
+			<span class="publication-card__action-count">{{ statistiques.nombreCommentaires }}</span>
 		</span>
 	{% endif %}
 

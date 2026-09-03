@@ -1,9 +1,11 @@
 <?php
 
+/* Origine du code : Structure générée par Symfony puis modifiée par le développeur. */
+
 /*
  * Description générale : Contrôleur de création des comptes utilisateur.
  * Rôle : Traiter l'inscription, déléguer la photo de profil et enregistrer le mot de passe haché.
- * Tâches : Valider le formulaire, appeler le service de fichiers, persister l'utilisateur et ouvrir sa session.
+ * Tâches : Valider le formulaire, téléverser la photo avec compensation, persister l'utilisateur et ouvrir sa session.
  * Liens avec les autres fichiers : Utilise RegistrationFormType, Utilisateur, FileUploadService, le hasher Symfony et Security.
  */
 
@@ -52,8 +54,14 @@ class RegistrationController extends AbstractController
 
             $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
 
-            $entityManager->persist($user);
-            $entityManager->flush();
+            try {
+                $entityManager->persist($user);
+                $entityManager->flush();
+            } catch (\Throwable $exception) {
+                $fileUploadService->compenserTeleversement($upload);
+
+                throw $exception;
+            }
 
             $this->addFlash('success', 'Ton compte a été créé avec succès.');
 

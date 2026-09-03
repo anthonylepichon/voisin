@@ -1,10 +1,11 @@
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Ajustements finaux issus de la maquette Figma simplifiée de l’application Voisin.
  * Rôle :
  * Harmoniser les écrans publics, membres et administratifs sur la grille desktop de 1440 pixels.
  * Tâches :
- * Corriger les proportions des cartes, formulaires, profils et contenus tout en conservant un rendu responsive.
+ * Corriger les proportions des formulaires, profils et contenus tout en conservant un rendu responsive.
  * Liens avec les autres fichiers :
  * Complète les composants et pages chargés auparavant par resources/scss/app.scss.
  */
@@ -65,66 +66,6 @@ body {
 
 .auth-card__avatar-upload {
     align-self: center;
-}
-
-// Carte de publication simplifiée partagée par l’accueil, le fil et les profils.
-.publication-card--feed .publication-card__media {
-    width: 374px;
-}
-
-.publication-card--feed .publication-card__header,
-.publication-card--feed .publication-card__text {
-    width: calc(100% - 40px);
-}
-
-.publication-card:not(:has(.publication-card__media)) {
-    height: 190px;
-}
-
-.publication-card:not(:has(.publication-card__media)) .publication-card__like,
-.publication-card:not(:has(.publication-card__media)) .publication-card__comments {
-    top: auto;
-    bottom: 16px;
-}
-
-.publication-card:not(:has(.publication-card__media)) .publication-card__owner-actions {
-    top: auto;
-    bottom: 20px;
-}
-
-.profile-page__publications {
-    --masonry-gap: 16px;
-
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    grid-auto-rows: 1px;
-    align-items: start;
-    column-gap: 16px;
-    row-gap: 1px;
-}
-
-.profile-page__publications > .publication-card:not(:has(.publication-card__media)) {
-    height: calc((455px - var(--masonry-gap)) / 2);
-}
-
-.publication-card--profile-third {
-    width: 100%;
-    min-width: 0;
-}
-
-.publication-card--profile-third .publication-card__header,
-.publication-card--profile-third .publication-card__text,
-.publication-card--profile-third .publication-card__media {
-    left: 9px;
-    width: calc(100% - 18px);
-}
-
-.publication-card--profile-third .publication-card__like {
-    left: 9px;
-}
-
-.publication-card--profile-third .publication-card__comments {
-    left: 67px;
 }
 
 // Bandeau de profil horizontal de la maquette simplifiée.
@@ -331,14 +272,6 @@ body {
         max-width: none;
     }
 
-    .publication-card--feed .publication-card__media {
-        width: min(374px, calc(100% - 38px));
-    }
-
-    .profile-page__publications {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
     .profile-page__summary,
     .profile-page__summary--owner,
     .profile-page__summary--stranger,
@@ -393,25 +326,6 @@ body {
 
     .profile-page__overview {
         flex-direction: column;
-    }
-
-    .profile-page__publications {
-        grid-template-columns: minmax(0, 1fr);
-    }
-
-    .profile-page__publications > .publication-card:not(:has(.publication-card__media)) {
-        height: auto;
-        min-height: 230px;
-    }
-
-    .publication-card--feed .publication-card__media,
-    .publication-card--profile-third .publication-card__media {
-        width: 100%;
-    }
-
-    .publication-card:not(:has(.publication-card__media)) {
-        height: auto;
-        min-height: 190px;
     }
 
     .publication-editor__form .visibility-selector,

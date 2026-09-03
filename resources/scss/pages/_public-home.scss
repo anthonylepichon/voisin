@@ -1,4 +1,5 @@
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Présentation publique de l'application Voisin avant authentification.
  * Rôle :
@@ -81,21 +82,9 @@
 .public-home__grid {
     --masonry-gap: 24px;
 
-    display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    grid-auto-rows: 1px;
-    align-items: start;
     width: min(100%, 1233px);
     column-gap: 24px;
-    row-gap: 1px;
-}
-
-.public-home__grid > .publication-card {
-    min-width: 0;
-}
-
-.public-home__grid > .publication-card:not(:has(.publication-card__media)) {
-    height: calc((455px - var(--masonry-gap)) / 2);
 }
 
 .public-home__empty {
@@ -181,12 +170,6 @@
 
         grid-template-columns: minmax(0, 1fr);
         column-gap: 16px;
-        row-gap: 1px;
-    }
-
-    .public-home__grid > .publication-card:not(:has(.publication-card__media)) {
-        height: auto;
-        min-height: 230px;
     }
 
     .public-home__empty {

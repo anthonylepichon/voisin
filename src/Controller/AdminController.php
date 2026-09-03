@@ -1,5 +1,7 @@
 <?php
 
+/* Origine du code : Code créé par le développeur. */
+
 /*
  * Description générale : Contrôleur du tableau de bord et de la modération administratifs.
  * Rôle : Réserver aux administrateurs la consultation des membres et de toutes les publications.

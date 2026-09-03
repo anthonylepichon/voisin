@@ -1,4 +1,5 @@
 {#
+Origine du code : Code créé par le développeur.
  Description générale : Page d'accueil publique de l'application Voisin.
  Rôle : Présenter le réseau et les cinq publications publiques les plus récentes.
  Tâches : Afficher les appels à l'action, les cartes publiques ou leur état vide.
@@ -31,10 +32,11 @@
                 <p class="public-home__empty-description">Connectez-vous pour rejoindre votre voisinage.</p>
             </div>
         {% else %}
-            <div class="public-home__grid" data-publication-masonry>
+            <div class="public-home__grid publication-masonry" data-publication-masonry>
                 {% for publication in publications %}
                     {% include 'publication/_card.html.twig' with {
                         publication: publication,
+                        statistiques: statistiquesPublications[publication.id],
                         varianteCarte: '',
                         afficherActionsProprietaire: false
                     } only %}

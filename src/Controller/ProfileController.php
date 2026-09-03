@@ -1,9 +1,11 @@
 <?php
 
+/* Origine du code : Code créé par le développeur. */
+
 /*
  * Description générale : Contrôleur des profils membres.
  * Rôle : Afficher un profil avec son état d'amitié et permettre au propriétaire de modifier ses données.
- * Tâches : Contrôler l'identité, charger les relations et publications visibles, puis déléguer la gestion de la photo.
+ * Tâches : Contrôler l'identité, remplacer la photo de façon compensatoire, charger les relations et paginer les publications.
  * Liens avec les autres fichiers : Utilise les repositories sociaux, ProfileFormType, FileUploadService, UserActivityService et les gabarits profile.
  */
 
@@ -60,11 +62,12 @@ class ProfileController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var UploadedFile|null $photo */
             $photo = $form->get('photoProfil')->getData();
+            $nouvellePhoto = null;
 
             if (null !== $photo) {
-                $upload = $fileUploadService->televerserPhotoProfil($photo, $utilisateur);
+                $nouvellePhoto = $fileUploadService->televerserPhotoProfil($photo, $utilisateur);
 
-                if (null === $upload) {
+                if (null === $nouvellePhoto) {
                     $form->get('photoProfil')->addError(new FormError('La photo de profil n’a pas pu être enregistrée. Réessaie plus tard.'));
 
                     return $this->render('profile/edit.html.twig', [
@@ -74,11 +77,23 @@ class ProfileController extends AbstractController
                 }
 
                 if (null !== $anciennePhoto) {
-                    $fileUploadService->supprimerPhotoProfil($utilisateur, $anciennePhoto);
+                    $fileUploadService->preparerSuppressionPhotoProfil($utilisateur, $anciennePhoto);
                 }
             }
 
-            $entityManager->flush();
+            try {
+                $entityManager->flush();
+            } catch (\Throwable $exception) {
+                if (null !== $nouvellePhoto) {
+                    $fileUploadService->compenserTeleversement($nouvellePhoto);
+                }
+
+                throw $exception;
+            }
+
+            if (null !== $nouvellePhoto && null !== $anciennePhoto) {
+                $fileUploadService->supprimerFichierPhysique($anciennePhoto);
+            }
 
             $this->addFlash('success', 'Ton profil a été mis à jour.');
 
@@ -93,11 +108,12 @@ class ProfileController extends AbstractController
 
     /**
      * Rôle : Afficher un profil membre.
-     * Paramètres : Le pseudonyme, les repositories nécessaires et le service d'activité.
+     * Paramètres : La requête avec la page demandée, le pseudonyme, les repositories nécessaires et le service d'activité.
      * Retour : Une réponse Twig ou une erreur 404.
      */
     #[Route('/profil/{pseudonyme}', name: 'app_profile_show', methods: ['GET'])]
     public function show(
+        Request $request,
         string $pseudonyme,
         UtilisateurRepository $utilisateurRepository,
         DemandeAmitieRepository $demandeAmitieRepository,
@@ -136,7 +152,25 @@ class ProfileController extends AbstractController
 
         $inclureReserveesAuxAmis = $estProprietaire || 'ami' === $statutAmitie;
         $amis = $utilisateurRepository->trouverAmis($utilisateur);
-        $publications = $publicationRepository->trouverPourProfil($utilisateur, $inclureReserveesAuxAmis);
+        $page = $request->query->getInt('page', 1);
+
+        if ($page < 1) {
+            $page = 1;
+        }
+
+        $nombrePublications = $publicationRepository->compterPourProfil($utilisateur, $inclureReserveesAuxAmis);
+        $nombrePages = (int) ceil($nombrePublications / PublicationRepository::PUBLICATIONS_PAR_PAGE);
+
+        if ($nombrePages < 1) {
+            $nombrePages = 1;
+        }
+
+        if ($page > $nombrePages) {
+            $page = $nombrePages;
+        }
+
+        $publications = $publicationRepository->trouverPourProfil($utilisateur, $inclureReserveesAuxAmis, $page);
+        $statistiquesPublications = $publicationRepository->trouverStatistiquesCartes($publications, $utilisateurConnecte);
 
         return $this->render('profile/show.html.twig', [
             'utilisateur' => $utilisateur,
@@ -145,6 +179,10 @@ class ProfileController extends AbstractController
             'demandeAmitie' => $demandeAmitie,
             'amis' => $amis,
             'publications' => $publications,
+            'statistiquesPublications' => $statistiquesPublications,
+            'nombrePublications' => $nombrePublications,
+            'pageActuelle' => $page,
+            'nombrePages' => $nombrePages,
             'nombreDemandesAmitieEnAttente' => $demandeAmitieRepository->compterRecues($utilisateurConnecte),
         ]);
     }

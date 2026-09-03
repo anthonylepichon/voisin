@@ -1,4 +1,5 @@
 {#
+Origine du code : Structure générée par Symfony puis modifiée par le développeur.
 Description générale :
 Gabarit HTML commun aux futures pages de l'application.
 Rôle :
@@ -6,7 +7,7 @@ Fournir la structure de base et les blocs Twig réutilisables.
 Tâches :
 Charger le favicon et les ressources classiques servies par AssetMapper, puis accueillir le contenu des pages.
 Liens avec les autres fichiers :
-Charge assets/images/favicon/favicon.svg, assets/styles/app.css et assets/app.js ; sera étendu par les futurs modèles Twig.
+Charge le favicon, la feuille de styles et les scripts fonctionnels situés dans assets/js ; sera étendu par les autres modèles Twig.
 #}
 <!DOCTYPE html>
 <html lang="fr">
@@ -22,7 +23,10 @@ Charge assets/images/favicon/favicon.svg, assets/styles/app.css et assets/app.js
         {% endblock %}
 
         {% block javascripts %}
-            <script src="{{ asset('app.js') }}" defer></script>
+            <script src="{{ asset('js/profile-photo-preview.js') }}" defer></script>
+            <script src="{{ asset('js/publication-image-preview.js') }}" defer></script>
+            <script src="{{ asset('js/publication-composer.js') }}" defer></script>
+            <script src="{{ asset('js/publication-masonry.js') }}" defer></script>
         {% endblock %}
     </head>
     <body class="{% block body_class %}{% endblock %}">
