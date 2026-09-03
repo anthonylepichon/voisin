@@ -1,5 +1,5 @@
 -- Description générale : Crée un jeu complet de données fictives pour la démonstration locale de Voisin.
--- Rôle : Alimenter toutes les tables métier avec huit profils, des publications, commentaires, likes, amitiés et demandes.
+-- Rôle : Alimenter toutes les tables métier avec huit profils, leurs fichiers, des publications, commentaires, likes, amitiés et demandes.
 -- Tâches : Insérer uniquement des données de démonstration locales, sans compte administrateur ni donnée personnelle réelle.
 -- Liens avec les autres fichiers : Utilise les images présentes dans uploads/profils et est documenté dans documents/readme/requete-donnees-demo.md.
 
@@ -13,7 +13,17 @@ INSERT INTO utilisateur (id, pseudonyme, adresse_email, mot_de_passe, roles, nom
 (7, 'Quentin_2', 'quentin2@example.test', '$2y$13$33UYRTzpqOnbDrF1vk7HCOsnVQawfB0W0yJfI9pTczSMkOW/ixvaS', '["ROLE_USER"]', 'profil-quentin2.jpg', 'Partage volontiers des nouvelles du voisinage.', '2026-04-06 13:20:00', '2026-09-01 14:45:00'),
 (8, 'Sophie', 'sophie@example.test', '$2y$13$33UYRTzpqOnbDrF1vk7HCOsnVQawfB0W0yJfI9pTczSMkOW/ixvaS', '["ROLE_USER"]', 'profil-sophie.jpg', 'Amatrice de balades et de moments conviviaux.', '2026-04-22 09:50:00', '2026-09-02 17:15:00');
 
-INSERT INTO publication (id, contenu, nom_image, visibilite, date_creation, auteur_id) VALUES
+INSERT INTO upload_fichier (type, nom, chemin, utilisateur_id, publication_id) VALUES
+('profil', 'profil-alice.jpg', 'uploads/profils', 1, NULL),
+('profil', 'profil-aline.jpg', 'uploads/profils', 2, NULL),
+('profil', 'profil-benoit.jpg', 'uploads/profils', 3, NULL),
+('profil', 'profil-eloise.jpg', 'uploads/profils', 4, NULL),
+('profil', 'profil-jessica.jpg', 'uploads/profils', 5, NULL),
+('profil', 'profil-quentin.jpg', 'uploads/profils', 6, NULL),
+('profil', 'profil-quentin2.jpg', 'uploads/profils', 7, NULL),
+('profil', 'profil-sophie.jpg', 'uploads/profils', 8, NULL);
+
+INSERT INTO publication (id, contenu, nom_image, visibilite, date_creation, utilisateur_id) VALUES
 (1, 'Bienvenue sur Voisin : partageons les informations utiles de notre quartier.', NULL, 'publique', '2026-08-10 08:00:00', 1),
 (2, 'Le jardin partagé sera ouvert samedi matin.', NULL, 'amis', '2026-08-12 17:30:00', 1),
 (3, 'Je cherche des idées pour animer la prochaine rencontre de voisins.', NULL, 'publique', '2026-08-20 18:15:00', 1),
@@ -39,7 +49,7 @@ INSERT INTO publication (id, contenu, nom_image, visibilite, date_creation, aute
 (23, 'Merci à celles et ceux qui participent au nettoyage de la rue.', NULL, 'amis', '2026-08-29 09:15:00', 8),
 (24, 'Rendez-vous dimanche pour la promenade au bord du canal.', NULL, 'publique', '2026-09-02 16:30:00', 8);
 
-INSERT INTO commentaire (id, contenu, date_creation, auteur_id, publication_id) VALUES
+INSERT INTO commentaire (id, contenu, date_creation, utilisateur_id, publication_id) VALUES
 (1, 'Très bonne idée, merci pour le partage.', '2026-08-10 09:15:00', 2, 1),
 (2, 'Je suis partant pour participer.', '2026-08-10 10:00:00', 3, 1),
 (3, 'Je viendrai avec plaisir.', '2026-08-12 18:05:00', 5, 2),

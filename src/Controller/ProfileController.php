@@ -3,8 +3,8 @@
 /*
  * Description générale : Contrôleur des profils membres.
  * Rôle : Afficher un profil avec son état d'amitié et permettre au propriétaire de modifier ses données.
- * Tâches : Contrôler l'identité, charger les relations et publications visibles, puis gérer les modifications de profil.
- * Liens avec les autres fichiers : Utilise les repositories sociaux, ProfileFormType, UserActivityService et les gabarits profile.
+ * Tâches : Contrôler l'identité, charger les relations et publications visibles, puis déléguer la gestion de la photo.
+ * Liens avec les autres fichiers : Utilise les repositories sociaux, ProfileFormType, FileUploadService, UserActivityService et les gabarits profile.
  */
 
 namespace App\Controller;
@@ -14,16 +14,15 @@ use App\Form\ProfileFormType;
 use App\Repository\DemandeAmitieRepository;
 use App\Repository\PublicationRepository;
 use App\Repository\UtilisateurRepository;
+use App\Service\FileUploadService;
 use App\Service\UserActivityService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\String\Slugger\SluggerInterface;
 
 class ProfileController extends AbstractController
 {
@@ -44,14 +43,14 @@ class ProfileController extends AbstractController
 
     /**
      * Rôle : Afficher le formulaire de modification du profil connecté.
-     * Paramètres : La requête, le gestionnaire d'entités et le slugger.
+     * Paramètres : La requête, Doctrine et le service central des fichiers.
      * Retour : Une réponse Twig ou une redirection après enregistrement.
      */
     #[Route('/profil/modifier', name: 'app_profile_edit', methods: ['GET', 'POST'])]
     public function edit(
         Request $request,
         EntityManagerInterface $entityManager,
-        SluggerInterface $slugger
+        FileUploadService $fileUploadService
     ): Response {
         $utilisateur = $this->getUtilisateurConnecte();
         $anciennePhoto = $utilisateur->getNomPhotoProfil();
@@ -63,9 +62,9 @@ class ProfileController extends AbstractController
             $photo = $form->get('photoProfil')->getData();
 
             if (null !== $photo) {
-                $nomNouvellePhoto = $this->enregistrerNouvellePhoto($photo, $utilisateur, $slugger);
+                $upload = $fileUploadService->televerserPhotoProfil($photo, $utilisateur);
 
-                if (null === $nomNouvellePhoto) {
+                if (null === $upload) {
                     $form->get('photoProfil')->addError(new FormError('La photo de profil n’a pas pu être enregistrée. Réessaie plus tard.'));
 
                     return $this->render('profile/edit.html.twig', [
@@ -74,14 +73,14 @@ class ProfileController extends AbstractController
                     ]);
                 }
 
-                $utilisateur->setNomPhotoProfil($nomNouvellePhoto);
+                $utilisateur->setNomPhotoProfil((string) $upload->getNom());
+
+                if (null !== $anciennePhoto) {
+                    $fileUploadService->supprimerPhotoProfil($utilisateur, $anciennePhoto);
+                }
             }
 
             $entityManager->flush();
-
-            if (null !== $photo && null !== $anciennePhoto) {
-                $this->supprimerAnciennePhotoInutilisee($anciennePhoto, $entityManager);
-            }
 
             $this->addFlash('success', 'Ton profil a été mis à jour.');
 
@@ -150,62 +149,6 @@ class ProfileController extends AbstractController
             'publications' => $publications,
             'nombreDemandesAmitieEnAttente' => $demandeAmitieRepository->compterRecues($utilisateurConnecte),
         ]);
-    }
-
-    /**
-     * Rôle : Enregistrer une nouvelle photo dans le répertoire privé des profils.
-     * Paramètres : Le fichier téléversé, son propriétaire et le slugger.
-     * Retour : Le nom enregistré ou null en cas d'échec.
-     */
-    private function enregistrerNouvellePhoto(
-        UploadedFile $photo,
-        Utilisateur $utilisateur,
-        SluggerInterface $slugger
-    ): ?string {
-        $extension = $photo->guessExtension();
-
-        if (null === $extension) {
-            return null;
-        }
-
-        $nomFichier = sprintf(
-            '%s-profil-%s.%s',
-            uniqid(),
-            $slugger->slug((string) $utilisateur->getPseudonyme())->lower(),
-            $extension
-        );
-
-        try {
-            $photo->move($this->getParameter('kernel.project_dir').'/uploads/profils', $nomFichier);
-        } catch (FileException) {
-            return null;
-        }
-
-        return $nomFichier;
-    }
-
-    /**
-     * Rôle : Effacer une ancienne photo uniquement lorsqu'aucun compte ne l'utilise.
-     * Paramètres : Le nom de l'ancienne photo et le gestionnaire d'entités.
-     * Retour : Aucun.
-     */
-    private function supprimerAnciennePhotoInutilisee(
-        string $nomPhoto,
-        EntityManagerInterface $entityManager
-    ): void {
-        $nombreUtilisateurs = $entityManager->getRepository(Utilisateur::class)->count([
-            'nomPhotoProfil' => $nomPhoto,
-        ]);
-
-        if (0 !== $nombreUtilisateurs) {
-            return;
-        }
-
-        $cheminPhoto = $this->getParameter('kernel.project_dir').'/uploads/profils/'.$nomPhoto;
-
-        if (is_file($cheminPhoto)) {
-            unlink($cheminPhoto);
-        }
     }
 
     /**

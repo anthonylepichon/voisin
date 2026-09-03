@@ -3,8 +3,8 @@
 /*
  * Description générale : Représente un compte utilisateur de l'application Voisin.
  * Rôle : Porter les données de sécurité, de profil et d'activité d'un utilisateur.
- * Tâches : Garantir les contraintes Doctrine et de validation du MPD pour la table utilisateur.
- * Liens avec les autres fichiers : Utilisée par UtilisateurRepository, la configuration Security, les contrôleurs et les autres entités métier.
+ * Tâches : Garantir les contraintes Doctrine, la validation du MPD et la relation avec les fichiers du profil.
+ * Liens avec les autres fichiers : Utilisée par UtilisateurRepository, UploadFichier, Security, les contrôleurs et les autres entités métier.
  */
 
 namespace App\Entity;
@@ -62,12 +62,16 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     private ?\DateTimeImmutable $dateDerniereActivite = null;
 
     /** @var Collection<int, Publication> */
-    #[ORM\OneToMany(mappedBy: 'auteur', targetEntity: Publication::class)]
+    #[ORM\OneToMany(mappedBy: 'utilisateur', targetEntity: Publication::class)]
     private Collection $publications;
 
     /** @var Collection<int, Commentaire> */
-    #[ORM\OneToMany(mappedBy: 'auteur', targetEntity: Commentaire::class)]
+    #[ORM\OneToMany(mappedBy: 'utilisateur', targetEntity: Commentaire::class)]
     private Collection $commentaires;
+
+    /** @var Collection<int, UploadFichier> */
+    #[ORM\OneToMany(mappedBy: 'utilisateur', targetEntity: UploadFichier::class)]
+    private Collection $uploadFichiers;
 
     /** @var Collection<int, Publication> */
     #[ORM\ManyToMany(targetEntity: Publication::class, mappedBy: 'utilisateursAimant')]
@@ -90,6 +94,7 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
         $this->dateInscription = new \DateTimeImmutable();
         $this->publications = new ArrayCollection();
         $this->commentaires = new ArrayCollection();
+        $this->uploadFichiers = new ArrayCollection();
         $this->publicationsAimees = new ArrayCollection();
         $this->amis = new ArrayCollection();
     }
@@ -320,6 +325,47 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
+     * Rôle : Retourner les fichiers téléversés pour le profil de l'utilisateur.
+     * Paramètres : Aucun.
+     * Retour : La collection des fichiers du profil.
+     *
+     * @return Collection<int, UploadFichier>
+     */
+    public function getUploadFichiers(): Collection
+    {
+        return $this->uploadFichiers;
+    }
+
+    /**
+     * Rôle : Ajouter un fichier téléversé au profil.
+     * Paramètres : Le fichier à rattacher.
+     * Retour : L'utilisateur modifié.
+     */
+    public function ajouterUploadFichier(UploadFichier $uploadFichier): static
+    {
+        if (!$this->uploadFichiers->contains($uploadFichier)) {
+            $this->uploadFichiers->add($uploadFichier);
+            $uploadFichier->setUtilisateur($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Rôle : Retirer un fichier téléversé du profil.
+     * Paramètres : Le fichier à détacher.
+     * Retour : L'utilisateur modifié.
+     */
+    public function retirerUploadFichier(UploadFichier $uploadFichier): static
+    {
+        if ($this->uploadFichiers->removeElement($uploadFichier)) {
+            $uploadFichier->setUtilisateur(null);
+        }
+
+        return $this;
+    }
+
+    /**
      * Rôle : Retourner les publications aimées par l'utilisateur.
      * Paramètres : Aucun.
      * Retour : La collection de publications aimées.
@@ -377,7 +423,7 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     public function __serialize(): array
     {
         $data = (array) $this;
-        $data["\0".self::class."\0motDePasse"] = hash('crc32c', $this->motDePasse);
+        $data["\0" . self::class . "\0motDePasse"] = hash('crc32c', $this->motDePasse);
 
         return $data;
     }
@@ -388,7 +434,5 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
      * Retour : Aucun.
      */
     #[\Deprecated]
-    public function eraseCredentials(): void
-    {
-    }
+    public function eraseCredentials(): void {}
 }

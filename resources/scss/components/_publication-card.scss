@@ -2,14 +2,14 @@
  * Description générale :
  * Carte de publication et variantes dimensionnelles issues des écrans Figma.
  * Rôle :
- * Afficher l'auteur, la visibilité, le texte, le média et les actions sociales d'une publication.
+ * Afficher l'utilisateur, la visibilité, le texte, le média et les actions sociales d'une publication.
  * Tâches :
  * Reproduire les cartes de l'accueil, du fil et du profil ainsi que l'état aimé et les actions du propriétaire.
  * Liens avec les autres fichiers :
  * Utilise resources/scss/abstracts/_variables.scss et s'appuie sur les composants avatar et badge.
  */
 
-@use '../abstracts/variables' as variables;
+@use "../abstracts/variables" as variables;
 
 .publication-card {
     position: relative;
@@ -127,10 +127,12 @@
 
 .publication-card__like {
     left: 21px;
+    cursor: pointer;
 }
 
 .publication-card__comments {
     left: 101px;
+    cursor: pointer;
 }
 
 .publication-card__action-icon {
@@ -148,14 +150,30 @@
 }
 
 .publication-card__like--active .publication-card__action-icon,
-.publication-card__like[aria-pressed='true'] .publication-card__action-icon {
+.publication-card__like[aria-pressed="true"] .publication-card__action-icon {
     color: variables.$color-primary;
+}
+
+.publication-card__like--active .publication-card__action-icon img,
+.publication-card__like[aria-pressed="true"]
+    .publication-card__action-icon
+    img {
+    filter: brightness(0) saturate(100%) invert(45%) sepia(62%) saturate(1376%)
+        hue-rotate(337deg) brightness(88%) contrast(88%);
+}
+
+.publication-card__like--active .publication-card__action-count,
+.publication-card__like[aria-pressed="true"] .publication-card__action-count {
+    color: variables.$color-primary;
+    font-weight: variables.$font-weight-semibold;
 }
 
 .publication-card__like--active .publication-card__action-icon svg,
 .publication-card__like--active .publication-card__action-icon path,
-.publication-card__like[aria-pressed='true'] .publication-card__action-icon svg,
-.publication-card__like[aria-pressed='true'] .publication-card__action-icon path {
+.publication-card__like[aria-pressed="true"] .publication-card__action-icon svg,
+.publication-card__like[aria-pressed="true"]
+    .publication-card__action-icon
+    path {
     fill: currentColor;
     stroke: currentColor;
 }
@@ -401,7 +419,8 @@
         height: 210px;
     }
 
-    .publication-card:not(:has(.publication-card__text)) .publication-card__media {
+    .publication-card:not(:has(.publication-card__text))
+        .publication-card__media {
         top: auto;
         height: 210px;
     }
@@ -459,7 +478,8 @@
         height: 180px;
     }
 
-    .publication-card:not(:has(.publication-card__text)) .publication-card__media {
+    .publication-card:not(:has(.publication-card__text))
+        .publication-card__media {
         height: 180px;
     }
 

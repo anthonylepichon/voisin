@@ -37,7 +37,7 @@
 
     {% if publication.nomImage %}
         <div class="publication-editor__current-image">
-            <img class="publication-editor__current-image-preview" src="{{ path('app_publication_image', {nom: publication.nomImage}) }}" alt="Image actuelle de la publication">
+            <img class="publication-editor__current-image-preview" src="{{ path('app_upload_fichier', {type: 'publication', nom: publication.nomImage}) }}" alt="Image actuelle de la publication">
             {% if afficherSuppressionImage %}
                 {{ form_widget(publicationForm.supprimerImage, {'attr': {'class': 'button button--danger-outline'}}) }}
             {% endif %}

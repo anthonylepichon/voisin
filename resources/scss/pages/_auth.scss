@@ -4,12 +4,12 @@
  * Rôle :
  * Reproduire les cartes de formulaires et leurs états vide, saisi, invalide et confirmé.
  * Tâches :
- * Centrer les formulaires et appliquer leurs largeurs et hauteurs spécifiques à chaque écran Figma.
+ * Centrer les formulaires et appliquer leurs dimensions spécifiques à chaque écran Figma.
  * Liens avec les autres fichiers :
  * Utilise resources/scss/abstracts/_variables.scss et les composants de formulaire, bouton et alerte.
  */
 
-@use '../abstracts/variables' as variables;
+@use "../abstracts/variables" as variables;
 
 .auth-page {
     min-height: 100vh;

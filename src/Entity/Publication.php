@@ -2,9 +2,9 @@
 
 /*
  * Description générale : Représente une publication publiée par un membre.
- * Rôle : Conserver son contenu, son image, sa visibilité, son auteur et les utilisateurs qui l'aiment.
- * Tâches : Appliquer les champs, contraintes et relations de la table publication ainsi que de l'association de likes.
- * Liens avec les autres fichiers : Liée à Utilisateur, PublicationRepository et aux futures fonctionnalités de fil, de likes et de commentaires.
+ * Rôle : Conserver son contenu, son image, sa visibilité, son propriétaire et les utilisateurs qui l'aiment.
+ * Tâches : Appliquer les champs, contraintes et relations de la publication, des fichiers et des likes.
+ * Liens avec les autres fichiers : Liée à Utilisateur, UploadFichier, Commentaire, PublicationRepository et aux contrôleurs métier.
  */
 
 namespace App\Entity;
@@ -17,7 +17,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: PublicationRepository::class)]
 #[ORM\Table(name: 'publication')]
-#[ORM\Index(name: 'idx_publication_auteur', fields: ['auteur'])]
+#[ORM\Index(name: 'idx_publication_utilisateur', fields: ['utilisateur'])]
 #[ORM\Index(name: 'idx_publication_visibilite_creation', fields: ['visibilite', 'dateCreation'])]
 #[Assert\Expression(
     expression: 'this.aUnContenuOuUneImage()',
@@ -52,8 +52,12 @@ class Publication
     private \DateTimeImmutable $dateCreation;
 
     #[ORM\ManyToOne(inversedBy: 'publications')]
-    #[ORM\JoinColumn(name: 'auteur_id', nullable: false, onDelete: 'RESTRICT')]
-    private ?Utilisateur $auteur = null;
+    #[ORM\JoinColumn(name: 'utilisateur_id', nullable: false, onDelete: 'RESTRICT')]
+    private ?Utilisateur $utilisateur = null;
+
+    /** @var Collection<int, UploadFichier> */
+    #[ORM\OneToMany(mappedBy: 'publication', targetEntity: UploadFichier::class)]
+    private Collection $uploadFichiers;
 
     /**
      * @var Collection<int, Utilisateur>
@@ -80,6 +84,7 @@ class Publication
         $this->dateCreation = new \DateTimeImmutable();
         $this->utilisateursAimant = new ArrayCollection();
         $this->commentaires = new ArrayCollection();
+        $this->uploadFichiers = new ArrayCollection();
     }
 
     /**
@@ -181,23 +186,23 @@ class Publication
     }
 
     /**
-     * Rôle : Retourner l'auteur de la publication.
+     * Rôle : Retourner l'utilisateur de la publication.
      * Paramètres : Aucun.
-     * Retour : L'auteur ou null avant sa définition.
+     * Retour : L'utilisateur ou null avant sa définition.
      */
-    public function getAuteur(): ?Utilisateur
+    public function getUtilisateur(): ?Utilisateur
     {
-        return $this->auteur;
+        return $this->utilisateur;
     }
 
     /**
-     * Rôle : Définir l'auteur de la publication.
-     * Paramètres : L'utilisateur auteur.
+     * Rôle : Définir l'utilisateur de la publication.
+     * Paramètres : L'utilisateur propriétaire de la publication.
      * Retour : La publication modifiée.
      */
-    public function setAuteur(Utilisateur $auteur): static
+    public function setUtilisateur(Utilisateur $utilisateur): static
     {
-        $this->auteur = $auteur;
+        $this->utilisateur = $utilisateur;
 
         return $this;
     }
@@ -250,6 +255,47 @@ class Publication
     public function getCommentaires(): Collection
     {
         return $this->commentaires;
+    }
+
+    /**
+     * Rôle : Retourner les fichiers téléversés pour la publication.
+     * Paramètres : Aucun.
+     * Retour : La collection des images de la publication.
+     *
+     * @return Collection<int, UploadFichier>
+     */
+    public function getUploadFichiers(): Collection
+    {
+        return $this->uploadFichiers;
+    }
+
+    /**
+     * Rôle : Ajouter un fichier téléversé à la publication.
+     * Paramètres : Le fichier à rattacher.
+     * Retour : La publication modifiée.
+     */
+    public function ajouterUploadFichier(UploadFichier $uploadFichier): static
+    {
+        if (!$this->uploadFichiers->contains($uploadFichier)) {
+            $this->uploadFichiers->add($uploadFichier);
+            $uploadFichier->setPublication($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Rôle : Retirer un fichier téléversé de la publication.
+     * Paramètres : Le fichier à détacher.
+     * Retour : La publication modifiée.
+     */
+    public function retirerUploadFichier(UploadFichier $uploadFichier): static
+    {
+        if ($this->uploadFichiers->removeElement($uploadFichier)) {
+            $uploadFichier->setPublication(null);
+        }
+
+        return $this;
     }
 
     /**

@@ -2,9 +2,9 @@
 
 /*
  * Description générale : Représente un commentaire déposé sous une publication.
- * Rôle : Conserver son contenu, sa date, son auteur et sa publication associée.
+ * Rôle : Conserver son contenu, sa date, son propriétaire et sa publication associée.
  * Tâches : Appliquer les champs, relations et index de la table commentaire du MPD.
- * Liens avec les autres fichiers : Lié à Utilisateur, Publication, CommentaireRepository et aux futures fonctionnalités de commentaires.
+ * Liens avec les autres fichiers : Lié à Utilisateur, Publication, CommentaireRepository, CommentFormType et CommentController.
  */
 
 namespace App\Entity;
@@ -15,7 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CommentaireRepository::class)]
 #[ORM\Table(name: 'commentaire')]
-#[ORM\Index(name: 'idx_commentaire_auteur', fields: ['auteur'])]
+#[ORM\Index(name: 'idx_commentaire_utilisateur', fields: ['utilisateur'])]
 #[ORM\Index(name: 'idx_commentaire_publication', fields: ['publication'])]
 class Commentaire
 {
@@ -25,15 +25,16 @@ class Commentaire
     private ?int $id = null;
 
     #[ORM\Column(name: 'contenu', type: 'text')]
-    #[Assert\NotBlank(message: 'Le commentaire ne peut pas être vide.')]
+    #[Assert\NotBlank(message: 'Le commentaire ne peut pas être vide.', normalizer: 'trim')]
+    #[Assert\Length(max: 500, maxMessage: 'Le commentaire ne peut pas dépasser {{ limit }} caractères.')]
     private ?string $contenu = null;
 
     #[ORM\Column(name: 'date_creation')]
     private \DateTimeImmutable $dateCreation;
 
     #[ORM\ManyToOne(inversedBy: 'commentaires')]
-    #[ORM\JoinColumn(name: 'auteur_id', nullable: false, onDelete: 'RESTRICT')]
-    private ?Utilisateur $auteur = null;
+    #[ORM\JoinColumn(name: 'utilisateur_id', nullable: false, onDelete: 'RESTRICT')]
+    private ?Utilisateur $utilisateur = null;
 
     #[ORM\ManyToOne(inversedBy: 'commentaires')]
     #[ORM\JoinColumn(name: 'publication_id', nullable: false, onDelete: 'CASCADE')]
@@ -104,23 +105,23 @@ class Commentaire
     }
 
     /**
-     * Rôle : Retourner l'auteur du commentaire.
+     * Rôle : Retourner l'utilisateur du commentaire.
      * Paramètres : Aucun.
-     * Retour : L'auteur ou null avant sa définition.
+     * Retour : L'utilisateur ou null avant sa définition.
      */
-    public function getAuteur(): ?Utilisateur
+    public function getUtilisateur(): ?Utilisateur
     {
-        return $this->auteur;
+        return $this->utilisateur;
     }
 
     /**
-     * Rôle : Définir l'auteur du commentaire.
-     * Paramètres : L'utilisateur auteur.
+     * Rôle : Définir l'utilisateur du commentaire.
+     * Paramètres : L'utilisateur propriétaire du commentaire.
      * Retour : Le commentaire modifié.
      */
-    public function setAuteur(Utilisateur $auteur): static
+    public function setUtilisateur(Utilisateur $utilisateur): static
     {
-        $this->auteur = $auteur;
+        $this->utilisateur = $utilisateur;
 
         return $this;
     }
