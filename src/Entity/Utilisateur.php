@@ -3,7 +3,7 @@
 /*
  * Description générale : Représente un compte utilisateur de l'application Voisin.
  * Rôle : Porter les données de sécurité, de profil et d'activité d'un utilisateur.
- * Tâches : Garantir les contraintes Doctrine, la validation du MPD, la photo du profil et l'encapsulation des relations inverses.
+ * Tâches : Garantir les contraintes Doctrine, les caractères autorisés du pseudonyme, la photo du profil et l'encapsulation des relations inverses.
  * Liens avec les autres fichiers : Utilisée par UtilisateurRepository, UploadFichier, Security, les contrôleurs et les autres entités métier.
  */
 
@@ -35,6 +35,7 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(name: 'pseudonyme', length: 50)]
     #[Assert\NotBlank(message: 'Le pseudonyme est obligatoire.', normalizer: 'trim')]
     #[Assert\Length(min: 3, max: 50, normalizer: 'trim', minMessage: 'Le pseudonyme doit contenir au moins {{ limit }} caractères.', maxMessage: 'Le pseudonyme ne peut pas dépasser {{ limit }} caractères.')]
+    #[Assert\Regex(pattern: '/^[\p{L}\p{N}_-]+$/u', message: 'Le pseudonyme peut contenir uniquement des lettres, des chiffres, des tirets et des tirets bas.')]
     private ?string $pseudonyme = null;
 
     #[ORM\Column(name: 'adresse_email', length: 180)]
