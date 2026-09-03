@@ -1,8 +1,8 @@
 {#
 Origine du code : Code créé par le développeur.
 Description générale : Navigation latérale partagée des pages authentifiées.
-Rôle : Donner accès au fil, au profil, aux relations d'amitié et à la déconnexion.
-Tâches : Marquer la page active, afficher le compteur des demandes et protéger la déconnexion par CSRF.
+Rôle : Donner accès au fil, au profil, aux relations d'amitié, à l'administration autorisée et à la déconnexion.
+Tâches : Marquer la page active, afficher le compteur des demandes, présenter les accès administratifs selon le rôle et protéger la déconnexion par CSRF.
 Liens avec les autres fichiers : Inclus dans les pages membre et stylisé par layout/_sidebar.scss.
 #}
 
@@ -19,6 +19,10 @@ Liens avec les autres fichiers : Inclus dans les pages membre et stylisé par la
                 <span class="side-nav__badge" aria-label="{{ nombreDemandesAmitieEnAttente }} demande{% if nombreDemandesAmitieEnAttente > 1 %}s{% endif %} en attente">{{ nombreDemandesAmitieEnAttente }}</span>
             {% endif %}
         </a>
+        {% if is_granted('ROLE_ADMIN') %}
+            <a class="side-nav__link{% if routeCourante == 'app_admin_index' %} side-nav__link--active{% endif %}" href="{{ path('app_admin_index') }}"{% if routeCourante == 'app_admin_index' %} aria-current="page"{% endif %}>Administration</a>
+            <a class="side-nav__link{% if routeCourante == 'app_admin_publications' %} side-nav__link--active{% endif %}" href="{{ path('app_admin_publications') }}"{% if routeCourante == 'app_admin_publications' %} aria-current="page"{% endif %}>Modération</a>
+        {% endif %}
     </div>
     <hr class="side-nav__separator">
     <form action="{{ path('app_logout') }}" method="post">
