@@ -1,0 +1,92 @@
+/*
+ * Origine du code : Code créé par le développeur.
+ * Description générale :
+ * Variables Sass issues des 12 sections et des 48 états desktop de la maquette Figma.
+ * Rôle :
+ * Centraliser les couleurs, typographies, dimensions, espacements et rayons partagés par l'interface.
+ * Tâches :
+ * Fournir les tokens communs aux fondations, composants, mises en page et pages du projet.
+ * Liens avec les autres fichiers :
+ * Utilisé par l'ensemble des fichiers partiels chargés depuis resources/scss/app.scss.
+ */
+
+// Typographie
+$font-family-base: 'Inter', Arial, sans-serif;
+$font-weight-regular: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+$font-size-11: 11px;
+$font-size-12: 12px;
+$font-size-13: 13px;
+$font-size-14: 14px;
+$font-size-15: 15px;
+$font-size-16: 16px;
+$font-size-18: 18px;
+$font-size-20: 20px;
+$font-size-22: 22px;
+$font-size-24: 24px;
+$font-size-28: 28px;
+$font-size-40: 40px;
+
+// Couleurs
+$color-page-background: #f0e8e3;
+$color-surface-soft: #faf7f5;
+$color-surface: #ffffff;
+$color-text: #2c2420;
+$color-text-muted: #8d8d8d;
+$color-border: #d8d8d8;
+$color-primary: #c95f30;
+$color-preview: #d9d9d9;
+$color-danger: #b94848;
+$color-danger-background: #fff2f2;
+$color-success: #1ba030;
+$color-success-background: #edfced;
+$color-success-background-alt: #f2fff2;
+$color-info: #3366cc;
+$color-info-background: #edf2ff;
+$color-warning: #996633;
+$color-warning-background: #fff7eb;
+$color-pending-background: #fffaed;
+$color-disabled-background: #f7f7f7;
+$color-black: #000000;
+
+// Rayons
+$radius-line: 2px;
+$radius-field: 8px;
+$radius-control: 10px;
+$radius-surface: 12px;
+$radius-card: 16px;
+$radius-avatar-small: 18px;
+$radius-pill-medium: 20px;
+$radius-avatar-medium: 24px;
+$radius-avatar: 33px;
+$radius-pill: 42px;
+
+// Dimensions communes
+$desktop-width: 1440px;
+$content-width: 1108px;
+$feed-content-width: 844px;
+$sidebar-width: 260px;
+$online-friends-width: 240px;
+$layout-gap: 24px;
+$page-padding: 24px;
+$icon-size: 24px;
+$header-background-color: #faf7f5;
+$header-height: 80px;
+$header-padding-horizontal: 64px;
+$header-padding-vertical: 14px;
+$header-logo-width: 146px;
+$header-logo-height: 52px;
+$header-actions-width: 515px;
+$header-actions-height: 60px;
+$header-avatar-size: 60px;
+$header-avatar-radius: 33px;
+
+// Paliers responsive ajoutés à partir de la maquette desktop de 1440 pixels.
+// Le rendu de référence reste strictement appliqué à 1440 pixels et devient fluide en dessous.
+$breakpoint-tablet-max: 1439px;
+$breakpoint-narrow-tablet-max: 1023px;
+$breakpoint-mobile-max: 767px;
+$tablet-page-padding: 24px;
+$mobile-page-padding: 16px;

@@ -1,0 +1,175 @@
+/*
+ * Origine du code : Code créé par le développeur.
+ * Description générale :
+ * Pages publiques d'inscription et de connexion.
+ * Rôle :
+ * Reproduire les cartes de formulaires et leurs états vide, saisi, invalide et confirmé.
+ * Tâches :
+ * Centrer les formulaires et appliquer leurs dimensions spécifiques à chaque écran Figma.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et les composants de formulaire, bouton et alerte.
+ */
+
+@use "../abstracts/variables" as variables;
+
+.auth-page {
+    min-height: 100vh;
+    background-color: variables.$color-page-background;
+}
+
+.auth-page #contenu-principal {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    width: 100%;
+    min-height: calc(100vh - #{variables.$header-height});
+    padding: 60px;
+}
+
+.auth-card {
+    display: flex;
+    flex-direction: column;
+    width: 500px;
+    padding: 40px;
+    gap: 20px;
+    overflow: visible;
+    background-color: variables.$color-surface;
+    border-radius: variables.$radius-card;
+}
+
+.auth-card--registration {
+    min-height: 756px;
+}
+
+.auth-card--registration-invalid {
+    min-height: 863px;
+}
+
+.auth-card--login {
+    width: 460px;
+    min-height: 417px;
+}
+
+.auth-card--login-with-alert {
+    width: 460px;
+    min-height: 488px;
+}
+
+.auth-card__heading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    text-align: center;
+}
+
+.auth-card__title {
+    margin: 0;
+    color: variables.$color-text;
+    font-size: variables.$font-size-28;
+    font-weight: variables.$font-weight-bold;
+}
+
+.auth-card__subtitle {
+    margin: 0;
+    color: variables.$color-text-muted;
+    font-size: variables.$font-size-14;
+}
+
+.auth-card__form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.auth-card--registration .auth-card__form {
+    width: 420px;
+}
+
+.auth-card--login .auth-card__form,
+.auth-card--login-with-alert .auth-card__form {
+    width: 380px;
+}
+
+.auth-card__submit {
+    align-self: center;
+}
+
+.auth-card__avatar-upload {
+    align-self: center;
+    width: 200px;
+}
+
+.auth-card--login .auth-card__submit,
+.auth-card--login-with-alert .auth-card__submit {
+    width: 141px;
+}
+
+.auth-card__alert--danger {
+    width: 432px;
+    margin-left: -26px;
+}
+
+.auth-card__alert--success {
+    width: 494px;
+    margin-left: -57px;
+    background-color: variables.$color-success-background-alt;
+}
+
+.auth-card__footer {
+    margin: 0;
+    color: variables.$color-text-muted;
+    font-size: variables.$font-size-14;
+    text-align: center;
+}
+
+.auth-card__footer-link {
+    color: variables.$color-primary;
+    text-decoration: none;
+}
+
+@media (max-width: variables.$breakpoint-tablet-max) {
+    .auth-page #contenu-principal {
+        padding: 48px variables.$tablet-page-padding;
+    }
+}
+
+@media (max-width: variables.$breakpoint-mobile-max) {
+    .auth-page #contenu-principal {
+        min-height: calc(100vh - 64px);
+        padding: 32px variables.$mobile-page-padding;
+    }
+
+    .auth-card,
+    .auth-card--registration,
+    .auth-card--registration-invalid,
+    .auth-card--login,
+    .auth-card--login-with-alert {
+        width: 100%;
+        height: auto;
+        min-height: 0;
+        padding: 28px 20px;
+    }
+
+    .auth-card__title {
+        font-size: variables.$font-size-24;
+    }
+
+    .auth-card--registration .auth-card__form,
+    .auth-card--login .auth-card__form,
+    .auth-card--login-with-alert .auth-card__form {
+        width: 100%;
+    }
+
+    .auth-card__alert--danger,
+    .auth-card__alert--success {
+        width: 100%;
+        margin-left: 0;
+    }
+}
+
+@media (max-width: 419px) {
+    .auth-page #contenu-principal {
+        min-height: calc(100vh - 104px);
+    }
+}

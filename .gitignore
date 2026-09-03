@@ -1,3 +1,4 @@
+# Origine du code : Structure générée par Symfony puis modifiée par le développeur.
 # Dépendances et fichiers générés
 /vendor/
 /var/
@@ -5,6 +6,9 @@
 /public/assets/
 /public/bundles/
 /assets/vendor/
+/uploads/profils/*
+/uploads/publications/*
+!/uploads/publications/.gitkeep
 
 # Configuration locale des outils
 /.vscode/
@@ -12,6 +16,7 @@
 
 # Variables d'environnement et secrets privés
 /.env.local
+/.env.dev
 /.env.local.php
 /.env.*.local
 /config/secrets/prod/prod.decrypt.private.php
@@ -25,16 +30,16 @@
 *.log
 *.tmp
 *.temp
+*.bkp
 .DS_Store
 Thumbs.db
 Desktop.ini
 
 # Ressources locales de pilotage et de formation
 /AGENTS.md
-/etat-avancement.md
-/documents/pilotage/*
-!/documents/pilotage/rapport-audit-final.md
+/documents/pilotage/
 /documents/outils/
 /documents/cours/
 /documents/conceptualisation/Spécifications/Google sheet/
 /documents/cahier des charges/cahier-des-charges-enrichi.md
+/documents/conceptualisation/Schéma Ergonomique/Maquette

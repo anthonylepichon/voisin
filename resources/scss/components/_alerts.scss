@@ -1,0 +1,66 @@
+/*
+ * Origine du code : Code créé par le développeur.
+ * Description générale :
+ * Messages d'information, de succès, d'avertissement et d'erreur de la maquette.
+ * Rôle :
+ * Présenter clairement le résultat d'une action ou une limitation fonctionnelle.
+ * Tâches :
+ * Appliquer les fonds, bordures, espacements et couleurs propres à chaque état.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et s'intègre aux pages et formulaires concernés.
+ */
+
+@use '../abstracts/variables' as variables;
+
+.alert {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    min-height: 49px;
+    padding: 16px;
+    overflow: hidden;
+    font-family: variables.$font-family-base;
+    font-size: variables.$font-size-14;
+    font-weight: variables.$font-weight-medium;
+    line-height: normal;
+    border-radius: variables.$radius-field;
+}
+
+.alert--danger {
+    min-height: 51px;
+    color: variables.$color-danger;
+    background-color: variables.$color-danger-background;
+    border: 1px solid variables.$color-danger;
+}
+
+.alert--success {
+    min-height: 51px;
+    color: variables.$color-success;
+    background-color: variables.$color-success-background;
+    border: 1px solid variables.$color-success;
+}
+
+.alert--info {
+    color: variables.$color-info;
+    background-color: variables.$color-info-background;
+}
+
+.alert--warning {
+    color: variables.$color-warning;
+    background-color: variables.$color-warning-background;
+}
+
+.alert--pending {
+    color: variables.$color-primary;
+    font-weight: variables.$font-weight-regular;
+    background-color: variables.$color-pending-background;
+}
+
+@media (max-width: variables.$breakpoint-mobile-max) {
+    .alert {
+        align-items: flex-start;
+        height: auto;
+        padding: 14px;
+        overflow: visible;
+    }
+}

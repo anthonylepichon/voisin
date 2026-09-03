@@ -1,0 +1,184 @@
+/*
+ * Origine du code : Code créé par le développeur.
+ * Description générale :
+ * Présentation publique de l'application Voisin avant authentification.
+ * Rôle :
+ * Reproduire le héros, les publications récentes et leur état vide définis dans Figma.
+ * Tâches :
+ * Dimensionner les sections, centrer les appels à l'action et organiser les cartes dans une grille masonry responsive.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss ainsi que les boutons et cartes du dossier components.
+ */
+
+@use '../abstracts/variables' as variables;
+
+.public-home {
+    width: 100%;
+    background-color: variables.$color-page-background;
+}
+
+.public-home__hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 363px;
+    padding: 80px;
+    gap: 24px;
+    text-align: center;
+}
+
+.public-home__title {
+    width: 646px;
+    min-height: 96px;
+    margin: 0;
+    color: variables.$color-text;
+    font-size: variables.$font-size-40;
+    font-weight: variables.$font-weight-bold;
+}
+
+.public-home__subtitle {
+    margin: 0;
+    color: variables.$color-text-muted;
+    font-size: variables.$font-size-18;
+    font-weight: variables.$font-weight-regular;
+}
+
+.public-home__actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 443px;
+    height: 37px;
+    gap: 16px;
+}
+
+.public-home__primary-action {
+    width: 233px;
+    height: 35px;
+}
+
+.public-home__secondary-action {
+    width: 194px;
+    height: 37px;
+}
+
+.public-home__recent {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 40px 100px;
+    gap: 24px;
+}
+
+.public-home__recent-title {
+    margin: 0;
+    color: variables.$color-text;
+    font-size: variables.$font-size-20;
+    font-weight: variables.$font-weight-semibold;
+}
+
+.public-home__grid {
+    --masonry-gap: 24px;
+
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    width: min(100%, 1233px);
+    column-gap: 24px;
+}
+
+.public-home__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 300px;
+    padding: 80px;
+    gap: 16px;
+    text-align: center;
+}
+
+.public-home__empty-title {
+    margin: 0;
+    color: variables.$color-text;
+    font-size: variables.$font-size-22;
+    font-weight: variables.$font-weight-semibold;
+}
+
+.public-home__empty-description {
+    margin: 0;
+    color: variables.$color-text-muted;
+    font-size: variables.$font-size-16;
+}
+
+@media (max-width: variables.$breakpoint-tablet-max) {
+    .public-home__hero {
+        height: auto;
+        min-height: 340px;
+        padding: 64px 32px;
+    }
+
+    .public-home__title {
+        width: min(646px, 100%);
+    }
+
+    .public-home__recent {
+        padding: 32px variables.$tablet-page-padding;
+    }
+
+    .public-home__grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        width: 100%;
+    }
+}
+
+@media (max-width: variables.$breakpoint-mobile-max) {
+    .public-home__hero {
+        min-height: 360px;
+        padding: 48px 20px;
+        gap: 20px;
+    }
+
+    .public-home__title {
+        min-height: 0;
+        font-size: variables.$font-size-28;
+    }
+
+    .public-home__subtitle {
+        font-size: variables.$font-size-16;
+    }
+
+    .public-home__actions {
+        flex-direction: column;
+        width: 100%;
+        height: auto;
+        gap: 12px;
+    }
+
+    .public-home__primary-action,
+    .public-home__secondary-action {
+        width: min(100%, 280px);
+    }
+
+    .public-home__recent {
+        padding: 28px variables.$mobile-page-padding;
+    }
+
+    .public-home__grid {
+        --masonry-gap: 16px;
+
+        grid-template-columns: minmax(0, 1fr);
+        column-gap: 16px;
+    }
+
+    .public-home__empty {
+        height: auto;
+        min-height: 240px;
+        padding: 48px 20px;
+    }
+
+    .public-home__empty-title {
+        font-size: variables.$font-size-18;
+    }
+}

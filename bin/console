@@ -1,6 +1,8 @@
 #!/usr/bin/env php
 <?php
 
+/* Origine du code : Code généré par Symfony et conservé sans modification fonctionnelle, hors commentaire de traçabilité. */
+
 use App\Kernel;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 

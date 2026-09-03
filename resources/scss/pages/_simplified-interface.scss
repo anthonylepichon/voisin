@@ -1,0 +1,344 @@
+/*
+ * Origine du code : Code créé par le développeur.
+ * Description générale :
+ * Ajustements finaux issus de la maquette Figma simplifiée de l’application Voisin.
+ * Rôle :
+ * Harmoniser les écrans publics, membres et administratifs sur la grille desktop de 1440 pixels.
+ * Tâches :
+ * Corriger les proportions des formulaires, profils et contenus tout en conservant un rendu responsive.
+ * Liens avec les autres fichiers :
+ * Complète les composants et pages chargés auparavant par resources/scss/app.scss.
+ */
+
+@use '../abstracts/variables' as variables;
+
+// Cadre général de la maquette desktop.
+html {
+    background-color: variables.$color-page-background;
+}
+
+body {
+    width: 100%;
+    max-width: variables.$desktop-width;
+    min-height: 100vh;
+    margin-inline: auto;
+}
+
+#contenu-principal {
+    width: 100%;
+}
+
+.site-header {
+    max-width: variables.$desktop-width;
+}
+
+// Navigation latérale commune et variante d’administration.
+.side-nav {
+    min-height: 238px;
+    height: auto;
+}
+
+.side-nav--admin {
+    min-height: 256px;
+}
+
+.side-nav--admin .side-nav__title {
+    line-height: normal;
+}
+
+// Formulaires publics centrés.
+.auth-card,
+.auth-card--registration,
+.auth-card--registration-invalid,
+.auth-card--login,
+.auth-card--login-with-alert {
+    height: auto;
+    min-height: 0;
+}
+
+.auth-card--registration .auth-card__form {
+    gap: 16px;
+}
+
+.auth-card__heading {
+    gap: 16px;
+}
+
+.auth-card__avatar-upload {
+    align-self: center;
+}
+
+// Bandeau de profil horizontal de la maquette simplifiée.
+.profile-page__summary,
+.profile-page__summary--owner,
+.profile-page__summary--stranger,
+.profile-page__summary--friend,
+.profile-page__summary--request-sent,
+.profile-page__summary--request-received {
+    display: grid;
+    grid-template-columns: 120px minmax(0, 1fr) 190px;
+    align-items: center;
+    min-height: 180px;
+    padding: 32px;
+    gap: 24px;
+}
+
+.profile-page__cover {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+}
+
+.profile-page__identity {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+    text-align: center;
+}
+
+.profile-page__overview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    min-width: 0;
+}
+
+.profile-page__stats {
+    justify-content: center;
+    gap: 32px;
+}
+
+.profile-page__actions {
+    justify-content: center;
+}
+
+.profile-page__relationship-message {
+    height: auto;
+    min-height: 0;
+}
+
+// Formulaire de profil avec aperçu de la photo actuelle.
+.profile-editor__form {
+    align-items: stretch;
+    width: 600px;
+    min-height: 0;
+    padding: 32px;
+}
+
+.profile-editor__current-photo {
+    align-self: center;
+    width: 96px;
+    height: 96px;
+    overflow: hidden;
+    border-radius: 32px;
+}
+
+.profile-editor__current-photo-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-editor__photo {
+    align-self: center;
+    width: auto;
+}
+
+.profile-editor__photo-button {
+    cursor: pointer;
+}
+
+.profile-editor__readonly-help {
+    color: variables.$color-text-muted;
+    font-size: variables.$font-size-12;
+}
+
+.profile-editor__actions {
+    justify-content: flex-start;
+}
+
+// Formulaire de publication sur une carte centrale de 700 pixels.
+.publication-editor__form {
+    width: 700px;
+    min-height: 0;
+}
+
+.publication-editor__form .form-field,
+.publication-editor__textarea {
+    width: 100%;
+}
+
+.publication-editor__current-image {
+    width: 100%;
+    height: auto;
+}
+
+.publication-editor__current-image-preview {
+    width: 150px;
+    height: 100px;
+}
+
+.publication-editor__form .visibility-selector {
+    align-self: flex-end;
+}
+
+.publication-editor__form .form-actions {
+    align-self: flex-end;
+}
+
+// Commentaires plus légers et conformes aux surfaces de la maquette.
+.comments-page {
+    gap: 20px;
+}
+
+.comment-card {
+    padding: 16px;
+    gap: 10px;
+    border-color: variables.$color-border;
+    border-radius: variables.$radius-control;
+    box-shadow: none;
+}
+
+.comment-card__avatar {
+    flex-basis: 36px;
+    width: 36px;
+    height: 36px;
+}
+
+.comment-card__content,
+.comment-card__actions,
+.comment-card__edit-form {
+    padding-left: 0;
+}
+
+.comment-card__action {
+    min-height: auto;
+    padding: 0;
+    background: transparent;
+    border-radius: 0;
+}
+
+.comment-card__action:hover,
+.comment-card__action:focus-visible,
+.comment-card__action--delete,
+.comment-card__action--delete:hover,
+.comment-card__action--delete:focus-visible {
+    background: transparent;
+}
+
+.comment-form {
+    padding: 0;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+}
+
+// Administration : le menu porte la navigation et le contenu reste direct.
+.admin-page__header {
+    align-items: flex-start;
+}
+
+.admin-page__navigation {
+    display: none;
+}
+
+.moderation-item {
+    min-height: 90px;
+    gap: 12px;
+}
+
+.moderation-item__thumbnail {
+    flex-basis: 40px;
+    width: 40px;
+    height: 40px;
+}
+
+.moderation-item__comments {
+    width: 246px;
+}
+
+.moderation-item__delete {
+    width: 120px;
+    color: variables.$color-text;
+    background-color: variables.$color-surface-soft;
+    border-color: variables.$color-text;
+}
+
+@media (max-width: variables.$breakpoint-tablet-max) {
+    body {
+        max-width: none;
+    }
+
+    .profile-page__summary,
+    .profile-page__summary--owner,
+    .profile-page__summary--stranger,
+    .profile-page__summary--friend,
+    .profile-page__summary--request-sent,
+    .profile-page__summary--request-received {
+        grid-template-columns: 104px minmax(0, 1fr);
+        min-height: 0;
+        padding: 24px;
+    }
+
+    .profile-page__cover {
+        width: 104px;
+        height: 104px;
+    }
+
+    .profile-page__overview {
+        grid-column: 1 / -1;
+        flex-direction: row;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .publication-editor__form,
+    .profile-editor__form {
+        width: min(700px, 100%);
+    }
+}
+
+@media (max-width: variables.$breakpoint-mobile-max) {
+    .auth-page #contenu-principal {
+        padding: 32px variables.$mobile-page-padding;
+    }
+
+    .auth-card {
+        width: 100%;
+        padding: 28px 20px;
+    }
+
+    .profile-page__summary,
+    .profile-page__summary--owner,
+    .profile-page__summary--stranger,
+    .profile-page__summary--friend,
+    .profile-page__summary--request-sent,
+    .profile-page__summary--request-received {
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+        padding: 24px 16px;
+        gap: 16px;
+    }
+
+    .profile-page__overview {
+        flex-direction: column;
+    }
+
+    .publication-editor__form .visibility-selector,
+    .publication-editor__form .form-actions {
+        align-self: stretch;
+    }
+
+    .profile-editor__form {
+        padding: 24px 16px;
+    }
+
+    .moderation-item__comments,
+    .moderation-item__delete {
+        width: auto;
+    }
+}

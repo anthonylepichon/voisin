@@ -1,0 +1,64 @@
+/*
+ * Origine du code : Code créé par le développeur.
+ * Description générale :
+ * Fondations typographiques communes à toute l'interface Voisin.
+ * Rôle :
+ * Appliquer la police Inter et les niveaux de texte relevés dans la maquette Figma.
+ * Tâches :
+ * Définir le texte courant, les titres principaux et les textes secondaires réutilisables.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
+ */
+
+@use '../abstracts/variables' as variables;
+
+html,
+body {
+    color: variables.$color-text;
+    font-family: variables.$font-family-base;
+    font-size: variables.$font-size-16;
+    font-weight: variables.$font-weight-regular;
+    line-height: normal;
+}
+
+html {
+    background-color: variables.$color-page-background;
+}
+
+body {
+    width: 100%;
+    max-width: variables.$desktop-width;
+    min-height: 100vh;
+    margin: 0 auto;
+    background-color: variables.$color-page-background;
+}
+
+#contenu-principal {
+    width: 100%;
+}
+
+.page-title {
+    color: variables.$color-text;
+    font-size: variables.$font-size-24;
+    font-weight: variables.$font-weight-bold;
+}
+
+.section-title {
+    color: variables.$color-text;
+    font-size: variables.$font-size-20;
+    font-weight: variables.$font-weight-semibold;
+}
+
+.secondary-text {
+    color: variables.$color-text-muted;
+}
+
+@media (max-width: variables.$breakpoint-mobile-max) {
+    .page-title {
+        font-size: variables.$font-size-22;
+    }
+
+    .section-title {
+        font-size: variables.$font-size-18;
+    }
+}

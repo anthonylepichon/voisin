@@ -1,0 +1,69 @@
+{#
+Origine du code : Code créé par le développeur.
+ Description générale : Page de modification du profil connecté.
+ Rôle : Afficher les champs que le membre peut modifier.
+ Tâches : Présenter les erreurs de validation et l'aperçu local d'une nouvelle photo.
+ Liens avec les autres fichiers : Utilise ProfileFormType, ProfileController, assets/js/profile-photo-preview.js et les styles pages/_profile.scss.
+#}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier mon profil — Voisin{% endblock %}
+{% block body %}
+    <div class="app-shell">
+        <aside class="app-shell__sidebar">
+            {% include 'partials/_member_sidebar.html.twig' %}
+        </aside>
+        <section class="app-shell__main profile-editor" aria-labelledby="titre-modification-profil">
+            <h1 class="profile-editor__title" id="titre-modification-profil">Modifier mon profil</h1>
+
+        {% set classeEtatFormulaireProfil = 'profile-editor__form--default' %}
+        {% if profileForm.vars.submitted and not profileForm.vars.valid %}
+            {% set classeEtatFormulaireProfil = 'profile-editor__form--invalid' %}
+        {% endif %}
+        {{ form_start(profileForm, {'attr': {'class': 'profile-editor__form ' ~ classeEtatFormulaireProfil}}) }}
+            {{ form_errors(profileForm) }}
+
+            <div class="profile-editor__current-photo">
+                <img class="profile-editor__current-photo-image" src="{{ path('app_upload_fichier', {type: 'profil', nom: app.user.uploadFichier.nom}) }}" alt="Photo actuelle de {{ app.user.pseudonyme }}">
+            </div>
+
+            <div class="profile-editor__photo file-upload file-upload--avatar" data-photo-profil>
+                {{ form_label(profileForm.photoProfil, 'Changer la photo', {'label_attr': {'class': 'visually-hidden'}}) }}
+                <label class="button button--secondary profile-editor__photo-button" for="{{ profileForm.photoProfil.vars.id }}">
+                    Changer la photo
+                    {{ form_widget(profileForm.photoProfil, {'attr': {'class': 'file-upload__input', 'accept': 'image/jpeg,image/png,image/webp', 'data-photo-profil-input': ''}}) }}
+                </label>
+                <div class="file-upload__preview" data-photo-profil-preview hidden>
+                    <img class="file-upload__preview-image" src="" alt="Aperçu de la nouvelle photo de profil" data-photo-profil-image>
+                    <span class="file-upload__filename" data-photo-profil-name></span>
+                </div>
+                {{ form_errors(profileForm.photoProfil) }}
+            </div>
+
+            <div class="profile-editor__field form-field">
+                {{ form_label(profileForm.pseudonyme, null, {'label_attr': {'class': 'form-field__label'}}) }}
+                {{ form_widget(profileForm.pseudonyme, {'attr': {'class': 'form-field__control'}}) }}
+                {{ form_errors(profileForm.pseudonyme) }}
+            </div>
+
+            <div class="profile-editor__field form-field">
+                <label class="form-field__label" for="adresse-email-profil">Email</label>
+                <input class="form-field__control" id="adresse-email-profil" type="email" value="{{ app.user.adresseEmail }}" readonly aria-describedby="adresse-email-aide">
+                <small class="profile-editor__readonly-help" id="adresse-email-aide">L’adresse e-mail de connexion n’est pas modifiée depuis cette page.</small>
+            </div>
+
+            <div class="profile-editor__field form-field">
+                {{ form_label(profileForm.biographie, null, {'label_attr': {'class': 'form-field__label'}}) }}
+                {{ form_widget(profileForm.biographie, {'attr': {'class': 'form-field__control form-field__control--textarea', 'placeholder': 'Présente-toi à ton voisinage'}}) }}
+                {{ form_errors(profileForm.biographie) }}
+            </div>
+
+            <div class="profile-editor__actions">
+                <button class="button button--primary" type="submit">Enregistrer</button>
+                <a class="button button--secondary" href="{{ path('app_profile_current') }}">Annuler</a>
+            </div>
+        {{ form_end(profileForm) }}
+        </section>
+    </div>
+{% endblock %}

@@ -1,0 +1,238 @@
+/*
+ * Origine du code : Code créé par le développeur.
+ * Description générale :
+ * Champs, zones de texte, téléversements et groupes d'actions des formulaires Figma.
+ * Rôle :
+ * Fournir une structure visuelle commune aux formulaires Symfony rendus avec Twig.
+ * Tâches :
+ * Styliser les libellés, contrôles, erreurs, aperçus de fichiers et alignements de boutons.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et sert aux éditeurs de publication et de profil.
+ */
+
+@use '../abstracts/variables' as variables;
+
+.form-field {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    width: 100%;
+}
+
+.form-field__label {
+    color: variables.$color-text;
+    font-family: variables.$font-family-base;
+    font-size: variables.$font-size-14;
+    font-weight: variables.$font-weight-medium;
+    line-height: normal;
+}
+
+.form-field__control {
+    width: 100%;
+    height: 44px;
+    padding: 12px;
+    overflow: hidden;
+    color: variables.$color-text;
+    font-family: variables.$font-family-base;
+    font-size: variables.$font-size-14;
+    font-weight: variables.$font-weight-regular;
+    line-height: normal;
+    background-color: variables.$color-surface;
+    border: 1px solid variables.$color-border;
+    border-radius: variables.$radius-field;
+    outline: 0;
+}
+
+.form-field__control::placeholder {
+    color: variables.$color-text-muted;
+    opacity: 1;
+}
+
+.form-field__control--textarea {
+    height: 120px;
+    padding: 16px;
+    resize: none;
+}
+
+.form-field--invalid .form-field__control,
+.form-field__control[aria-invalid='true'] {
+    border-color: variables.$color-danger;
+}
+
+.form-field__control:focus-visible {
+    border-color: variables.$color-primary;
+    outline: 2px solid variables.$color-primary;
+    outline-offset: 2px;
+}
+
+.form-field__error {
+    color: variables.$color-danger;
+    font-family: variables.$font-family-base;
+    font-size: variables.$font-size-12;
+    font-weight: variables.$font-weight-regular;
+    line-height: normal;
+}
+
+.form-actions {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.file-upload {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.file-upload__label {
+    color: variables.$color-text;
+    font-family: variables.$font-family-base;
+    font-size: variables.$font-size-14;
+    font-weight: variables.$font-weight-medium;
+    line-height: normal;
+}
+
+.file-upload__zone {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 300px;
+    min-height: 51px;
+    padding: 16px;
+    overflow: hidden;
+    color: variables.$color-text-muted;
+    font-family: variables.$font-family-base;
+    font-size: variables.$font-size-14;
+    font-weight: variables.$font-weight-regular;
+    line-height: normal;
+    text-align: center;
+    cursor: pointer;
+    background-color: variables.$color-surface-soft;
+    border: 1px solid variables.$color-border;
+    border-radius: variables.$radius-control;
+}
+
+.file-upload__input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.file-upload__zone:has(.file-upload__input:focus-visible) {
+    border-color: variables.$color-primary;
+    outline: 2px solid variables.$color-primary;
+    outline-offset: 2px;
+}
+
+.file-upload__preview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 300px;
+    min-height: 137px;
+    padding: 16px;
+    overflow: hidden;
+    background-color: variables.$color-surface-soft;
+    border: 1px solid variables.$color-border;
+    border-radius: variables.$radius-control;
+}
+
+.file-upload__preview[hidden] {
+    display: none;
+}
+
+.file-upload__preview-image {
+    width: 120px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: variables.$radius-field;
+}
+
+.file-upload__filename {
+    color: variables.$color-text-muted;
+    font-family: variables.$font-family-base;
+    font-size: variables.$font-size-12;
+    font-weight: variables.$font-weight-regular;
+    line-height: normal;
+}
+
+.form-field > ul,
+.file-upload > ul,
+.auth-card__form > ul,
+.publication-editor__form > ul,
+.profile-editor__form > ul,
+.visibility-selector > ul {
+    color: variables.$color-danger;
+    font-family: variables.$font-family-base;
+    font-size: variables.$font-size-12;
+    font-weight: variables.$font-weight-regular;
+    line-height: normal;
+}
+
+.file-upload__remove {
+    min-height: 35px;
+}
+
+.file-upload__error {
+    color: variables.$color-danger;
+    font-size: variables.$font-size-12;
+    font-weight: variables.$font-weight-regular;
+}
+
+.file-upload--avatar {
+    width: 200px;
+}
+
+.file-upload--avatar .file-upload__zone,
+.file-upload--avatar .file-upload__preview {
+    width: 200px;
+    height: 120px;
+    min-height: 120px;
+    padding: 0;
+    border-radius: variables.$radius-surface;
+}
+
+.file-upload--avatar .file-upload__preview-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+}
+
+.file-upload--avatar.file-upload--invalid {
+    min-height: 168px;
+}
+
+@media (max-width: variables.$breakpoint-mobile-max) {
+    .form-actions {
+        flex-wrap: wrap;
+        width: 100%;
+    }
+
+    .form-actions .button {
+        flex: 1 1 140px;
+    }
+
+    .file-upload,
+    .file-upload__zone,
+    .file-upload__preview {
+        width: 100%;
+        max-width: 300px;
+    }
+
+    .file-upload--avatar,
+    .file-upload--avatar .file-upload__zone,
+    .file-upload--avatar .file-upload__preview {
+        width: min(200px, 100%);
+    }
+}

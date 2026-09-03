@@ -1,3 +1,4 @@
+# Origine du code : Structure générée par Symfony puis modifiée par le développeur.
 doctrine:
     dbal:
         url: '%env(resolve:DATABASE_URL)%'

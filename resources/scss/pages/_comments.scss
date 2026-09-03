@@ -1,0 +1,97 @@
+/*
+ * Origine du code : Code créé par le développeur.
+ * Description générale :
+ * Composition desktop des écrans de lecture, gestion, édition et modération des commentaires.
+ * Rôle :
+ * Ordonner le résumé de publication, le titre, les commentaires et le formulaire dans tous leurs états.
+ * Tâches :
+ * Conserver le rythme vertical de 20 px et les dimensions exactes des états vide et invalide.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et les composants _publication-summary.scss et _comments.scss.
+ */
+
+@use '../abstracts/variables' as variables;
+
+.comments-page {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    gap: 18px;
+    align-items: flex-start;
+    width: variables.$content-width;
+    min-width: 0;
+    overflow: hidden;
+    color: variables.$color-text;
+    font-family: variables.$font-family-base;
+    line-height: normal;
+}
+
+.comments-page__title {
+    margin: 4px 0 0;
+    font-size: variables.$font-size-18;
+    font-weight: variables.$font-weight-semibold;
+    white-space: nowrap;
+}
+
+.comments-page__list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: variables.$content-width;
+}
+
+.comments-page__empty {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+    justify-content: center;
+    width: variables.$content-width;
+    min-height: 132px;
+    padding: 32px;
+    overflow: hidden;
+    background-color: variables.$color-surface;
+    border: 1px solid rgba(44, 36, 32, 0.08);
+    border-radius: variables.$radius-surface;
+    box-shadow: 0 3px 12px rgba(44, 36, 32, 0.04);
+    text-align: center;
+    white-space: nowrap;
+}
+
+.comments-page__empty-title {
+    color: variables.$color-text;
+    font-size: variables.$font-size-16;
+    font-weight: variables.$font-weight-semibold;
+}
+
+.comments-page__empty-description {
+    color: variables.$color-text-muted;
+    font-size: variables.$font-size-14;
+    font-weight: variables.$font-weight-regular;
+}
+
+.error-page {
+    width: min(720px, calc(100% - 40px));
+    margin: 80px auto;
+}
+
+@media (max-width: variables.$breakpoint-tablet-max) {
+    .comments-page,
+    .comments-page__list,
+    .comments-page__empty {
+        width: 100%;
+    }
+}
+
+@media (max-width: variables.$breakpoint-mobile-max) {
+    .comments-page__title,
+    .comments-page__empty {
+        white-space: normal;
+    }
+
+    .comments-page__empty {
+        height: auto;
+        min-height: 124px;
+        padding: 28px 20px;
+    }
+}

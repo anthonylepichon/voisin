@@ -1,0 +1,39 @@
+{#
+Origine du code : Code créé par le développeur.
+Description générale : En-tête commun aux pages publiques et authentifiées de l'application Voisin.
+Rôle : Afficher l'identité visuelle et les accès adaptés à l'état de connexion.
+Tâches : Présenter le logo, les accès publics ou les actions du membre connecté.
+Liens avec les autres fichiers : Inclus par templates/base.html.twig et stylisé par resources/scss/layout/_header.scss.
+#}
+<header class="site-header{% if app.user %} site-header--authenticated{% else %} site-header--public{% endif %}">
+    <a class="site-header__brand" href="{{ path('app_home') }}" aria-label="Accueil Voisin">
+        <img class="site-header__logo" src="{{ asset('images/logo/00-logo.png') }}" alt="Voisin">
+    </a>
+
+    {% if app.user %}
+        <nav class="site-header__actions site-header__actions--authenticated" aria-label="Accès au compte">
+            <a class="site-header__publication" href="{{ path('app_feed') }}#creer-publication">Publier</a>
+            <a class="site-header__profile" href="{{ path('app_profile_current') }}">Mon profil</a>
+            <form class="site-header__logout" action="{{ path('app_logout') }}" method="post">
+                <input type="hidden" name="_token" value="{{ csrf_token('logout') }}">
+                <button class="site-header__logout-button" type="submit">Déconnexion</button>
+            </form>
+            <a class="site-header__notification" href="{{ path('app_friendship_requests') }}"{% if nombreDemandesAmitieEnAttente is defined and nombreDemandesAmitieEnAttente > 0 %} aria-label="{{ nombreDemandesAmitieEnAttente }} demande{% if nombreDemandesAmitieEnAttente > 1 %}s{% endif %} d’amitié en attente"{% else %} aria-label="Mes demandes d’amitié"{% endif %}>
+                <img class="site-header__notification-image" src="{{ asset('images/icons/icon_notif.png') }}" alt="">
+                {% if nombreDemandesAmitieEnAttente is defined and nombreDemandesAmitieEnAttente > 0 %}
+                    <span class="site-header__notification-badge" aria-hidden="true">{{ nombreDemandesAmitieEnAttente }}</span>
+                {% endif %}
+            </a>
+            <a class="site-header__member-link" href="{{ path('app_profile_current') }}" aria-label="Mon profil">
+                <span class="site-header__avatar">
+                    <img class="site-header__avatar-image" src="{{ path('app_upload_fichier', {type: 'profil', nom: app.user.uploadFichier.nom}) }}" alt="Photo de profil de {{ app.user.pseudonyme }}">
+                </span>
+            </a>
+        </nav>
+    {% else %}
+        <nav class="site-header__actions" aria-label="Accès au compte">
+            <a class="site-header__login" href="{{ path('app_login') }}">Connexion</a>
+            <a class="site-header__register" href="{{ path('app_register') }}">Inscription</a>
+        </nav>
+    {% endif %}
+</header>

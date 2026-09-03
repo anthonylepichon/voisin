@@ -1,5 +1,7 @@
 <?php
 
+/* Origine du code : Code généré par Symfony et conservé sans modification fonctionnelle, hors commentaire de traçabilité. */
+
 return [
     Symfony\Bundle\FrameworkBundle\FrameworkBundle::class => ['all' => true],
     Doctrine\Bundle\DoctrineBundle\DoctrineBundle::class => ['all' => true],

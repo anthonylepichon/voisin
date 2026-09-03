@@ -1,3 +1,4 @@
+# Origine du code : Structure générée par Symfony puis modifiée par le développeur.
 security:
     # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
     password_hashers:
@@ -5,7 +6,8 @@ security:
 
     # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
     providers:
-        users_in_memory: { memory: null }
+        app_user_provider:
+            id: App\Security\UtilisateurProvider
 
     firewalls:
         dev:
@@ -14,18 +16,26 @@ security:
             security: false
         main:
             lazy: true
-            provider: users_in_memory
-
-            # Activate different ways to authenticate:
-            # https://symfony.com/doc/current/security.html#the-firewall
-
-            # https://symfony.com/doc/current/security/impersonating_user.html
-            # switch_user: true
+            provider: app_user_provider
+            form_login:
+                login_path: app_login
+                check_path: app_login
+                enable_csrf: true
+                username_parameter: identifiant
+                password_parameter: mot_de_passe
+                default_target_path: app_feed
+            logout:
+                path: app_logout
+                target: app_home
+                enable_csrf: true
+                csrf_parameter: _token
+                csrf_token_id: logout
 
     # Note: Only the *first* matching rule is applied
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/administration, roles: ROLE_ADMIN }
+        - { path: ^/fil-actualite, roles: ROLE_USER }
+        - { path: ^/(profil|publications|commentaires|demandes|amis), roles: ROLE_USER }
 
 when@test:
     security:

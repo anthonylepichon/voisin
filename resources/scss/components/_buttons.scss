@@ -1,0 +1,78 @@
+/*
+ * Origine du code : Code créé par le développeur.
+ * Description générale :
+ * Boutons réutilisables conformes aux variantes visibles dans la maquette Figma.
+ * Rôle :
+ * Harmoniser les actions principales, secondaires, dangereuses et désactivées.
+ * Tâches :
+ * Définir la géométrie en pilule, la typographie et les couleurs de chaque état de bouton.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et complète les formulaires et pages de l'application.
+ */
+
+@use '../abstracts/variables' as variables;
+
+.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 20px;
+    overflow: hidden;
+    color: variables.$color-text;
+    font-family: variables.$font-family-base;
+    font-size: variables.$font-size-16;
+    font-weight: variables.$font-weight-regular;
+    line-height: normal;
+    text-align: center;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+    background-color: variables.$color-surface-soft;
+    border: 1px solid variables.$color-text;
+    border-radius: variables.$radius-pill;
+}
+
+.button--primary {
+    color: variables.$color-surface;
+    background-color: variables.$color-primary;
+    border: 0;
+}
+
+.button--secondary {
+    color: variables.$color-text;
+    background-color: variables.$color-surface-soft;
+    border-color: variables.$color-text;
+}
+
+.button--danger {
+    color: variables.$color-surface;
+    background-color: variables.$color-danger;
+    border: 0;
+}
+
+.button--danger-outline {
+    color: variables.$color-danger;
+    background-color: variables.$color-surface;
+    border-color: variables.$color-danger;
+}
+
+.button--disabled,
+.button:disabled,
+.button[aria-disabled='true'] {
+    color: variables.$color-text-muted;
+    cursor: not-allowed;
+    background-color: variables.$color-disabled-background;
+    border-color: variables.$color-border;
+}
+
+.button__icon {
+    flex: 0 0 variables.$icon-size;
+    width: variables.$icon-size;
+    height: variables.$icon-size;
+    margin-right: 8px;
+}
+
+.button:focus-visible {
+    outline: 2px solid variables.$color-primary;
+    outline-offset: 3px;
+}

@@ -1,0 +1,277 @@
+/*
+ * Origine du code : Code créé par le développeur.
+ * Description générale :
+ * Composants du tableau de bord administrateur et de la modération.
+ * Rôle :
+ * Styliser le tableau des membres et les lignes de publication administratives.
+ * Tâches :
+ * Respecter les dimensions du tableau et des variantes de modération ou de suppression.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss, complète layout/_sidebar.scss et compose pages/_admin.scss.
+ */
+
+@use '../abstracts/variables' as variables;
+
+.members-table {
+    display: flex;
+    flex-direction: column;
+    width: variables.$content-width;
+    overflow: visible;
+    background-color: variables.$color-surface;
+    border: 1px solid variables.$color-border;
+    border-radius: variables.$radius-surface;
+    font-family: variables.$font-family-base;
+    line-height: normal;
+}
+
+.members-table__row {
+    display: grid;
+    flex: 0 0 44px;
+    grid-template-columns: repeat(4, 1fr);
+    width: 100%;
+    height: 44px;
+}
+
+.members-table__row--head {
+    background-color: variables.$color-surface-soft;
+    border-radius: variables.$radius-field;
+}
+
+.members-table__cell {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    height: 44px;
+    padding: 0 12px;
+    overflow: hidden;
+    color: variables.$color-text;
+    border-right: 1px solid variables.$color-border;
+    border-bottom: 1px solid variables.$color-border;
+    font-size: variables.$font-size-13;
+    font-weight: variables.$font-weight-regular;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.members-table__row--head .members-table__cell {
+    font-weight: variables.$font-weight-semibold;
+}
+
+.members-table__cell:last-child {
+    border-right: 0;
+}
+
+.members-table__row:last-child .members-table__cell {
+    border-bottom: 0;
+}
+
+.members-table__role--admin {
+    color: variables.$color-primary;
+}
+
+.moderation-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: variables.$content-width;
+}
+
+.moderation-item {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    width: variables.$content-width;
+    min-height: 104px;
+    padding: 16px;
+    color: variables.$color-text;
+    background-color: variables.$color-surface;
+    border: 1px solid variables.$color-border;
+    border-radius: variables.$radius-field;
+    font-family: variables.$font-family-base;
+    line-height: normal;
+}
+
+.moderation-item--deleted {
+    background-color: variables.$color-disabled-background;
+}
+
+.moderation-item__thumbnail {
+    flex: 0 0 64px;
+    width: 64px;
+    height: 64px;
+    overflow: hidden;
+    border-radius: variables.$radius-avatar;
+}
+
+.moderation-item__thumbnail-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.moderation-item__details {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    gap: 4px;
+    align-items: flex-start;
+    min-width: 0;
+}
+
+.moderation-item__author,
+.moderation-item__excerpt,
+.moderation-item__date {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.moderation-item__author {
+    font-size: variables.$font-size-14;
+    font-weight: variables.$font-weight-semibold;
+}
+
+.moderation-item__excerpt {
+    display: -webkit-box;
+    font-size: variables.$font-size-13;
+    font-weight: variables.$font-weight-regular;
+    white-space: normal;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+
+.moderation-item__date {
+    color: variables.$color-text-muted;
+    font-size: variables.$font-size-12;
+    font-weight: variables.$font-weight-regular;
+}
+
+.moderation-item--deleted .moderation-item__excerpt {
+    color: variables.$color-text-muted;
+}
+
+.moderation-item__actions {
+    display: flex;
+    flex: 0 0 auto;
+    gap: 12px;
+    align-items: center;
+}
+
+.moderation-item__actions form {
+    margin: 0;
+}
+
+.moderation-item__comments,
+.moderation-item__delete {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 37px;
+    padding: 8px 20px;
+    overflow: hidden;
+    border-radius: variables.$radius-pill;
+    font-size: variables.$font-size-16;
+    font-weight: variables.$font-weight-regular;
+    white-space: nowrap;
+}
+
+.moderation-item__comments {
+    color: variables.$color-text;
+    background-color: variables.$color-surface-soft;
+    border: 1px solid variables.$color-text;
+}
+
+.moderation-item__delete {
+    color: variables.$color-surface;
+    background-color: variables.$color-danger;
+    border: 1px solid variables.$color-danger;
+    cursor: pointer;
+}
+
+.moderation-item__status {
+    flex: 0 0 68px;
+    width: 68px;
+    overflow: hidden;
+    color: variables.$color-danger;
+    font-size: variables.$font-size-13;
+    font-weight: variables.$font-weight-medium;
+    text-align: right;
+    white-space: nowrap;
+}
+
+.moderation-item__comments:hover,
+.moderation-item__comments:focus-visible {
+    color: variables.$color-surface;
+    background-color: variables.$color-text;
+}
+
+.moderation-item__delete:hover,
+.moderation-item__delete:focus-visible {
+    filter: brightness(0.9);
+}
+
+.moderation-item__comments:focus-visible,
+.moderation-item__delete:focus-visible {
+    outline: 3px solid rgba(201, 95, 48, 0.25);
+    outline-offset: 2px;
+}
+
+@media (max-width: variables.$breakpoint-tablet-max) {
+    .members-table,
+    .moderation-list,
+    .moderation-item {
+        width: 100%;
+    }
+
+    .moderation-item__actions {
+        flex: 0 0 auto;
+    }
+}
+
+@media (max-width: variables.$breakpoint-narrow-tablet-max) {
+    .moderation-item {
+        flex-wrap: wrap;
+        height: auto;
+        padding: 16px;
+    }
+
+    .moderation-item__actions {
+        flex: 1 0 100%;
+        justify-content: flex-end;
+        width: 100%;
+    }
+
+    .moderation-item__comments,
+    .moderation-item__delete {
+        flex: 1 1 auto;
+    }
+}
+
+@media (max-width: variables.$breakpoint-mobile-max) {
+    .members-table {
+        overflow-x: auto;
+        border-radius: variables.$radius-field;
+    }
+
+    .members-table__row {
+        min-width: 680px;
+    }
+
+    .moderation-item__thumbnail {
+        flex-basis: 56px;
+        width: 56px;
+        height: 56px;
+    }
+
+    .moderation-item__actions {
+        flex: 1 0 100%;
+        width: 100%;
+    }
+
+    .moderation-item__comments,
+    .moderation-item__delete {
+        flex: 1 1 auto;
+        padding-right: 12px;
+        padding-left: 12px;
+    }
+}

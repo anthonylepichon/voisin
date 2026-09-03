@@ -1,0 +1,148 @@
+/*
+ * Origine du code : Code créé par le développeur.
+ * Description générale :
+ * Navigation latérale des espaces membre et administrateur.
+ * Rôle :
+ * Fournir la géométrie commune des menus verticaux visible dans la maquette Figma.
+ * Tâches :
+ * Dimensionner le panneau, les liens, séparateurs, compteurs et bouton de déconnexion.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et se place dans resources/scss/layout/_app-shell.scss.
+ */
+
+@use '../abstracts/variables' as variables;
+
+.side-nav {
+    display: flex;
+    flex-direction: column;
+    width: variables.$sidebar-width;
+    height: 238px;
+    padding: 24px;
+    gap: 16px;
+    overflow: hidden;
+    background-color: variables.$color-surface;
+    border-radius: variables.$radius-surface;
+}
+
+.side-nav--with-badge {
+    height: 241px;
+}
+
+.side-nav--admin {
+    height: 256px;
+}
+
+.side-nav--admin-extended {
+    height: auto;
+    min-height: 306px;
+}
+
+.side-nav__title {
+    margin: 0;
+    color: variables.$color-primary;
+    font-size: variables.$font-size-16;
+    font-weight: variables.$font-weight-bold;
+}
+
+.side-nav__links {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.side-nav__link {
+    display: flex;
+    align-items: center;
+    width: fit-content;
+    min-height: 18px;
+    color: variables.$color-text;
+    font-size: variables.$font-size-15;
+    font-weight: variables.$font-weight-regular;
+    text-decoration: none;
+    gap: 8px;
+}
+
+.side-nav__link--active {
+    color: variables.$color-primary;
+}
+
+.side-nav__badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 25px;
+    min-height: 21px;
+    padding: 4px 8px;
+    color: variables.$color-surface;
+    font-size: variables.$font-size-11;
+    font-weight: variables.$font-weight-bold;
+    line-height: 1;
+    background-color: variables.$color-primary;
+    border-radius: variables.$radius-control;
+}
+
+.side-nav__separator {
+    flex: 0 0 1px;
+    width: 212px;
+    height: 1px;
+    margin: 0;
+    background-color: variables.$color-border;
+    border: 0;
+}
+
+.side-nav__logout {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 166px;
+    height: 37px;
+    padding: 8px 20px;
+    color: variables.$color-text;
+    font-size: variables.$font-size-16;
+    font-weight: variables.$font-weight-regular;
+    text-decoration: none;
+    white-space: nowrap;
+    background-color: variables.$color-surface-soft;
+    border: 1px solid variables.$color-text;
+    border-radius: variables.$radius-pill;
+}
+
+@media (max-width: variables.$breakpoint-tablet-max) {
+    .side-nav,
+    .side-nav--with-badge,
+    .side-nav--admin,
+    .side-nav--admin-extended {
+        width: 100%;
+        height: auto;
+    }
+
+    .side-nav__separator {
+        width: 100%;
+    }
+
+    .side-nav__logout {
+        width: 100%;
+    }
+}
+
+@media (max-width: variables.$breakpoint-mobile-max) {
+    .side-nav,
+    .side-nav--with-badge,
+    .side-nav--admin,
+    .side-nav--admin-extended {
+        padding: 16px;
+        gap: 12px;
+    }
+
+    .side-nav__links {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        width: 100%;
+        gap: 12px 16px;
+    }
+
+    .side-nav__link {
+        width: 100%;
+        font-size: variables.$font-size-14;
+    }
+}

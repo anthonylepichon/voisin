@@ -1,0 +1,47 @@
+{#
+Origine du code : Code créé par le développeur.
+ Description générale : Page d'accueil publique de l'application Voisin.
+ Rôle : Présenter le réseau et les cinq publications publiques les plus récentes.
+ Tâches : Afficher les appels à l'action, les cartes publiques ou leur état vide.
+ Liens avec les autres fichiers : Étend base.html.twig et utilise HomeController ainsi que publication/_card.html.twig.
+#}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Voisin — Le réseau de quartier{% endblock %}
+
+{% block body_class %}public-home{% endblock %}
+
+{% block body %}
+    <section class="public-home__hero">
+        <h1 class="public-home__title">Chez Voisin.<br>Partagez ce qui compte vraiment</h1>
+        <p class="public-home__subtitle">Retrouvez vos amis, créez du lien</p>
+
+        <div class="public-home__actions">
+            <a class="button button--primary public-home__primary-action" href="{{ path('app_register') }}">Je rejoins la communauté</a>
+            <a class="button button--secondary public-home__secondary-action" href="#publications-recentes">Voir les publications</a>
+        </div>
+    </section>
+
+    <section class="public-home__recent" aria-labelledby="publications-recentes">
+        <h2 class="public-home__recent-title" id="publications-recentes">Ils ont partagé récemment leurs expériences</h2>
+
+        {% if publications is empty %}
+            <div class="public-home__empty">
+                <p class="public-home__empty-title">Les publications apparaîtront bientôt ici.</p>
+                <p class="public-home__empty-description">Connectez-vous pour rejoindre votre voisinage.</p>
+            </div>
+        {% else %}
+            <div class="public-home__grid publication-masonry" data-publication-masonry>
+                {% for publication in publications %}
+                    {% include 'publication/_card.html.twig' with {
+                        publication: publication,
+                        statistiques: statistiquesPublications[publication.id],
+                        varianteCarte: '',
+                        afficherActionsProprietaire: false
+                    } only %}
+                {% endfor %}
+            </div>
+        {% endif %}
+    </section>
+{% endblock %}

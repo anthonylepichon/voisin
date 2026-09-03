@@ -1,0 +1,267 @@
+/*
+ * Origine du code : Code créé par le développeur.
+ * Description générale :
+ * Mise en page de l'en-tête principal d'après le composant Figma validé.
+ * Rôle :
+ * Maintenir le header visible et présenter clairement les actions publiques ou authentifiées.
+ * Tâches :
+ * Dimensionner le logo, les boutons, la notification et l'avatar sur ordinateur, tablette et mobile.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et stylise templates/partials/_header.html.twig.
+ */
+
+@use '../abstracts/variables' as variables;
+
+.site-header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: variables.$header-height;
+    padding: variables.$header-padding-vertical variables.$header-padding-horizontal;
+    background-color: variables.$header-background-color;
+    border-bottom: 1px solid variables.$color-border;
+}
+
+.site-header__brand {
+    position: relative;
+    flex: 0 0 variables.$header-logo-width;
+    width: variables.$header-logo-width;
+    height: variables.$header-logo-height;
+    overflow: hidden;
+}
+
+.site-header__logo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+}
+
+.site-header__actions {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: flex-end;
+    width: auto;
+    height: auto;
+    gap: 16px;
+}
+
+.site-header__login,
+.site-header__register,
+.site-header__publication,
+.site-header__profile,
+.site-header__logout-button {
+    position: static;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 150px;
+    height: 37px;
+    padding: 8px 20px;
+    color: variables.$color-text;
+    font-family: variables.$font-family-base;
+    font-size: variables.$font-size-16;
+    font-weight: variables.$font-weight-regular;
+    line-height: 1;
+    text-decoration: none;
+    white-space: nowrap;
+    background-color: variables.$color-surface-soft;
+    border: 1px solid variables.$color-text;
+    border-radius: variables.$radius-pill;
+    cursor: pointer;
+}
+
+.site-header__register,
+.site-header__logout-button {
+    color: variables.$color-surface;
+    background-color: variables.$color-primary;
+    border-color: variables.$color-primary;
+}
+
+.site-header__login:hover,
+.site-header__publication:hover,
+.site-header__profile:hover {
+    color: variables.$color-surface;
+    background-color: variables.$color-text;
+}
+
+.site-header__register:hover,
+.site-header__logout-button:hover {
+    background-color: variables.$color-text;
+    border-color: variables.$color-text;
+}
+
+.site-header__logout {
+    margin: 0;
+}
+
+.site-header__notification {
+    position: relative;
+    display: inline-flex;
+    flex: 0 0 variables.$icon-size;
+    align-items: center;
+    justify-content: center;
+    width: variables.$icon-size;
+    height: variables.$icon-size;
+}
+
+.site-header__notification-image {
+    width: 100%;
+    height: 100%;
+}
+
+.site-header__notification-badge {
+    position: absolute;
+    top: -7px;
+    right: -9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 18px;
+    height: 18px;
+    padding-inline: 5px;
+    color: variables.$color-surface;
+    font-size: variables.$font-size-11;
+    font-weight: variables.$font-weight-semibold;
+    line-height: 1;
+    background-color: variables.$color-danger;
+    border-radius: variables.$radius-pill;
+}
+
+.site-header__member-link {
+    display: block;
+    flex: 0 0 variables.$header-avatar-size;
+    width: variables.$header-avatar-size;
+    height: variables.$header-avatar-size;
+}
+
+.site-header__avatar {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border-radius: variables.$header-avatar-radius;
+}
+
+.site-header__avatar-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+}
+
+@media (max-width: variables.$breakpoint-tablet-max) {
+    .site-header {
+        height: 72px;
+        padding: 10px variables.$tablet-page-padding;
+    }
+
+    .site-header__brand {
+        flex-basis: 132px;
+        width: 132px;
+        height: 47px;
+    }
+
+    .site-header__actions {
+        gap: 10px;
+    }
+
+    .site-header__login,
+    .site-header__register,
+    .site-header__publication,
+    .site-header__profile,
+    .site-header__logout-button {
+        min-width: 128px;
+        padding-inline: 16px;
+    }
+
+    .site-header__member-link {
+        flex-basis: 52px;
+        width: 52px;
+        height: 52px;
+    }
+}
+
+@media (max-width: variables.$breakpoint-narrow-tablet-max) {
+    .site-header__publication,
+    .site-header__profile,
+    .site-header__logout-button {
+        min-width: 0;
+        padding-inline: 13px;
+        font-size: variables.$font-size-14;
+    }
+
+    .site-header__notification {
+        display: none;
+    }
+}
+
+@media (max-width: variables.$breakpoint-mobile-max) {
+    .site-header {
+        flex-wrap: wrap;
+        height: auto;
+        min-height: 112px;
+        padding: 8px variables.$mobile-page-padding;
+        gap: 8px;
+    }
+
+    .site-header__brand {
+        flex-basis: 108px;
+        width: 108px;
+        height: 39px;
+    }
+
+    .site-header__actions--authenticated {
+        flex: 1 0 100%;
+        order: 2;
+        width: 100%;
+        gap: 8px;
+    }
+
+    .site-header__actions--authenticated .site-header__publication,
+    .site-header__actions--authenticated .site-header__profile,
+    .site-header__actions--authenticated .site-header__logout,
+    .site-header__actions--authenticated .site-header__logout-button {
+        flex: 1 1 0;
+        width: 100%;
+    }
+
+    .site-header__actions--authenticated .site-header__member-link {
+        display: none;
+    }
+
+    .site-header--public .site-header__actions {
+        gap: 8px;
+    }
+
+    .site-header__login,
+    .site-header__register {
+        min-width: 0;
+        height: 34px;
+        padding: 7px 12px;
+        font-size: variables.$font-size-13;
+    }
+}
+
+@media (max-width: 419px) {
+    .site-header--public {
+        min-height: 104px;
+    }
+
+    .site-header--public .site-header__actions {
+        flex: 1 0 100%;
+        width: 100%;
+    }
+
+    .site-header__login,
+    .site-header__register {
+        flex: 1 1 0;
+    }
+}

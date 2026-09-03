@@ -1,0 +1,88 @@
+# Origine du code : Code créé par le développeur.
+# Description générale : Workflow d’intégration continue de l’application Voisin.
+# Rôle : Contrôler automatiquement le projet avant son intégration.
+# Tâches : Installer les dépendances, valider PHP, Symfony, Twig, YAML, JavaScript et Sass.
+# Liens avec les autres fichiers : composer.lock, package-lock.json, config/, src/, templates/, assets/ et resources/scss/.
+
+name: Intégration continue
+
+on:
+  pull_request:
+    branches:
+      - develop
+      - main
+
+  push:
+    branches:
+      - develop
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verification:
+    name: Vérification du projet Symfony
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    env:
+      APP_ENV: test
+      APP_DEBUG: "0"
+      APP_SECRET: ci-only-non-production-secret
+
+    steps:
+      - name: Récupérer le dépôt
+        uses: actions/checkout@v4
+
+      - name: Préparer PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          extensions: ctype, iconv, intl
+          coverage: none
+          tools: composer
+
+      - name: Vérifier composer.json et composer.lock
+        run: composer validate --strict --no-check-publish
+
+      - name: Installer les dépendances PHP
+        run: composer install --prefer-dist --no-interaction --no-progress
+
+      - name: Vérifier la syntaxe PHP
+        run: |
+          find src config migrations public -type f -name "*.php" -print0 \
+            | xargs -0 -n1 php -l
+          php -l bin/console
+
+      - name: Vérifier le conteneur Symfony
+        run: php bin/console lint:container --env=test
+
+      - name: Vérifier les templates Twig
+        run: php bin/console lint:twig templates --env=test
+
+      - name: Vérifier les fichiers YAML
+        run: php bin/console lint:yaml config --parse-tags
+
+      - name: Préparer Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Installer Sass
+        run: npm ci
+
+      - name: Vérifier la syntaxe JavaScript
+        run: |
+          find assets/js -type f -name "*.js" -print0 \
+            | xargs -0 -n1 node --check
+
+      - name: Compiler le SCSS
+        run: npm run sass:build
+
+      - name: Vérifier que le CSS compilé est à jour
+        run: git diff --exit-code -- assets/styles/app.css

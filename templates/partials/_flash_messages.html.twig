@@ -1,0 +1,14 @@
+{#
+Origine du code : Code créé par le développeur.
+Description générale : Affiche les messages temporaires transmis par Symfony.
+Rôle : Informer l'utilisateur du résultat d'une action réalisée dans l'application.
+Tâches : Associer chaque type de message flash à la variante visuelle SCSS correspondante.
+Liens avec les autres fichiers : Inclus par templates/base.html.twig et stylisé par resources/scss/components/_alerts.scss.
+#}
+{% for type, messages in app.flashes %}
+    {% for message in messages %}
+        <div class="alert alert--{{ type }}" role="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endfor %}

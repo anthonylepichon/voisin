@@ -1,3 +1,4 @@
+# Origine du code : Code généré par Symfony et conservé sans modification fonctionnelle, hors commentaire de traçabilité.
 monolog:
     channels:
         - deprecation # Deprecations are logged in the dedicated "deprecation" channel when it exists

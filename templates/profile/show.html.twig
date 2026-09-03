@@ -1,0 +1,137 @@
+{#
+Origine du code : Code créé par le développeur.
+ Description générale : Page de consultation d'un profil membre.
+ Rôle : Présenter les informations publiques du membre connecté ou visité.
+ Tâches : Afficher la photo, les compteurs, l'état d'amitié, les amis et les publications autorisées.
+ Liens avec les autres fichiers : Étend base.html.twig, utilise ProfileController, FriendshipController et les styles du profil.
+#}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Profil de {{ utilisateur.pseudonyme }} — Voisin{% endblock %}
+{% block body %}
+    {% set classeResumeProfil = 'profile-page__summary--stranger' %}
+    {% if estProprietaire %}
+        {% set classeResumeProfil = 'profile-page__summary--owner' %}
+    {% elseif statutAmitie == 'ami' %}
+        {% set classeResumeProfil = 'profile-page__summary--friend' %}
+    {% elseif statutAmitie == 'envoyee' %}
+        {% set classeResumeProfil = 'profile-page__summary--request-sent' %}
+    {% elseif statutAmitie == 'recue' %}
+        {% set classeResumeProfil = 'profile-page__summary--request-received' %}
+    {% endif %}
+
+    <div class="app-shell">
+        <aside class="app-shell__sidebar">
+            {% include 'partials/_member_sidebar.html.twig' %}
+        </aside>
+        <section class="app-shell__main profile-page" aria-labelledby="titre-profil">
+        <article class="profile-page__summary {{ classeResumeProfil }}">
+            <div class="profile-page__cover">
+                <img class="profile-page__cover-image" src="{{ path('app_upload_fichier', {type: 'profil', nom: utilisateur.uploadFichier.nom}) }}" alt="Photo de profil de {{ utilisateur.pseudonyme }}">
+            </div>
+            <div class="profile-page__identity">
+                <h1 class="profile-page__name" id="titre-profil">{{ utilisateur.pseudonyme }}</h1>
+                {% if utilisateur.biographie %}
+                    <p class="profile-page__biography">{{ utilisateur.biographie }}</p>
+                {% else %}
+                    <p class="profile-page__biography">Ce voisin n’a pas encore renseigné de biographie.</p>
+                {% endif %}
+                <p class="profile-page__member-since">Membre depuis le {{ utilisateur.dateInscription|date('d/m/Y') }}</p>
+            </div>
+            <div class="profile-page__overview">
+                <div class="profile-page__stats" aria-label="Statistiques du profil">
+                    <div class="profile-page__stat">
+                        <p class="profile-page__stat-value">{{ nombrePublications }}</p>
+                        <p class="profile-page__stat-label">Publications</p>
+                    </div>
+                    <div class="profile-page__stat">
+                        <p class="profile-page__stat-value">{{ amis|length }}</p>
+                        <p class="profile-page__stat-label">Amis</p>
+                    </div>
+                </div>
+                {% if estProprietaire %}
+                    <div class="profile-page__actions">
+                        <a class="button button--primary" href="{{ path('app_profile_edit') }}">Modifier mon profil</a>
+                    </div>
+                {% elseif statutAmitie == 'ami' %}
+                    <p class="alert alert--success profile-page__relationship-message">Vous êtes amis.</p>
+                {% elseif statutAmitie == 'envoyee' %}
+                    <p class="alert alert--pending profile-page__relationship-message">Demande d’amitié envoyée.</p>
+                {% elseif statutAmitie == 'recue' and demandeAmitie %}
+                    <div class="profile-page__actions">
+                        <form action="{{ path('app_friendship_refuse', {id: demandeAmitie.id}) }}" method="post">
+                            <input type="hidden" name="_token" value="{{ csrf_token('refuser-demande-amitie-' ~ demandeAmitie.id) }}">
+                            <button class="button button--secondary" type="submit">Refuser</button>
+                        </form>
+                        <form action="{{ path('app_friendship_accept', {id: demandeAmitie.id}) }}" method="post">
+                            <input type="hidden" name="_token" value="{{ csrf_token('accepter-demande-amitie-' ~ demandeAmitie.id) }}">
+                            <button class="button button--primary" type="submit">Accepter</button>
+                        </form>
+                    </div>
+                {% else %}
+                    <div class="profile-page__actions">
+                        <form action="{{ path('app_friendship_send', {id: utilisateur.id}) }}" method="post">
+                            <input type="hidden" name="_token" value="{{ csrf_token('envoyer-demande-amitie-' ~ utilisateur.id) }}">
+                            <button class="button button--primary" type="submit">Ajouter comme ami</button>
+                        </form>
+                    </div>
+                {% endif %}
+            </div>
+        </article>
+
+        <nav class="profile-page__tabs" aria-label="Contenu du profil">
+            <a class="profile-page__tab profile-page__tab--active" href="#titre-publications" aria-current="page">
+                Publications
+                <span class="profile-page__tab-indicator" aria-hidden="true"></span>
+            </a>
+            <a class="profile-page__tab" href="#titre-amis-profil">Amis</a>
+        </nav>
+
+        <section class="profile-page__publications publication-masonry" aria-labelledby="titre-publications" data-publication-masonry>
+            <h2 class="visually-hidden" id="titre-publications">Publications de {{ utilisateur.pseudonyme }}</h2>
+            {% if publications is empty %}
+                <div class="empty-state profile-page__empty-state">
+                    <p class="empty-state__title">Aucune publication visible.</p>
+                    <p class="empty-state__description">Les publications accessibles apparaîtront ici.</p>
+                </div>
+            {% else %}
+                {% for publication in publications %}
+                    {% include 'publication/_card.html.twig' with {
+                        publication: publication,
+                        statistiques: statistiquesPublications[publication.id],
+                        varianteCarte: 'publication-card--profile-third'
+                    } only %}
+                {% endfor %}
+            {% endif %}
+        </section>
+
+        {% include 'partials/_pagination.html.twig' with {
+            routePagination: 'app_profile_show',
+            parametresPagination: {pseudonyme: utilisateur.pseudonyme},
+            pageActuelle: pageActuelle,
+            nombrePages: nombrePages
+        } only %}
+
+        <section class="profile-page__friends" aria-labelledby="titre-amis-profil">
+            <h2 class="profile-page__section-title" id="titre-amis-profil">Amis de {{ utilisateur.pseudonyme }}</h2>
+            {% if amis is empty %}
+                <div class="empty-state profile-page__empty-state">
+                    <p class="empty-state__title">Aucun ami à afficher.</p>
+                </div>
+            {% else %}
+                <div class="friends__grid friends__grid--three-columns">
+                    {% for ami in amis %}
+                        <a class="friend-card" href="{{ path('app_profile_show', {pseudonyme: ami.pseudonyme}) }}">
+                            <span class="friend-card__portrait">
+                                <img class="friend-card__portrait-image" src="{{ path('app_upload_fichier', {type: 'profil', nom: ami.uploadFichier.nom}) }}" alt="Photo de profil de {{ ami.pseudonyme }}">
+                            </span>
+                            <span class="friend-card__name">{{ ami.pseudonyme }}</span>
+                        </a>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </section>
+        </section>
+    </div>
+{% endblock %}

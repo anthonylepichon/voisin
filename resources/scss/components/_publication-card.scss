@@ -1,0 +1,537 @@
+/*
+ * Origine du code : Code créé par le développeur.
+ * Description générale :
+ * Carte de publication et variantes dimensionnelles issues des écrans Figma.
+ * Rôle :
+ * Afficher l'utilisateur, la visibilité, le texte, le média et les actions sociales d'une publication.
+ * Tâches :
+ * Reproduire les cartes de l'accueil, du fil et du profil ainsi que l'état aimé et les actions du propriétaire.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et s'appuie sur les composants avatar et badge.
+ */
+
+@use "../abstracts/variables" as variables;
+
+.publication-masonry {
+    display: grid;
+    grid-auto-rows: 1px;
+    align-items: start;
+    row-gap: 1px;
+}
+
+.publication-masonry > .publication-card {
+    min-width: 0;
+}
+
+.publication-masonry > .publication-card:not(:has(.publication-card__media)) {
+    height: calc((455px - var(--masonry-gap)) / 2);
+}
+
+.publication-card {
+    position: relative;
+    flex: 0 0 395px;
+    width: 395px;
+    height: 455px;
+    overflow: hidden;
+    color: variables.$color-text;
+    font-family: variables.$font-family-base;
+    background-color: variables.$color-surface;
+    border: 1px solid variables.$color-border;
+    border-radius: variables.$radius-card;
+}
+
+.publication-card__header {
+    position: absolute;
+    top: 15px;
+    left: -1px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 389px;
+    height: 60px;
+    padding: 0 16px;
+}
+
+.publication-card__author {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.publication-card__author-details {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 134px;
+    height: 40px;
+    white-space: nowrap;
+}
+
+.publication-card__author-name,
+.publication-card__date,
+.publication-card__text,
+.publication-card__action-count {
+    margin: 0;
+    line-height: normal;
+}
+
+.publication-card__author-name {
+    color: variables.$color-text;
+    font-size: variables.$font-size-16;
+    font-weight: variables.$font-weight-bold;
+}
+
+.publication-card__date {
+    color: variables.$color-text-muted;
+    font-size: variables.$font-size-14;
+    font-weight: variables.$font-weight-regular;
+}
+
+.publication-card__text {
+    position: absolute;
+    top: 109px;
+    left: 20px;
+    width: 352px;
+    max-height: 58px;
+    overflow: hidden;
+    color: variables.$color-text;
+    font-size: variables.$font-size-16;
+    font-weight: variables.$font-weight-regular;
+    white-space: pre-line;
+}
+
+.publication-card__media {
+    position: absolute;
+    top: 188px;
+    left: 17px;
+    width: 355px;
+    height: 210px;
+    overflow: hidden;
+    border-radius: variables.$radius-field;
+}
+
+.publication-card__media-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+}
+
+.publication-card__report,
+.publication-card__like,
+.publication-card__comments {
+    position: absolute;
+    top: 416px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    height: variables.$icon-size;
+    padding: 0;
+    color: variables.$color-black;
+    font-family: variables.$font-family-base;
+    font-size: variables.$font-size-16;
+    font-weight: variables.$font-weight-regular;
+    line-height: normal;
+    text-decoration: none;
+    background: transparent;
+    border: 0;
+}
+
+.publication-card__report {
+    left: 348px;
+    width: variables.$icon-size;
+}
+
+.publication-card__like {
+    left: 21px;
+    cursor: pointer;
+}
+
+.publication-card__comments {
+    left: 101px;
+    cursor: pointer;
+}
+
+.publication-card__action-icon {
+    display: block;
+    flex: 0 0 variables.$icon-size;
+    width: variables.$icon-size;
+    height: variables.$icon-size;
+}
+
+.publication-card__action-icon img,
+.publication-card__action-icon svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.publication-card__like--active .publication-card__action-icon,
+.publication-card__like[aria-pressed="true"] .publication-card__action-icon {
+    color: variables.$color-primary;
+}
+
+.publication-card__like--active .publication-card__action-icon img,
+.publication-card__like[aria-pressed="true"]
+    .publication-card__action-icon
+    img {
+    filter: brightness(0) saturate(100%) invert(45%) sepia(62%) saturate(1376%)
+        hue-rotate(337deg) brightness(88%) contrast(88%);
+}
+
+.publication-card__like--active .publication-card__action-count,
+.publication-card__like[aria-pressed="true"] .publication-card__action-count {
+    color: variables.$color-primary;
+    font-weight: variables.$font-weight-semibold;
+}
+
+.publication-card__like--active .publication-card__action-icon svg,
+.publication-card__like--active .publication-card__action-icon path,
+.publication-card__like[aria-pressed="true"] .publication-card__action-icon svg,
+.publication-card__like[aria-pressed="true"]
+    .publication-card__action-icon
+    path {
+    fill: currentColor;
+    stroke: currentColor;
+}
+
+.publication-card__action-count {
+    color: variables.$color-black;
+}
+
+.publication-card__owner-actions {
+    position: absolute;
+    top: 420px;
+    right: 10px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    height: 16px;
+    font-size: variables.$font-size-13;
+    font-weight: variables.$font-weight-medium;
+    line-height: normal;
+    white-space: nowrap;
+}
+
+.publication-card__owner-action {
+    padding: 0;
+    color: variables.$color-primary;
+    font: inherit;
+    text-decoration: none;
+    background: transparent;
+    border: 0;
+}
+
+.publication-card__owner-action--delete {
+    color: variables.$color-danger;
+}
+
+.publication-card:not(:has(.publication-card__media)) {
+    height: 190px;
+}
+
+.publication-card:not(:has(.publication-card__media)) .publication-card__like,
+.publication-card:not(:has(.publication-card__media)) .publication-card__comments {
+    top: auto;
+    bottom: 16px;
+}
+
+.publication-card:not(:has(.publication-card__media)) .publication-card__owner-actions {
+    top: auto;
+    bottom: 20px;
+}
+
+// Carte de 844 pixels du fil d'actualité.
+.publication-card--feed {
+    flex-basis: auto;
+    width: 844px;
+}
+
+.publication-card--feed .publication-card__header {
+    left: 19px;
+    width: calc(100% - 40px);
+}
+
+.publication-card--feed .publication-card__text {
+    left: 19px;
+    width: calc(100% - 40px);
+}
+
+.publication-card--feed .publication-card__media {
+    left: 19px;
+    width: 374px;
+}
+
+.publication-card--feed .publication-card__report {
+    left: 19px;
+}
+
+.publication-card--feed .publication-card__like {
+    left: 19px;
+}
+
+.publication-card--feed .publication-card__comments {
+    left: 77px;
+}
+
+.publication-card:not(:has(.publication-card__text)) .publication-card__media {
+    top: 109px;
+    height: 289px;
+}
+
+// Carte de la première rangée du profil : trois colonnes de 358,667 pixels.
+.publication-card--profile-third {
+    flex-basis: 358.667px;
+    width: 100%;
+    min-width: 0;
+}
+
+.publication-card--profile-third .publication-card__header {
+    left: 9px;
+    width: calc(100% - 18px);
+}
+
+.publication-card--profile-third .publication-card__text {
+    left: 9px;
+    width: calc(100% - 18px);
+}
+
+.publication-card--profile-third .publication-card__media {
+    left: 9px;
+    width: calc(100% - 18px);
+}
+
+.publication-card--profile-third .publication-card__report {
+    left: 9px;
+}
+
+.publication-card--profile-third .publication-card__like {
+    left: 9px;
+}
+
+.publication-card--profile-third .publication-card__comments {
+    left: 67px;
+}
+
+// Carte de propriétaire de 546 pixels utilisée dans la seconde rangée du profil.
+.publication-card--profile-half {
+    flex-basis: 546px;
+    width: 546px;
+}
+
+.publication-card--profile-half .publication-card__header {
+    left: 9px;
+    width: 389px;
+}
+
+.publication-card--profile-half .publication-card__text {
+    left: 9px;
+    width: 352px;
+}
+
+.publication-card--profile-half .publication-card__media {
+    left: 9px;
+    width: 355px;
+}
+
+.publication-card--profile-half .publication-card__report {
+    left: 9px;
+}
+
+.publication-card--profile-half .publication-card__like {
+    left: 43px;
+}
+
+.publication-card--profile-half .publication-card__comments {
+    left: 91px;
+}
+
+// Carte étirée à 542 pixels sur les profils des autres membres.
+.publication-card--profile-compact {
+    flex-basis: 542px;
+    width: 542px;
+}
+
+@media (max-width: variables.$breakpoint-tablet-max) {
+    .publication-card,
+    .publication-card--feed,
+    .publication-card--profile-third,
+    .publication-card--profile-half,
+    .publication-card--profile-compact {
+        flex-basis: auto;
+        width: 100%;
+        min-width: 0;
+    }
+
+    .publication-card .publication-card__header,
+    .publication-card--feed .publication-card__header,
+    .publication-card--profile-third .publication-card__header,
+    .publication-card--profile-half .publication-card__header {
+        left: 19px;
+        width: calc(100% - 38px);
+    }
+
+    .publication-card .publication-card__text,
+    .publication-card--feed .publication-card__text,
+    .publication-card--profile-third .publication-card__text,
+    .publication-card--profile-half .publication-card__text {
+        left: 19px;
+        width: calc(100% - 38px);
+    }
+
+    .publication-card .publication-card__media,
+    .publication-card--feed .publication-card__media,
+    .publication-card--profile-third .publication-card__media,
+    .publication-card--profile-half .publication-card__media {
+        left: 19px;
+        width: calc(100% - 38px);
+    }
+
+    .publication-card--feed .publication-card__media {
+        width: min(374px, calc(100% - 38px));
+    }
+}
+
+@media (max-width: variables.$breakpoint-mobile-max) {
+    .publication-card,
+    .publication-card--feed,
+    .publication-card--profile-third,
+    .publication-card--profile-half,
+    .publication-card--profile-compact {
+        display: flex;
+        flex-direction: column;
+        height: auto;
+        min-height: 230px;
+        padding: 16px 16px 56px;
+        gap: 16px;
+    }
+
+    .publication-card .publication-card__header,
+    .publication-card--feed .publication-card__header,
+    .publication-card--profile-third .publication-card__header,
+    .publication-card--profile-half .publication-card__header {
+        position: static;
+        width: 100%;
+        height: auto;
+        padding: 0;
+    }
+
+    .publication-card__author {
+        min-width: 0;
+        gap: 10px;
+    }
+
+    .publication-card__author .avatar {
+        flex-basis: 48px;
+        width: 48px;
+        height: 48px;
+    }
+
+    .publication-card__author-details {
+        width: auto;
+        min-width: 0;
+    }
+
+    .publication-card__author-name,
+    .publication-card__date {
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .publication-card .publication-card__text,
+    .publication-card--feed .publication-card__text,
+    .publication-card--profile-third .publication-card__text,
+    .publication-card--profile-half .publication-card__text {
+        position: static;
+        width: 100%;
+        max-height: none;
+    }
+
+    .publication-card .publication-card__media,
+    .publication-card--feed .publication-card__media,
+    .publication-card--profile-third .publication-card__media,
+    .publication-card--profile-half .publication-card__media {
+        position: static;
+        width: 100%;
+        height: 210px;
+    }
+
+    .publication-card:not(:has(.publication-card__text))
+        .publication-card__media {
+        top: auto;
+        height: 210px;
+    }
+
+    .publication-masonry > .publication-card:not(:has(.publication-card__media)) {
+        height: auto;
+        min-height: 230px;
+    }
+
+    .publication-card:not(:has(.publication-card__media)) {
+        height: auto;
+        min-height: 190px;
+    }
+
+    .publication-card__report,
+    .publication-card--feed .publication-card__report,
+    .publication-card--profile-third .publication-card__report,
+    .publication-card--profile-half .publication-card__report {
+        top: auto;
+        bottom: 16px;
+        left: 16px;
+    }
+
+    .publication-card__like,
+    .publication-card--feed .publication-card__like,
+    .publication-card--profile-third .publication-card__like,
+    .publication-card--profile-half .publication-card__like {
+        top: auto;
+        bottom: 16px;
+        left: 16px;
+    }
+
+    .publication-card__comments,
+    .publication-card--feed .publication-card__comments,
+    .publication-card--profile-third .publication-card__comments,
+    .publication-card--profile-half .publication-card__comments {
+        top: auto;
+        bottom: 16px;
+        left: 74px;
+    }
+
+    .publication-card__owner-actions {
+        top: auto;
+        right: 16px;
+        bottom: 20px;
+    }
+
+    .badge {
+        flex: 0 0 auto;
+        font-size: variables.$font-size-13;
+    }
+
+    .badge__icon {
+        flex-basis: 18px;
+        width: 18px;
+        height: 18px;
+    }
+}
+
+@media (max-width: 479px) {
+    .publication-card .publication-card__media,
+    .publication-card--feed .publication-card__media,
+    .publication-card--profile-third .publication-card__media,
+    .publication-card--profile-half .publication-card__media {
+        height: 180px;
+    }
+
+    .publication-card:not(:has(.publication-card__text))
+        .publication-card__media {
+        height: 180px;
+    }
+
+    .publication-card__owner-actions {
+        gap: 8px;
+        font-size: variables.$font-size-12;
+    }
+}

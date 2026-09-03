@@ -1,0 +1,76 @@
+/*
+ * Origine du code : Code créé par le développeur.
+ * Description générale :
+ * Réinitialisation commune aux écrans desktop de l'application.
+ * Rôle :
+ * Neutraliser les styles natifs qui modifieraient les dimensions ou la typographie définies dans Figma.
+ * Tâches :
+ * Uniformiser le modèle de boîte, les marges, les listes, les liens, les contrôles et les images.
+ * Liens avec les autres fichiers :
+ * Chargé par resources/scss/app.scss avant les styles de mise en page.
+ */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+}
+
+img {
+    display: block;
+    max-width: 100%;
+}
+
+button,
+input,
+select,
+textarea {
+    margin: 0;
+    color: inherit;
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+textarea {
+    resize: none;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+ul,
+ol {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+p {
+    margin: 0;
+}
+
+.visually-hidden {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}

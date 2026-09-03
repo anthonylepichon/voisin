@@ -1,0 +1,15 @@
+{#
+Origine du code : Code créé par le développeur.
+Description générale : Carte réutilisable d'un ami.
+Rôle : Afficher le profil d'un ami et son état de présence calculé.
+Tâches : Présenter la photo, le pseudonyme et un indicateur accessible en ligne ou hors ligne.
+Liens avec les autres fichiers : Incluse par friendship/friends.html.twig et stylisée par components/_friend-card.scss.
+#}
+
+<a class="friend-card" href="{{ path('app_profile_show', {pseudonyme: ami.pseudonyme}) }}">
+    <span class="friend-card__portrait">
+        <img class="friend-card__portrait-image" src="{{ path('app_upload_fichier', {type: 'profil', nom: ami.uploadFichier.nom}) }}" alt="Photo de profil de {{ ami.pseudonyme }}">
+    </span>
+    <span class="friend-card__name">{{ ami.pseudonyme }}</span>
+    <span class="friend-card__status{% if estEnLigne %} friend-card__status--online{% else %} friend-card__status--offline{% endif %}" aria-label="{% if estEnLigne %}En ligne{% else %}Hors ligne{% endif %}"></span>
+</a>

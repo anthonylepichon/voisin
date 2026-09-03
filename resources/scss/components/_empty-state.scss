@@ -1,0 +1,57 @@
+/*
+ * Origine du code : Code créé par le développeur.
+ * Description générale :
+ * État vide générique reproduisant les panneaux sans contenu de la maquette Figma.
+ * Rôle :
+ * Informer l'utilisateur lorsqu'une liste ou un profil ne contient aucun élément visible.
+ * Tâches :
+ * Centrer le titre et la description dans une surface blanche espacée de 131 pixels de haut.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et est employé dans les pages de profil et les listes.
+ */
+
+@use '../abstracts/variables' as variables;
+
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    min-height: 131px;
+    padding: 40px;
+    overflow: hidden;
+    text-align: center;
+    background-color: variables.$color-surface;
+    border-radius: variables.$radius-surface;
+}
+
+.empty-state__title {
+    margin: 0;
+    color: variables.$color-text;
+    font-family: variables.$font-family-base;
+    font-size: variables.$font-size-18;
+    font-weight: variables.$font-weight-semibold;
+    line-height: normal;
+}
+
+.empty-state__description {
+    margin: 0;
+    color: variables.$color-text-muted;
+    font-family: variables.$font-family-base;
+    font-size: variables.$font-size-14;
+    font-weight: variables.$font-weight-regular;
+    line-height: normal;
+}
+
+@media (max-width: variables.$breakpoint-mobile-max) {
+    .empty-state {
+        min-height: 120px;
+        padding: 28px 20px;
+    }
+
+    .empty-state__title {
+        font-size: variables.$font-size-16;
+    }
+}

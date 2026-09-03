@@ -1,0 +1,98 @@
+/*
+ * Origine du code : Code créé par le développeur.
+ * Description générale :
+ * Filtres du fil d'actualité.
+ * Rôle :
+ * Reproduire la rangée de libellé et de pastilles de filtrage de la maquette.
+ * Tâches :
+ * Gérer les dimensions, espacements et états actif et inactif des filtres.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et s'affiche dans resources/scss/pages/_feed.scss.
+ */
+
+@use '../abstracts/variables' as variables;
+
+.feed-filters {
+    display: flex;
+    align-items: center;
+    width: variables.$feed-content-width;
+    height: 36px;
+    gap: 12px;
+}
+
+.feed-filters__label {
+    color: variables.$color-text;
+    font-size: variables.$font-size-14;
+    font-weight: variables.$font-weight-medium;
+}
+
+.feed-filters__list {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.feed-filters__item {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 36px;
+    padding: 10px 16px;
+    color: variables.$color-text;
+    font-size: variables.$font-size-13;
+    font-weight: variables.$font-weight-medium;
+    white-space: nowrap;
+    background-color: variables.$color-surface-soft;
+    border: 0;
+    border-radius: variables.$radius-pill-medium;
+}
+
+.feed-filters__item:nth-child(1) {
+    width: 75px;
+}
+
+.feed-filters__item:nth-child(2) {
+    width: 94px;
+}
+
+.feed-filters__item:nth-child(3) {
+    width: 141px;
+}
+
+.feed-filters__item--active {
+    color: variables.$color-surface;
+    background-color: variables.$color-primary;
+}
+
+@media (max-width: variables.$breakpoint-tablet-max) {
+    .feed-filters {
+        width: 100%;
+    }
+}
+
+@media (max-width: variables.$breakpoint-mobile-max) {
+    .feed-filters {
+        flex-wrap: wrap;
+        height: auto;
+        gap: 10px;
+    }
+
+    .feed-filters__label {
+        flex: 1 0 100%;
+    }
+
+    .feed-filters__list {
+        flex-wrap: wrap;
+        width: 100%;
+        gap: 8px;
+    }
+
+    .feed-filters__item,
+    .feed-filters__item:nth-child(1),
+    .feed-filters__item:nth-child(2),
+    .feed-filters__item:nth-child(3) {
+        flex: 1 1 auto;
+        width: auto;
+        min-width: max-content;
+    }
+}

@@ -1,0 +1,197 @@
+/*
+ * Origine du code : Code créé par le développeur.
+ * Description générale :
+ * Pages de création et de modification d'une publication des sections 05 et 06 de Figma.
+ * Rôle :
+ * Organiser le titre, le formulaire, les médias, la visibilité et les messages d'autorisation.
+ * Tâches :
+ * Reproduire les états initial, avec aperçu, invalide, image conservée, image retirée et accès refusé.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et les composants de formulaire, bouton, badge et alerte.
+ */
+
+@use '../abstracts/variables' as variables;
+
+.publication-editor-page {
+    min-height: 100vh;
+    background-color: variables.$color-page-background;
+}
+
+.publication-editor-page #contenu-principal {
+    width: 100%;
+    padding: 0;
+}
+
+.publication-editor {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    overflow: visible;
+}
+
+.publication-editor__title {
+    margin: 0;
+    color: variables.$color-text;
+    font-family: variables.$font-family-base;
+    font-size: variables.$font-size-24;
+    font-weight: variables.$font-weight-bold;
+    line-height: normal;
+}
+
+.publication-editor__form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+    width: 700px;
+    padding: 32px;
+    overflow: visible;
+    background-color: variables.$color-surface;
+    border-radius: variables.$radius-surface;
+}
+
+.publication-editor__form--initial {
+    min-height: 389px;
+}
+
+.publication-editor__form--with-preview {
+    min-height: 475px;
+}
+
+.publication-editor__form--invalid {
+    min-height: 424px;
+}
+
+.publication-editor__form--image-kept {
+    min-height: 413px;
+}
+
+.publication-editor__form--image-removed {
+    min-height: 407px;
+}
+
+.publication-editor__textarea {
+    width: 600px;
+    height: 120px;
+}
+
+.publication-editor__content-error {
+    margin: 0;
+    color: variables.$color-danger;
+    font-family: variables.$font-family-base;
+    font-size: variables.$font-size-12;
+    font-weight: variables.$font-weight-regular;
+    line-height: normal;
+}
+
+.publication-editor__upload {
+    width: 300px;
+}
+
+.publication-editor__current-image {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 312px;
+    height: 100px;
+    overflow: hidden;
+}
+
+.publication-editor__current-image-preview {
+    flex: 0 0 150px;
+    width: 150px;
+    height: 100px;
+    object-fit: cover;
+    background-color: variables.$color-preview;
+    border-radius: variables.$radius-field;
+}
+
+.publication-editor__removed-image {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    width: 212px;
+    min-height: 94px;
+    padding: 16px;
+    overflow: hidden;
+    background-color: variables.$color-surface-soft;
+    border-radius: variables.$radius-control;
+}
+
+.publication-editor__removed-image-label {
+    margin: 0;
+    color: variables.$color-text-muted;
+    font-family: variables.$font-family-base;
+    font-size: variables.$font-size-14;
+    font-weight: variables.$font-weight-regular;
+    line-height: normal;
+}
+
+.publication-editor__alert {
+    width: 700px;
+}
+
+.publication-editor__return-action {
+    align-self: center;
+}
+
+.publication-editor--unauthorized {
+    height: 157px;
+}
+
+@media (max-width: variables.$breakpoint-tablet-max) {
+    .publication-editor__form,
+    .publication-editor__alert {
+        width: min(700px, 100%);
+    }
+
+    .publication-editor__textarea {
+        width: 100%;
+    }
+}
+
+@media (max-width: variables.$breakpoint-mobile-max) {
+    .publication-editor {
+        gap: 16px;
+    }
+
+    .publication-editor__title {
+        font-size: variables.$font-size-22;
+        text-align: center;
+    }
+
+    .publication-editor__form,
+    .publication-editor__form--initial,
+    .publication-editor__form--with-preview,
+    .publication-editor__form--invalid,
+    .publication-editor__form--image-kept,
+    .publication-editor__form--image-removed {
+        width: 100%;
+        height: auto;
+        min-height: 0;
+        padding: 24px 16px;
+        gap: 16px;
+    }
+
+    .publication-editor__upload {
+        width: 100%;
+    }
+
+    .publication-editor__current-image {
+        align-items: flex-start;
+        width: 100%;
+        height: auto;
+    }
+
+    .publication-editor__current-image-preview {
+        flex-basis: min(150px, 48%);
+        width: min(150px, 48%);
+    }
+
+    .publication-editor__alert {
+        width: 100%;
+    }
+}

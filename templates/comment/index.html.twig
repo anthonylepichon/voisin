@@ -1,0 +1,140 @@
+{#
+Origine du code : Code créé par le développeur.
+Description générale : Page de consultation et de gestion des commentaires d'une publication.
+Rôle : Afficher la publication, ses commentaires et les formulaires autorisés.
+Tâches : Gérer les états vide, ajout invalide, édition et actions conditionnelles de suppression.
+Liens avec les autres fichiers : Étend base.html.twig, utilise CommentController, CommentFormType et les styles de commentaires.
+#}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Commentaires — Voisin
+{% endblock %}
+
+{% block body %}
+	<div class="app-shell">
+		<aside class="app-shell__sidebar">
+			{% if is_granted('ROLE_ADMIN') and app.request.query.get('administration') %}
+				{% include 'partials/_admin_sidebar.html.twig' %}
+			{% else %}
+				{% include 'partials/_member_sidebar.html.twig' %}
+			{% endif %}
+		</aside>
+
+		<section class="app-shell__main comments-page" aria-labelledby="titre-commentaires">
+			<article class="publication-summary">
+				<header class="publication-summary__header">
+					<span class="publication-summary__avatar">
+						<img class="publication-summary__avatar-image" src="{{ path('app_upload_fichier', {type: 'profil', nom: publication.utilisateur.uploadFichier.nom}) }}" alt="Photo de profil de {{ publication.utilisateur.pseudonyme }}">
+					</span>
+					<span class="publication-summary__identity">
+						<a class="publication-summary__author" href="{{ path('app_profile_show', {pseudonyme: publication.utilisateur.pseudonyme}) }}">{{ publication.utilisateur.pseudonyme }}</a>
+						<time class="publication-summary__date" datetime="{{ publication.dateCreation|date('c') }}">{{ publication.dateCreation|date('d/m/Y à H:i') }}</time>
+					</span>
+					<span class="publication-summary__visibility">
+						{% if publication.visibilite == 'publique' %}
+							<img class="publication-summary__visibility-icon" src="{{ asset('images/icons/icon_GlobeSimple.png') }}" alt="">
+							Publique
+						{% else %}
+							<img class="publication-summary__visibility-icon" src="{{ asset('images/icons/icon_users.png') }}" alt="">
+							Amis
+						{% endif %}
+					</span>
+				</header>
+
+				{% if publication.aUnContenuTexte() %}
+					<p class="publication-summary__text">{{ publication.contenu }}</p>
+				{% elseif publication.imageAffichee %}
+					<p class="publication-summary__text">Publication avec une image.</p>
+				{% endif %}
+
+				<div class="publication-summary__stats">
+					<span>{{ publication.utilisateursAimant|length }}
+						mention
+						{% if publication.utilisateursAimant|length > 1 %}s
+						{% endif %}
+						J’aime</span>
+					<span>{{ commentaires|length }}
+						commentaire
+						{% if commentaires|length > 1 %}s
+						{% endif %}
+					</span>
+				</div>
+			</article>
+
+			<h1 class="comments-page__title" id="titre-commentaires">Commentaires</h1>
+
+			{% if commentaires is empty %}
+				<div class="comments-page__empty">
+					<p class="comments-page__empty-title">Aucun commentaire pour le moment.</p>
+					<p class="comments-page__empty-description">Sois le premier voisin à participer à la discussion.</p>
+				</div>
+			{% else %}
+				<div class="comments-page__list">
+					{% for commentaire in commentaires %}
+						{% set estUtilisateurCommentaire = commentaire.utilisateur.id == app.user.id %}
+						{% set estUtilisateurPublication = publication.utilisateur.id == app.user.id %}
+						{% set peutSupprimer = estUtilisateurCommentaire or estUtilisateurPublication or is_granted('ROLE_ADMIN') %}
+						{% set estEnEdition = editedComment and editedComment.id == commentaire.id %}
+
+						<article class="comment-card{% if estEnEdition %} comment-card--editing{% elseif estUtilisateurCommentaire or peutSupprimer %} comment-card--manageable{% endif %}{% if estUtilisateurPublication and not estUtilisateurCommentaire %} comment-card--publication-owner{% endif %}">
+							<header class="comment-card__header">
+								<span class="comment-card__avatar">
+									<img class="comment-card__avatar-image" src="{{ path('app_upload_fichier', {type: 'profil', nom: commentaire.utilisateur.uploadFichier.nom}) }}" alt="Photo de profil de {{ commentaire.utilisateur.pseudonyme }}">
+								</span>
+								<span class="comment-card__identity">
+									<a class="comment-card__author" href="{{ path('app_profile_show', {pseudonyme: commentaire.utilisateur.pseudonyme}) }}">{{ commentaire.utilisateur.pseudonyme }}</a>
+									<time class="comment-card__date" datetime="{{ commentaire.dateCreation|date('c') }}">{{ commentaire.dateCreation|date('d/m/Y à H:i') }}</time>
+								</span>
+							</header>
+
+							{% if estEnEdition and editForm %}
+								{{ form_start(editForm, {attr: {class: 'comment-card__edit-form'}}) }}
+								{{ form_widget(editForm.contenu, {attr: {class: 'comment-card__edit-input'}}) }}
+								{{ form_errors(editForm.contenu) }}
+								<div class="comment-card__edit-actions">
+									<button class="comment-card__save" type="submit">Enregistrer</button>
+									<a class="comment-card__cancel" href="{{ path('app_comment_index', {id: publication.id}) }}">Annuler</a>
+								</div>
+								{{ form_end(editForm) }}
+							{% else %}
+								<p class="comment-card__content">{{ commentaire.contenu }}</p>
+
+								{% if estUtilisateurCommentaire or peutSupprimer %}
+									<div class="comment-card__actions">
+										{% if estUtilisateurCommentaire %}
+											<a class="comment-card__action" href="{{ path('app_comment_edit', {id: commentaire.id}) }}">Modifier</a>
+										{% endif %}
+										{% if peutSupprimer %}
+											<form action="{{ path('app_comment_delete', {id: commentaire.id}) }}" method="post" onsubmit="return confirm('Supprimer ce commentaire ?');">
+												<input type="hidden" name="_token" value="{{ csrf_token('supprimer-commentaire-' ~ commentaire.id) }}">
+												<button class="comment-card__action comment-card__action--delete" type="submit">Supprimer</button>
+											</form>
+										{% endif %}
+									</div>
+								{% endif %}
+							{% endif %}
+						</article>
+					{% endfor %}
+				</div>
+			{% endif %}
+
+			{% if not editedComment %}
+				{% set classeFormulaireCommentaire = 'comment-form' %}
+				{% if commentForm.vars.submitted and not commentForm.vars.valid %}
+					{% set classeFormulaireCommentaire = 'comment-form comment-form--invalid' %}
+				{% endif %}
+				{{ form_start(commentForm, {attr: {class: classeFormulaireCommentaire}}) }}
+				<div class="comment-form__row">
+					<span class="comment-form__avatar">
+						<img class="comment-form__avatar-image" src="{{ path('app_upload_fichier', {type: 'profil', nom: app.user.uploadFichier.nom}) }}" alt="Photo de profil de {{ app.user.pseudonyme }}">
+					</span>
+					{{ form_widget(commentForm.contenu, {attr: {class: 'comment-form__input'}}) }}
+					<button class="comment-form__submit" type="submit">Publier le commentaire</button>
+				</div>
+				<div class="comment-form__error">{{ form_errors(commentForm.contenu) }}</div>
+				{{ form_end(commentForm) }}
+			{% endif %}
+		</section>
+	</div>
+{% endblock %}

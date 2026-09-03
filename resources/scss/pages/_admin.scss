@@ -1,0 +1,230 @@
+/*
+ * Origine du code : Code créé par le développeur.
+ * Description générale :
+ * Compositions desktop du tableau de bord administrateur et de l'accès refusé.
+ * Rôle :
+ * Ordonner les titres, compteurs, alertes, tableaux, listes de modération et états vides.
+ * Tâches :
+ * Reproduire le rythme de 20 px, les surfaces de 1108 px et l'écran d'accès refusé sans espacement ajouté.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et les composants administratifs de resources/scss/components/_admin.scss.
+ */
+
+@use '../abstracts/variables' as variables;
+
+.admin-page {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    gap: 20px;
+    align-items: flex-start;
+    width: variables.$content-width;
+    min-width: 0;
+    overflow: hidden;
+    color: variables.$color-text;
+    font-family: variables.$font-family-base;
+    line-height: normal;
+}
+
+.admin-page__header {
+    display: flex;
+    gap: 24px;
+    align-items: flex-end;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.admin-page__navigation {
+    display: flex;
+    gap: 8px;
+    padding: 4px;
+    background-color: variables.$color-surface;
+    border: 1px solid variables.$color-border;
+    border-radius: variables.$radius-pill;
+}
+
+.admin-page__navigation-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 120px;
+    min-height: 37px;
+    padding: 8px 20px;
+    color: variables.$color-text;
+    border-radius: variables.$radius-pill;
+    font-size: variables.$font-size-14;
+    font-weight: variables.$font-weight-medium;
+}
+
+.admin-page__navigation-link--active,
+.admin-page__navigation-link:hover,
+.admin-page__navigation-link:focus-visible {
+    color: variables.$color-surface;
+    background-color: variables.$color-primary;
+}
+
+.admin-page__navigation-link:focus-visible {
+    outline: 3px solid rgba(201, 95, 48, 0.25);
+    outline-offset: 2px;
+}
+
+.admin-page__title {
+    font-size: variables.$font-size-24;
+    font-weight: variables.$font-weight-bold;
+    white-space: nowrap;
+}
+
+.admin-page__count {
+    color: variables.$color-text-muted;
+    font-size: variables.$font-size-14;
+    font-weight: variables.$font-weight-regular;
+    white-space: nowrap;
+}
+
+.admin-page__alert {
+    display: flex;
+    align-items: center;
+    width: variables.$content-width;
+    height: 51px;
+    padding: 16px;
+    overflow: hidden;
+    color: variables.$color-success;
+    background-color: variables.$color-success-background;
+    border: 1px solid variables.$color-success;
+    border-radius: variables.$radius-field;
+    font-size: variables.$font-size-14;
+    font-weight: variables.$font-weight-medium;
+    white-space: nowrap;
+}
+
+.admin-page__empty {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+    justify-content: center;
+    width: variables.$content-width;
+    height: 131px;
+    padding: 40px;
+    overflow: hidden;
+    background-color: variables.$color-surface;
+    border-radius: variables.$radius-surface;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.admin-page__empty-title {
+    font-size: variables.$font-size-18;
+    font-weight: variables.$font-weight-semibold;
+}
+
+.admin-page__empty-description {
+    color: variables.$color-text-muted;
+    font-size: variables.$font-size-14;
+    font-weight: variables.$font-weight-regular;
+}
+
+.access-denied {
+    display: flex;
+    flex: 0 0 350px;
+    flex-direction: column;
+    align-items: center;
+    width: variables.$desktop-width;
+    height: 350px;
+    padding: 60px;
+    overflow: hidden;
+    color: variables.$color-text;
+    background-color: variables.$color-page-background;
+    font-family: variables.$font-family-base;
+    line-height: normal;
+}
+
+.access-denied__alert {
+    display: flex;
+    flex: 0 0 51px;
+    align-items: center;
+    width: 522px;
+    height: 51px;
+    padding: 16px;
+    overflow: hidden;
+    color: variables.$color-danger;
+    background-color: variables.$color-danger-background;
+    border: 1px solid variables.$color-danger;
+    border-radius: variables.$radius-field;
+    font-size: variables.$font-size-14;
+    font-weight: variables.$font-weight-medium;
+    white-space: nowrap;
+}
+
+.access-denied__return {
+    display: flex;
+    flex: 0 0 37px;
+    align-items: center;
+    justify-content: center;
+    width: 216px;
+    height: 37px;
+    padding: 8px 20px;
+    overflow: hidden;
+    color: variables.$color-text;
+    background-color: variables.$color-surface-soft;
+    border: 1px solid variables.$color-text;
+    border-radius: variables.$radius-pill;
+    font-size: variables.$font-size-16;
+    font-weight: variables.$font-weight-regular;
+    white-space: nowrap;
+}
+
+@media (max-width: variables.$breakpoint-tablet-max) {
+    .admin-page,
+    .admin-page__alert,
+    .admin-page__empty,
+    .access-denied {
+        width: 100%;
+    }
+}
+
+@media (max-width: variables.$breakpoint-mobile-max) {
+    .admin-page__header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .admin-page__navigation {
+        width: 100%;
+    }
+
+    .admin-page__navigation-link {
+        flex: 1 1 50%;
+        min-width: 0;
+    }
+
+    .admin-page__title,
+    .admin-page__count,
+    .admin-page__alert,
+    .admin-page__empty,
+    .access-denied__alert {
+        white-space: normal;
+    }
+
+    .admin-page__alert,
+    .admin-page__empty,
+    .access-denied,
+    .access-denied__alert {
+        height: auto;
+    }
+
+    .admin-page__empty {
+        min-height: 120px;
+        padding: 28px 20px;
+    }
+
+    .access-denied {
+        min-height: 300px;
+        padding: 48px variables.$mobile-page-padding;
+    }
+
+    .access-denied__alert {
+        flex-basis: auto;
+        width: 100%;
+    }
+}

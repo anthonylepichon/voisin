@@ -1,0 +1,13 @@
+<!--
+Description générale : Icône vectorielle de l'application Voisin affichée par les navigateurs.
+Rôle : Identifier visuellement le site dans les onglets, favoris et raccourcis.
+Tâches : Reprendre le symbole du logo dans un format carré adapté à toutes les résolutions.
+Liens avec les autres fichiers : Déclaré dans templates/base.html.twig et inspiré de assets/images/logo/00-logo.png.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title">
+    <title id="title">Voisin</title>
+    <rect width="512" height="512" rx="112" fill="#f0e8e3"/>
+    <circle cx="180" cy="203" r="100" fill="#c95f30"/>
+    <circle cx="326" cy="203" r="100" fill="#dda187"/>
+    <circle cx="253" cy="320" r="100" fill="#d8825f"/>
+</svg>

@@ -1,0 +1,25 @@
+{
+  "name": "voisin",
+  "version": "1.0.0",
+  "description": "Projet en cours de développement.",
+  "main": "index.js",
+  "scripts": {
+    "sass:build": "sass resources/scss/app.scss assets/styles/app.css --style=expanded --no-source-map",
+    "sass:watch": "sass --watch resources/scss/app.scss:assets/styles/app.css --style=expanded --no-source-map"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anthonylepichon/voisin.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/anthonylepichon/voisin/issues"
+  },
+  "homepage": "https://github.com/anthonylepichon/voisin#readme",
+  "devDependencies": {
+    "sass": "^1.103.1"
+  }
+}

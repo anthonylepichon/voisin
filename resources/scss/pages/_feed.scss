@@ -1,0 +1,88 @@
+/*
+ * Origine du code : Code créé par le développeur.
+ * Description générale :
+ * Compositions des différents états du fil d'actualité.
+ * Rôle :
+ * Assembler le compositeur, les filtres, les publications et l'état vide sur la colonne centrale.
+ * Tâches :
+ * Appliquer les espacements, les colonnes de la grille des publications et les états vides.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et les composants du fil d'actualité.
+ */
+
+@use '../abstracts/variables' as variables;
+
+.feed-page {
+    display: flex;
+    flex-direction: column;
+    width: variables.$feed-content-width;
+    min-width: 0;
+    gap: 20px;
+    overflow: hidden;
+}
+
+.feed-page__posts {
+    --masonry-gap: 20px;
+
+    grid-template-columns: repeat(2, 395px);
+    width: variables.$feed-content-width;
+    column-gap: 20px;
+}
+
+.feed-page__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: variables.$feed-content-width;
+    height: 131px;
+    padding: 40px;
+    gap: 12px;
+    text-align: center;
+    background-color: variables.$color-surface;
+    border-radius: variables.$radius-surface;
+}
+
+.feed-page__empty-title {
+    margin: 0;
+    color: variables.$color-text;
+    font-size: variables.$font-size-18;
+    font-weight: variables.$font-weight-semibold;
+}
+
+.feed-page__empty-description {
+    margin: 0;
+    color: variables.$color-text-muted;
+    font-size: variables.$font-size-14;
+}
+
+@media (max-width: variables.$breakpoint-tablet-max) {
+    .feed-page,
+    .feed-page__posts,
+    .feed-page__empty {
+        width: 100%;
+    }
+
+    .feed-page__posts {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: variables.$breakpoint-mobile-max) {
+    .feed-page {
+        gap: 16px;
+    }
+
+    .feed-page__posts {
+        --masonry-gap: 16px;
+
+        grid-template-columns: minmax(0, 1fr);
+        column-gap: 16px;
+    }
+
+    .feed-page__empty {
+        height: auto;
+        min-height: 131px;
+        padding: 28px 20px;
+    }
+}

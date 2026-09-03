@@ -1,5 +1,7 @@
 <?php
 
+/* Origine du code : Code généré par Symfony et conservé sans modification fonctionnelle, hors commentaire de traçabilité. */
+
 use App\Kernel;
 
 require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
