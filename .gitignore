@@ -16,6 +16,7 @@
 
 # Variables d'environnement et secrets privés
 /.env.local
+/.env.dev
 /.env.local.php
 /.env.*.local
 /config/secrets/prod/prod.decrypt.private.php
