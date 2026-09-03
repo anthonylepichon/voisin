@@ -67,3 +67,24 @@
     fill: currentColor;
     stroke: currentColor;
 }
+
+@media (max-width: variables.$breakpoint-tablet-max) {
+    .feed-page,
+    .feed-page__posts,
+    .feed-page__empty {
+        width: 100%;
+    }
+}
+
+@media (max-width: variables.$breakpoint-mobile-max) {
+    .feed-page,
+    .feed-page__posts {
+        gap: 16px;
+    }
+
+    .feed-page__empty {
+        height: auto;
+        min-height: 131px;
+        padding: 28px 20px;
+    }
+}

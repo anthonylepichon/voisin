@@ -103,3 +103,71 @@
     background-color: variables.$color-primary;
     border: 0;
 }
+
+@media (max-width: variables.$breakpoint-tablet-max) {
+    .friend-request-card {
+        width: 100%;
+    }
+
+    .friend-request-card__actions {
+        right: 24px;
+        left: auto;
+    }
+}
+
+@media (max-width: variables.$breakpoint-narrow-tablet-max) {
+    .friend-request-card {
+        display: grid;
+        grid-template-columns: 64px minmax(0, 1fr);
+        height: auto;
+        min-height: 154px;
+        padding: 20px;
+        gap: 16px;
+    }
+
+    .friend-request-card__avatar,
+    .friend-request-card__identity,
+    .friend-request-card__actions {
+        position: static;
+    }
+
+    .friend-request-card__avatar {
+        width: 64px;
+        height: 64px;
+    }
+
+    .friend-request-card__identity {
+        align-self: center;
+        min-width: 0;
+    }
+
+    .friend-request-card__actions {
+        grid-column: 1 / -1;
+        width: 100%;
+    }
+
+    .friend-request-card__decline,
+    .friend-request-card__accept {
+        flex: 1 1 0;
+        width: auto;
+    }
+}
+
+@media (max-width: variables.$breakpoint-mobile-max) {
+    .friend-request-card {
+        display: grid;
+        grid-template-columns: 64px minmax(0, 1fr);
+        height: auto;
+        min-height: 154px;
+        padding: 20px;
+        gap: 16px;
+    }
+
+    .friend-request-card__name,
+    .friend-request-card__date {
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+}

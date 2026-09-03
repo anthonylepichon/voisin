@@ -217,3 +217,89 @@
     text-align: right;
     white-space: nowrap;
 }
+
+@media (max-width: variables.$breakpoint-tablet-max) {
+    .members-table,
+    .moderation-list,
+    .moderation-item {
+        width: 100%;
+    }
+
+    .moderation-item__thumbnail,
+    .moderation-item--deleted .moderation-item__thumbnail {
+        flex: 0 0 120px;
+        width: 120px;
+    }
+
+    .moderation-item__details,
+    .moderation-item--deleted .moderation-item__details {
+        flex: 1 1 auto;
+        width: auto;
+    }
+
+    .moderation-item__actions {
+        flex: 0 0 auto;
+        width: auto;
+    }
+
+    .moderation-item__comments,
+    .moderation-item__delete,
+    .moderation-item--single-action .moderation-item__delete {
+        flex: 0 0 auto;
+        width: auto;
+    }
+}
+
+@media (max-width: variables.$breakpoint-narrow-tablet-max) {
+    .moderation-item {
+        flex-wrap: wrap;
+        height: auto;
+        padding: 16px;
+    }
+
+    .moderation-item__thumbnail,
+    .moderation-item--deleted .moderation-item__thumbnail {
+        flex-basis: 72px;
+        width: 72px;
+        height: 56px;
+    }
+
+    .moderation-item__actions {
+        flex: 1 0 100%;
+        width: 100%;
+    }
+
+    .moderation-item__comments,
+    .moderation-item__delete,
+    .moderation-item--single-action .moderation-item__delete {
+        flex: 1 1 auto;
+    }
+}
+
+@media (max-width: variables.$breakpoint-mobile-max) {
+    .members-table {
+        overflow-x: auto;
+    }
+
+    .members-table__row {
+        min-width: 680px;
+    }
+
+    .moderation-item__thumbnail,
+    .moderation-item--deleted .moderation-item__thumbnail {
+        flex-basis: 56px;
+        width: 56px;
+        height: 56px;
+    }
+
+    .moderation-item__actions {
+        flex: 1 0 100%;
+        width: 100%;
+    }
+
+    .moderation-item__comments,
+    .moderation-item__delete,
+    .moderation-item--single-action .moderation-item__delete {
+        flex: 1 1 auto;
+    }
+}

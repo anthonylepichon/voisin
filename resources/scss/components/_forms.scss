@@ -59,6 +59,12 @@
     border-color: variables.$color-danger;
 }
 
+.form-field__control:focus-visible {
+    border-color: variables.$color-primary;
+    outline: 2px solid variables.$color-primary;
+    outline-offset: 2px;
+}
+
 .form-field__error {
     color: variables.$color-danger;
     font-family: variables.$font-family-base;
@@ -120,6 +126,12 @@
     border: 0;
 }
 
+.file-upload__zone:has(.file-upload__input:focus-visible) {
+    border-color: variables.$color-primary;
+    outline: 2px solid variables.$color-primary;
+    outline-offset: 2px;
+}
+
 .file-upload__preview {
     display: flex;
     flex-direction: column;
@@ -148,6 +160,19 @@
 
 .file-upload__filename {
     color: variables.$color-text-muted;
+    font-family: variables.$font-family-base;
+    font-size: variables.$font-size-12;
+    font-weight: variables.$font-weight-regular;
+    line-height: normal;
+}
+
+.form-field > ul,
+.file-upload > ul,
+.auth-card__form > ul,
+.publication-editor__form > ul,
+.profile-editor__form > ul,
+.visibility-selector > ul {
+    color: variables.$color-danger;
     font-family: variables.$font-family-base;
     font-size: variables.$font-size-12;
     font-weight: variables.$font-weight-regular;
@@ -185,4 +210,28 @@
 
 .file-upload--avatar.file-upload--invalid {
     min-height: 168px;
+}
+
+@media (max-width: variables.$breakpoint-mobile-max) {
+    .form-actions {
+        flex-wrap: wrap;
+        width: 100%;
+    }
+
+    .form-actions .button {
+        flex: 1 1 140px;
+    }
+
+    .file-upload,
+    .file-upload__zone,
+    .file-upload__preview {
+        width: 100%;
+        max-width: 300px;
+    }
+
+    .file-upload--avatar,
+    .file-upload--avatar .file-upload__zone,
+    .file-upload--avatar .file-upload__preview {
+        width: min(200px, 100%);
+    }
 }

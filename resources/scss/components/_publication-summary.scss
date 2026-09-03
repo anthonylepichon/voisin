@@ -128,3 +128,44 @@
 .publication-summary--compact .publication-summary__stats {
     display: none;
 }
+
+@media (max-width: variables.$breakpoint-tablet-max) {
+    .publication-summary {
+        width: 100%;
+    }
+
+    .publication-summary__header {
+        width: 100%;
+    }
+
+    .publication-summary__identity,
+    .publication-summary__visibility {
+        flex: 1 1 0;
+        width: auto;
+    }
+}
+
+@media (max-width: variables.$breakpoint-mobile-max) {
+    .publication-summary,
+    .publication-summary--compact {
+        height: auto;
+        min-height: 117px;
+        padding: 16px;
+    }
+
+    .publication-summary__visibility {
+        flex: 0 0 auto;
+        font-size: variables.$font-size-13;
+    }
+
+    .publication-summary__visibility-icon {
+        flex-basis: 18px;
+        width: 18px;
+        height: 18px;
+    }
+
+    .publication-summary__text {
+        overflow: visible;
+        white-space: normal;
+    }
+}

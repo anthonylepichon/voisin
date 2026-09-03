@@ -1,0 +1,86 @@
+{#
+Description générale : Page du fil d'actualité d'un membre connecté.
+Rôle : Présenter la création rapide, les filtres et les publications visibles.
+Tâches : Afficher les trois filtres, l'état vide et les cartes triées par date.
+Liens avec les autres fichiers : Étend base.html.twig, utilise FeedController et les composants SCSS du fil.
+#}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Fil d’actualité — Voisin{% endblock %}
+
+{% block body %}
+    <div class="app-shell app-shell--feed">
+        <aside class="app-shell__sidebar">
+            {% include 'partials/_member_sidebar.html.twig' %}
+        </aside>
+
+        <section class="app-shell__main feed-page" aria-labelledby="titre-fil">
+            <h1 class="visually-hidden" id="titre-fil">Fil d’actualité</h1>
+
+            <article class="post-composer">
+                <div class="post-composer__editor">
+                    <img class="post-composer__avatar" src="{{ path('app_profile_photo', {nom: app.user.nomPhotoProfil}) }}" alt="Photo de profil de {{ app.user.pseudonyme }}">
+                    <a class="post-composer__textarea post-composer__prompt" href="{{ path('app_publication_create') }}">Quoi de neuf ?</a>
+                </div>
+                <div class="post-composer__actions">
+                    <a class="post-composer__photo" href="{{ path('app_publication_create') }}">
+                        <img class="icon" src="{{ asset('images/icons/icon_image.png') }}" alt="">
+                        Photo
+                        <img class="icon" src="{{ asset('images/icons/icon_chevron.png') }}" alt="">
+                    </a>
+                    <a class="post-composer__visibility" href="{{ path('app_publication_create') }}">
+                        <img class="icon" src="{{ asset('images/icons/icon_GlobeSimple.png') }}" alt="">
+                        public
+                        <img class="icon" src="{{ asset('images/icons/icon_chevron.png') }}" alt="">
+                    </a>
+                    <a class="button button--primary post-composer__submit" href="{{ path('app_publication_create') }}">Partager</a>
+                </div>
+            </article>
+
+            <nav class="feed-filters" aria-label="Filtrer les publications">
+                <span class="feed-filters__label">Filtrer :</span>
+                <div class="feed-filters__list">
+                    <a class="feed-filters__item{% if filtreActif == 'toutes' %} feed-filters__item--active{% endif %}" href="{{ path('app_feed', {filtre: 'toutes'}) }}"{% if filtreActif == 'toutes' %} aria-current="page"{% endif %}>Toutes</a>
+                    <a class="feed-filters__item{% if filtreActif == 'publiques' %} feed-filters__item--active{% endif %}" href="{{ path('app_feed', {filtre: 'publiques'}) }}"{% if filtreActif == 'publiques' %} aria-current="page"{% endif %}>Publiques</a>
+                    <a class="feed-filters__item{% if filtreActif == 'amis' %} feed-filters__item--active{% endif %}" href="{{ path('app_feed', {filtre: 'amis'}) }}"{% if filtreActif == 'amis' %} aria-current="page"{% endif %}>Amis uniquement</a>
+                </div>
+            </nav>
+
+            {% if publications is empty %}
+                <div class="feed-page__empty">
+                    <p class="feed-page__empty-title">Aucune publication à afficher.</p>
+                    <p class="feed-page__empty-description">Les nouvelles publications visibles apparaîtront ici.</p>
+                </div>
+            {% else %}
+                <div class="feed-page__posts">
+                    {% for publication in publications %}
+                        {% include 'publication/_card.html.twig' with {publication: publication} only %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </section>
+
+        <aside class="app-shell__aside" aria-label="Présence des amis">
+            <section class="online-friends" aria-labelledby="titre-amis-en-ligne">
+                <h2 class="online-friends__title" id="titre-amis-en-ligne">Amis en ligne</h2>
+
+                {% if amisEnLigne is empty %}
+                    <p class="online-friends__empty">Aucun ami en ligne actuellement.</p>
+                {% else %}
+                    <ul class="online-friends__list">
+                        {% for ami in amisEnLigne %}
+                            <li>
+                                <a class="online-friends__item" href="{{ path('app_profile_show', {pseudonyme: ami.pseudonyme}) }}">
+                                    <img class="online-friends__avatar" src="{{ path('app_profile_photo', {nom: ami.nomPhotoProfil}) }}" alt="">
+                                    <span class="online-friends__name">{{ ami.pseudonyme }}</span>
+                                    <span class="online-friends__status" aria-label="En ligne"></span>
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </section>
+        </aside>
+    </div>
+{% endblock %}

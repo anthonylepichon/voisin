@@ -129,3 +129,44 @@
 .friends__grid--two-columns {
     grid-template-columns: repeat(2, 544px);
 }
+
+@media (max-width: variables.$breakpoint-tablet-max) {
+    .friend-requests,
+    .friends,
+    .friend-requests__alert,
+    .friend-requests__list,
+    .friend-requests__empty,
+    .friends__empty,
+    .friends__grid {
+        width: 100%;
+    }
+
+    .friends__grid--three-columns,
+    .friends__grid--two-columns {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: variables.$breakpoint-mobile-max) {
+    .friend-requests__title,
+    .friends__title,
+    .friend-requests__alert,
+    .friend-requests__empty,
+    .friends__empty,
+    .friends__section-title {
+        white-space: normal;
+    }
+
+    .friend-requests__alert,
+    .friend-requests__empty,
+    .friends__empty {
+        height: auto;
+        min-height: 120px;
+    }
+
+    .friends__grid--three-columns,
+    .friends__grid--two-columns {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 16px;
+    }
+}

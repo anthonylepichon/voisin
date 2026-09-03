@@ -20,10 +20,20 @@ body {
     line-height: normal;
 }
 
-body {
-    min-width: variables.$desktop-width;
-    min-height: 100vh;
+html {
     background-color: variables.$color-page-background;
+}
+
+body {
+    width: 100%;
+    max-width: variables.$desktop-width;
+    min-height: 100vh;
+    margin: 0 auto;
+    background-color: variables.$color-page-background;
+}
+
+#contenu-principal {
+    width: 100%;
 }
 
 .page-title {
@@ -40,4 +50,14 @@ body {
 
 .secondary-text {
     color: variables.$color-text-muted;
+}
+
+@media (max-width: variables.$breakpoint-mobile-max) {
+    .page-title {
+        font-size: variables.$font-size-22;
+    }
+
+    .section-title {
+        font-size: variables.$font-size-18;
+    }
 }

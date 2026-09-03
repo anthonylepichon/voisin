@@ -81,3 +81,11 @@ $header-actions-width: 515px;
 $header-actions-height: 60px;
 $header-avatar-size: 60px;
 $header-avatar-radius: 33px;
+
+// Paliers responsive ajoutés à partir de la maquette desktop de 1440 pixels.
+// Le rendu de référence reste strictement appliqué à 1440 pixels et devient fluide en dessous.
+$breakpoint-tablet-max: 1439px;
+$breakpoint-narrow-tablet-max: 1023px;
+$breakpoint-mobile-max: 767px;
+$tablet-page-padding: 24px;
+$mobile-page-padding: 16px;

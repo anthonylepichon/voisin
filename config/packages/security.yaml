@@ -22,7 +22,7 @@ security:
                 enable_csrf: true
                 username_parameter: identifiant
                 password_parameter: mot_de_passe
-                default_target_path: app_home
+                default_target_path: app_feed
             logout:
                 path: app_logout
                 target: app_home
@@ -31,6 +31,7 @@ security:
     access_control:
         - { path: ^/administration, roles: ROLE_ADMIN }
         - { path: ^/media/profils, roles: ROLE_USER }
+        - { path: ^/fil-actualite, roles: ROLE_USER }
         - { path: ^/(profil|publications|demandes|amis), roles: ROLE_USER }
 
 when@test:

@@ -5,11 +5,18 @@
  Liens avec les autres fichiers : Utilisé par les pages publication/create et publication/edit avec PublicationFormType.
 #}
 
-{{ form_start(publicationForm, {'attr': {'class': 'publication-editor__form publication-editor__form--initial'}}) }}
+{% set classeEtatFormulaire = 'publication-editor__form--initial' %}
+{% if publicationForm.vars.submitted and not publicationForm.vars.valid %}
+    {% set classeEtatFormulaire = 'publication-editor__form--invalid' %}
+{% elseif publication.nomImage %}
+    {% set classeEtatFormulaire = 'publication-editor__form--image-kept' %}
+{% endif %}
+
+{{ form_start(publicationForm, {'attr': {'class': 'publication-editor__form ' ~ classeEtatFormulaire}}) }}
     {{ form_errors(publicationForm) }}
 
     <div class="form-field">
-        {{ form_label(publicationForm.contenu, null, {'label_attr': {'class': 'form-field__label'}}) }}
+        {{ form_label(publicationForm.contenu, null, {'label_attr': {'class': 'form-field__label visually-hidden'}}) }}
         {{ form_widget(publicationForm.contenu, {'attr': {'class': 'form-field__control form-field__control--textarea publication-editor__textarea', 'placeholder': 'Partage une nouvelle avec ton voisinage'}}) }}
         {{ form_errors(publicationForm.contenu) }}
     </div>
@@ -39,9 +46,16 @@
         {{ form_widget(publicationForm.supprimerImage, {'attr': {'hidden': 'hidden'}}) }}
     {% endif %}
 
-    <div class="form-field">
-        {{ form_label(publicationForm.visibilite, null, {'label_attr': {'class': 'form-field__label'}}) }}
-        {{ form_widget(publicationForm.visibilite, {'attr': {'class': 'form-field__control'}}) }}
+    <div class="visibility-selector">
+        {{ form_label(publicationForm.visibilite, null, {'label_attr': {'class': 'visibility-selector__label'}}) }}
+        <div class="visibility-selector__options">
+            {% for choixVisibilite in publicationForm.visibilite %}
+                <label class="visibility-selector__option" for="{{ choixVisibilite.vars.id }}">
+                    {{ form_widget(choixVisibilite, {'attr': {'class': 'visibility-selector__input'}}) }}
+                    <span class="visibility-selector__text">{{ choixVisibilite.vars.label }}</span>
+                </label>
+            {% endfor %}
+        </div>
         {{ form_errors(publicationForm.visibilite) }}
     </div>
 
