@@ -1,0 +1,62 @@
+{#
+Description générale : Page de consultation des amis du membre connecté.
+Rôle : Séparer visuellement les amis en ligne et hors ligne.
+Tâches : Afficher les profils, les indicateurs de présence et un état vide normal.
+Liens avec les autres fichiers : Étend base.html.twig, utilise FriendshipController et les composants SCSS d'amitié.
+#}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes amis — Voisin{% endblock %}
+
+{% block body %}
+    {% set amisEnLigne = [] %}
+    {% set amisHorsLigne = [] %}
+
+    {% for ami in amis %}
+        {% if statutsEnLigne[ami.id] ?? false %}
+            {% set amisEnLigne = amisEnLigne|merge([ami]) %}
+        {% else %}
+            {% set amisHorsLigne = amisHorsLigne|merge([ami]) %}
+        {% endif %}
+    {% endfor %}
+
+    <div class="app-shell">
+        <aside class="app-shell__sidebar">
+            {% include 'partials/_member_sidebar.html.twig' %}
+        </aside>
+
+        <section class="app-shell__main friends" aria-labelledby="titre-amis">
+            <h1 class="friends__title" id="titre-amis">Mes amis</h1>
+
+            {% if amis is empty %}
+                <div class="friends__empty">
+                    <p class="friends__empty-title">Ta liste d’amis est vide.</p>
+                    <p class="friends__empty-description">Consulte un profil pour envoyer une demande d’amitié.</p>
+                </div>
+            {% else %}
+                <h2 class="friends__section-title">En ligne</h2>
+                {% if amisEnLigne is empty %}
+                    <p class="friends__empty-description">Aucun ami n’est en ligne actuellement.</p>
+                {% else %}
+                    <div class="friends__grid friends__grid--three-columns">
+                        {% for ami in amisEnLigne %}
+                            {% include 'friendship/_friend_card.html.twig' with {ami: ami, estEnLigne: true} only %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <h2 class="friends__section-title friends__section-title--offline">Hors ligne</h2>
+                {% if amisHorsLigne is empty %}
+                    <p class="friends__empty-description">Tous tes amis sont en ligne.</p>
+                {% else %}
+                    <div class="friends__grid friends__grid--two-columns">
+                        {% for ami in amisHorsLigne %}
+                            {% include 'friendship/_friend_card.html.twig' with {ami: ami, estEnLigne: false} only %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endif %}
+        </section>
+    </div>
+{% endblock %}

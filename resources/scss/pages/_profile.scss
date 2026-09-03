@@ -34,17 +34,17 @@
 
 .profile-page__summary--owner,
 .profile-page__summary--stranger {
-    height: 404px;
+    min-height: 404px;
 }
 
 .profile-page__summary--friend,
 .profile-page__summary--request-sent,
 .profile-page__summary--request-received {
-    height: 406px;
+    min-height: 406px;
 }
 
 .profile-page__summary--empty {
-    height: 353px;
+    min-height: 353px;
 }
 
 .profile-page__cover {
@@ -172,6 +172,26 @@
     gap: 24px;
     width: 100%;
     overflow: hidden;
+}
+
+.profile-page__friends {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    min-width: 0;
+}
+
+.profile-page__section-title {
+    margin: 0;
+    color: variables.$color-text;
+    font-size: variables.$font-size-20;
+    font-weight: variables.$font-weight-bold;
+    line-height: normal;
+}
+
+.profile-page__friends .friend-card {
+    text-decoration: none;
 }
 
 .profile-page__publication-row {

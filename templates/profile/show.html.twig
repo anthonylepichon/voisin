@@ -1,8 +1,8 @@
 {#
  Description générale : Page de consultation d'un profil membre.
  Rôle : Présenter les informations publiques du membre connecté ou visité.
- Tâches : Afficher la photo, la biographie, les compteurs et l'accès à la modification du propriétaire.
- Liens avec les autres fichiers : Étend base.html.twig, utilise ProfileController et les styles pages/_profile.scss.
+ Tâches : Afficher la photo, les compteurs, l'état d'amitié, les amis et les publications autorisées.
+ Liens avec les autres fichiers : Étend base.html.twig, utilise ProfileController, FriendshipController et les styles du profil.
 #}
 
 {% extends 'base.html.twig' %}
@@ -12,6 +12,12 @@
     {% set classeResumeProfil = 'profile-page__summary--stranger' %}
     {% if estProprietaire %}
         {% set classeResumeProfil = 'profile-page__summary--owner' %}
+    {% elseif statutAmitie == 'ami' %}
+        {% set classeResumeProfil = 'profile-page__summary--friend' %}
+    {% elseif statutAmitie == 'envoyee' %}
+        {% set classeResumeProfil = 'profile-page__summary--request-sent' %}
+    {% elseif statutAmitie == 'recue' %}
+        {% set classeResumeProfil = 'profile-page__summary--request-received' %}
     {% endif %}
 
     <div class="app-shell">
@@ -36,11 +42,11 @@
 
             <div class="profile-page__stats" aria-label="Statistiques du profil">
                 <div class="profile-page__stat">
-                    <p class="profile-page__stat-value">{{ utilisateur.publications|length }}</p>
+                    <p class="profile-page__stat-value">{{ publications|length }}</p>
                     <p class="profile-page__stat-label">Publications</p>
                 </div>
                 <div class="profile-page__stat">
-                    <p class="profile-page__stat-value">{{ utilisateur.amis|length }}</p>
+                    <p class="profile-page__stat-value">{{ amis|length }}</p>
                     <p class="profile-page__stat-label">Amis</p>
                 </div>
             </div>
@@ -48,6 +54,28 @@
             {% if estProprietaire %}
                 <div class="profile-page__actions">
                     <a class="button button--primary" href="{{ path('app_profile_edit') }}">Modifier mon profil</a>
+                </div>
+            {% elseif statutAmitie == 'ami' %}
+                <p class="alert alert--success profile-page__relationship-message">Vous êtes amis.</p>
+            {% elseif statutAmitie == 'envoyee' %}
+                <p class="alert alert--pending profile-page__relationship-message">Demande d’amitié envoyée.</p>
+            {% elseif statutAmitie == 'recue' and demandeAmitie %}
+                <div class="profile-page__actions">
+                    <form action="{{ path('app_friendship_refuse', {id: demandeAmitie.id}) }}" method="post">
+                        <input type="hidden" name="_token" value="{{ csrf_token('refuser-demande-amitie-' ~ demandeAmitie.id) }}">
+                        <button class="button button--secondary" type="submit">Refuser</button>
+                    </form>
+                    <form action="{{ path('app_friendship_accept', {id: demandeAmitie.id}) }}" method="post">
+                        <input type="hidden" name="_token" value="{{ csrf_token('accepter-demande-amitie-' ~ demandeAmitie.id) }}">
+                        <button class="button button--primary" type="submit">Accepter</button>
+                    </form>
+                </div>
+            {% else %}
+                <div class="profile-page__actions">
+                    <form action="{{ path('app_friendship_send', {id: utilisateur.id}) }}" method="post">
+                        <input type="hidden" name="_token" value="{{ csrf_token('envoyer-demande-amitie-' ~ utilisateur.id) }}">
+                        <button class="button button--primary" type="submit">Ajouter comme ami</button>
+                    </form>
                 </div>
             {% endif %}
         </article>
@@ -61,9 +89,36 @@
 
         <section class="profile-page__publications" aria-labelledby="titre-publications">
             <h2 class="visually-hidden" id="titre-publications">Publications de {{ utilisateur.pseudonyme }}</h2>
-            <div class="empty-state profile-page__empty-state">
-                <p class="empty-state__title">Les publications de {{ utilisateur.pseudonyme }} apparaîtront bientôt ici.</p>
-            </div>
+            {% if publications is empty %}
+                <div class="empty-state profile-page__empty-state">
+                    <p class="empty-state__title">Aucune publication visible.</p>
+                    <p class="empty-state__description">Les publications accessibles apparaîtront ici.</p>
+                </div>
+            {% else %}
+                {% for publication in publications %}
+                    {% include 'publication/_card.html.twig' with {publication: publication} only %}
+                {% endfor %}
+            {% endif %}
+        </section>
+
+        <section class="profile-page__friends" aria-labelledby="titre-amis-profil">
+            <h2 class="profile-page__section-title" id="titre-amis-profil">Amis de {{ utilisateur.pseudonyme }}</h2>
+            {% if amis is empty %}
+                <div class="empty-state profile-page__empty-state">
+                    <p class="empty-state__title">Aucun ami à afficher.</p>
+                </div>
+            {% else %}
+                <div class="friends__grid friends__grid--three-columns">
+                    {% for ami in amis %}
+                        <a class="friend-card" href="{{ path('app_profile_show', {pseudonyme: ami.pseudonyme}) }}">
+                            <span class="friend-card__portrait">
+                                <img class="friend-card__portrait-image" src="{{ path('app_profile_photo', {nom: ami.nomPhotoProfil}) }}" alt="Photo de profil de {{ ami.pseudonyme }}">
+                            </span>
+                            <span class="friend-card__name">{{ ami.pseudonyme }}</span>
+                        </a>
+                    {% endfor %}
+                </div>
+            {% endif %}
         </section>
         </section>
     </div>

@@ -50,6 +50,7 @@
     font-weight: variables.$font-weight-bold;
     line-height: normal;
     text-align: center;
+    text-decoration: none;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
@@ -76,4 +77,9 @@
 
 .friend-card__status--offline {
     background-color: variables.$color-text-muted;
+}
+
+.friend-card:focus-visible {
+    outline: 2px solid variables.$color-primary;
+    outline-offset: 3px;
 }

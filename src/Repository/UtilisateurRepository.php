@@ -3,7 +3,7 @@
 /*
  * Description générale : Fournit l'accès Doctrine aux comptes utilisateurs.
  * Rôle : Rechercher les utilisateurs, leurs amis et mettre à niveau leurs accès de sécurité.
- * Tâches : Retrouver un compte par identifiant, réunir ses amis et enregistrer un nouveau hachage de mot de passe.
+ * Tâches : Retrouver un compte par identifiant, réunir ses amis, vérifier une relation et mettre à niveau un mot de passe.
  * Liens avec les autres fichiers : Utilisé par l'entité Utilisateur, Symfony Security et les fonctionnalités sociales.
  */
 
@@ -70,6 +70,16 @@ class UtilisateurRepository extends ServiceEntityRepository implements PasswordU
         }
 
         return $amis;
+    }
+
+    /**
+     * Rôle : Indiquer si deux utilisateurs sont déjà amis quelle que soit l'orientation enregistrée.
+     * Paramètres : Les deux utilisateurs à comparer.
+     * Retour : Vrai lorsque la relation existe, faux sinon.
+     */
+    public function sontAmis(Utilisateur $premier, Utilisateur $second): bool
+    {
+        return in_array($second, $this->trouverAmis($premier), true);
     }
 
     /**

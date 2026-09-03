@@ -1,0 +1,53 @@
+{#
+Description générale : Page des demandes d'amitié reçues.
+Rôle : Présenter chaque demande en attente et les décisions autorisées au destinataire.
+Tâches : Afficher l'expéditeur, la date, les jetons CSRF et un état vide normal.
+Liens avec les autres fichiers : Étend base.html.twig, utilise FriendshipController et les composants SCSS d'amitié.
+#}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Demandes d’amitié — Voisin{% endblock %}
+
+{% block body %}
+    <div class="app-shell">
+        <aside class="app-shell__sidebar">
+            {% include 'partials/_member_sidebar.html.twig' %}
+        </aside>
+
+        <section class="app-shell__main friend-requests" aria-labelledby="titre-demandes-amitie">
+            <h1 class="friend-requests__title" id="titre-demandes-amitie">Demandes d’amitié</h1>
+
+            {% if demandes is empty %}
+                <div class="friend-requests__empty">
+                    <p class="friend-requests__empty-title">Aucune demande en attente.</p>
+                    <p class="friend-requests__empty-description">Les nouvelles demandes reçues apparaîtront ici.</p>
+                </div>
+            {% else %}
+                <div class="friend-requests__list">
+                    {% for demande in demandes %}
+                        <article class="friend-request-card">
+                            <a class="friend-request-card__avatar" href="{{ path('app_profile_show', {pseudonyme: demande.expediteur.pseudonyme}) }}">
+                                <img class="friend-request-card__avatar-image" src="{{ path('app_profile_photo', {nom: demande.expediteur.nomPhotoProfil}) }}" alt="Photo de profil de {{ demande.expediteur.pseudonyme }}">
+                            </a>
+                            <div class="friend-request-card__identity">
+                                <a class="friend-request-card__name" href="{{ path('app_profile_show', {pseudonyme: demande.expediteur.pseudonyme}) }}">{{ demande.expediteur.pseudonyme }}</a>
+                                <time class="friend-request-card__date" datetime="{{ demande.dateCreation|date('c') }}">Demande reçue le {{ demande.dateCreation|date('d/m/Y') }}</time>
+                            </div>
+                            <div class="friend-request-card__actions">
+                                <form action="{{ path('app_friendship_refuse', {id: demande.id}) }}" method="post">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('refuser-demande-amitie-' ~ demande.id) }}">
+                                    <button class="friend-request-card__decline" type="submit">Refuser</button>
+                                </form>
+                                <form action="{{ path('app_friendship_accept', {id: demande.id}) }}" method="post">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('accepter-demande-amitie-' ~ demande.id) }}">
+                                    <button class="friend-request-card__accept" type="submit">Accepter</button>
+                                </form>
+                            </div>
+                        </article>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </section>
+    </div>
+{% endblock %}

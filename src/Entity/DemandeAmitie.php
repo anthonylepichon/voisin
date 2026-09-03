@@ -4,7 +4,7 @@
  * Description générale : Représente une demande d'amitié envoyée entre deux utilisateurs.
  * Rôle : Conserver l'émetteur, le destinataire et la date de création d'une demande en attente.
  * Tâches : Appliquer les relations et contraintes prévues par la table demande_amitie du MPD.
- * Liens avec les autres fichiers : Liée à Utilisateur et utilisée par DemandeAmitieRepository ainsi que les futures fonctionnalités d'amitié.
+ * Liens avec les autres fichiers : Liée à Utilisateur et utilisée par DemandeAmitieRepository, FriendshipController et les vues d'amitié.
  */
 
 namespace App\Entity;

@@ -4,7 +4,7 @@
  * Description générale : Représente un compte utilisateur de l'application Voisin.
  * Rôle : Porter les données de sécurité, de profil et d'activité d'un utilisateur.
  * Tâches : Garantir les contraintes Doctrine et de validation du MPD pour la table utilisateur.
- * Liens avec les autres fichiers : Utilisée par UtilisateurRepository, la configuration Security et les futures entités métier.
+ * Liens avec les autres fichiers : Utilisée par UtilisateurRepository, la configuration Security, les contrôleurs et les autres entités métier.
  */
 
 namespace App\Entity;

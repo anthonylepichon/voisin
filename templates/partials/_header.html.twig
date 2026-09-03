@@ -5,7 +5,7 @@ Tâches : Présenter le logo, les accès publics ou les actions du membre connec
 Liens avec les autres fichiers : Inclus par templates/base.html.twig et stylisé par resources/scss/layout/_header.scss.
 #}
 {% set routeCourante = app.request.attributes.get('_route') %}
-{% set routesEnteteComplet = ['app_home', 'app_feed', 'app_profile_current', 'app_profile_show'] %}
+{% set routesEnteteComplet = ['app_home', 'app_feed', 'app_profile_current', 'app_profile_show', 'app_friendship_requests', 'app_friendship_friends'] %}
 
 <header class="site-header{% if app.user %} site-header--authenticated{% if routeCourante not in routesEnteteComplet %} site-header--compact{% endif %}{% else %} site-header--public{% endif %}">
     <a class="site-header__brand" href="{% if app.user %}{{ path('app_feed') }}{% else %}{{ path('app_home') }}{% endif %}" aria-label="Accueil Voisin">

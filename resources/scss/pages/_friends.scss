@@ -104,6 +104,13 @@
     font-weight: variables.$font-weight-regular;
 }
 
+.friends > .friends__empty-description {
+    width: 100%;
+    padding: 20px;
+    background-color: variables.$color-surface;
+    border-radius: variables.$radius-field;
+}
+
 .friends__section-title {
     color: variables.$color-text;
     font-size: variables.$font-size-16;

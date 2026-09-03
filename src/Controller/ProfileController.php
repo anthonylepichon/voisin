@@ -2,16 +2,19 @@
 
 /*
  * Description générale : Contrôleur des profils membres.
- * Rôle : Afficher un profil et permettre à son propriétaire de modifier les données autorisées.
- * Tâches : Contrôler l'identité connectée, valider les modifications et gérer le remplacement de photo.
- * Liens avec les autres fichiers : Utilise ProfileFormType, UtilisateurRepository et les gabarits profile.
+ * Rôle : Afficher un profil avec son état d'amitié et permettre au propriétaire de modifier ses données.
+ * Tâches : Contrôler l'identité, charger les relations et publications visibles, puis gérer les modifications de profil.
+ * Liens avec les autres fichiers : Utilise les repositories sociaux, ProfileFormType, UserActivityService et les gabarits profile.
  */
 
 namespace App\Controller;
 
 use App\Entity\Utilisateur;
 use App\Form\ProfileFormType;
+use App\Repository\DemandeAmitieRepository;
+use App\Repository\PublicationRepository;
 use App\Repository\UtilisateurRepository;
+use App\Service\UserActivityService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
@@ -93,25 +96,59 @@ class ProfileController extends AbstractController
 
     /**
      * Rôle : Afficher un profil membre.
-     * Paramètres : Le pseudonyme demandé et le dépôt des utilisateurs.
+     * Paramètres : Le pseudonyme, les repositories nécessaires et le service d'activité.
      * Retour : Une réponse Twig ou une erreur 404.
      */
     #[Route('/profil/{pseudonyme}', name: 'app_profile_show', methods: ['GET'])]
-    public function show(string $pseudonyme, UtilisateurRepository $utilisateurRepository): Response
-    {
+    public function show(
+        string $pseudonyme,
+        UtilisateurRepository $utilisateurRepository,
+        DemandeAmitieRepository $demandeAmitieRepository,
+        PublicationRepository $publicationRepository,
+        UserActivityService $userActivityService,
+    ): Response {
         $utilisateur = $utilisateurRepository->findOneBy(['pseudonyme' => $pseudonyme]);
 
         if (null === $utilisateur) {
             throw $this->createNotFoundException('Profil introuvable.');
         }
 
-        $utilisateurConnecte = $this->getUser();
-        $estProprietaire = $utilisateurConnecte instanceof Utilisateur
-            && $utilisateurConnecte->getId() === $utilisateur->getId();
+        $utilisateurConnecte = $this->getUtilisateurConnecte();
+        $userActivityService->enregistrerActivite($utilisateurConnecte, new \DateTimeImmutable());
+        $estProprietaire = $utilisateurConnecte->getId() === $utilisateur->getId();
+        $statutAmitie = 'aucune';
+        $demandeAmitie = null;
+
+        if ($estProprietaire) {
+            $statutAmitie = 'proprietaire';
+        } elseif ($utilisateurRepository->sontAmis($utilisateurConnecte, $utilisateur)) {
+            $statutAmitie = 'ami';
+        } else {
+            $demandeAmitie = $demandeAmitieRepository->trouverEntre($utilisateurConnecte, $utilisateur);
+
+            if (null !== $demandeAmitie) {
+                $expediteur = $demandeAmitie->getExpediteur();
+
+                if (null !== $expediteur && $expediteur->getId() === $utilisateurConnecte->getId()) {
+                    $statutAmitie = 'envoyee';
+                } else {
+                    $statutAmitie = 'recue';
+                }
+            }
+        }
+
+        $inclureReserveesAuxAmis = $estProprietaire || 'ami' === $statutAmitie;
+        $amis = $utilisateurRepository->trouverAmis($utilisateur);
+        $publications = $publicationRepository->trouverPourProfil($utilisateur, $inclureReserveesAuxAmis);
 
         return $this->render('profile/show.html.twig', [
             'utilisateur' => $utilisateur,
             'estProprietaire' => $estProprietaire,
+            'statutAmitie' => $statutAmitie,
+            'demandeAmitie' => $demandeAmitie,
+            'amis' => $amis,
+            'publications' => $publications,
+            'nombreDemandesAmitieEnAttente' => $demandeAmitieRepository->compterRecues($utilisateurConnecte),
         ]);
     }
 
