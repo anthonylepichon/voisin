@@ -4,7 +4,7 @@
  * Rôle :
  * Assembler le compositeur, les filtres, les publications et l'état vide sur la colonne centrale.
  * Tâches :
- * Appliquer les espacements, la grille masonry des publications et les variantes de filtre et de réaction.
+ * Appliquer les espacements, les colonnes de la grille des publications et les états vides.
  * Liens avec les autres fichiers :
  * Utilise resources/scss/abstracts/_variables.scss et les composants du fil d'actualité.
  */
@@ -23,17 +23,9 @@
 .feed-page__posts {
     --masonry-gap: 20px;
 
-    display: grid;
     grid-template-columns: repeat(2, 395px);
-    grid-auto-rows: 1px;
-    align-items: start;
     width: variables.$feed-content-width;
     column-gap: 20px;
-    row-gap: 1px;
-}
-
-.feed-page__posts > .publication-card:not(:has(.publication-card__media)) {
-    height: calc((455px - var(--masonry-gap)) / 2);
 }
 
 .feed-page__empty {
@@ -63,20 +55,6 @@
     font-size: variables.$font-size-14;
 }
 
-.feed-page--liked .publication-card:first-child .publication-card__like {
-    color: variables.$color-primary;
-}
-
-.feed-page--liked .publication-card:first-child .publication-card__action-icon {
-    color: variables.$color-primary;
-}
-
-.feed-page--liked .publication-card:first-child .publication-card__action-icon svg,
-.feed-page--liked .publication-card:first-child .publication-card__action-icon path {
-    fill: currentColor;
-    stroke: currentColor;
-}
-
 @media (max-width: variables.$breakpoint-tablet-max) {
     .feed-page,
     .feed-page__posts,
@@ -90,8 +68,7 @@
 }
 
 @media (max-width: variables.$breakpoint-mobile-max) {
-    .feed-page,
-    .feed-page__posts {
+    .feed-page {
         gap: 16px;
     }
 
@@ -100,12 +77,6 @@
 
         grid-template-columns: minmax(0, 1fr);
         column-gap: 16px;
-        row-gap: 1px;
-    }
-
-    .feed-page__posts > .publication-card:not(:has(.publication-card__media)) {
-        height: auto;
-        min-height: 230px;
     }
 
     .feed-page__empty {

@@ -87,7 +87,7 @@
             <a class="profile-page__tab" href="#titre-amis-profil">Amis</a>
         </nav>
 
-        <section class="profile-page__publications" aria-labelledby="titre-publications" data-publication-masonry>
+        <section class="profile-page__publications publication-masonry" aria-labelledby="titre-publications" data-publication-masonry>
             <h2 class="visually-hidden" id="titre-publications">Publications de {{ utilisateur.pseudonyme }}</h2>
             {% if publications is empty %}
                 <div class="empty-state profile-page__empty-state">

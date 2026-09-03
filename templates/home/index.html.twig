@@ -31,7 +31,7 @@
                 <p class="public-home__empty-description">Connectez-vous pour rejoindre votre voisinage.</p>
             </div>
         {% else %}
-            <div class="public-home__grid" data-publication-masonry>
+            <div class="public-home__grid publication-masonry" data-publication-masonry>
                 {% for publication in publications %}
                     {% include 'publication/_card.html.twig' with {
                         publication: publication,

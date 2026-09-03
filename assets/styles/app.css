@@ -1864,6 +1864,21 @@ body {
  * Liens avec les autres fichiers :
  * Utilise resources/scss/abstracts/_variables.scss et s'appuie sur les composants avatar et badge.
  */
+.publication-masonry {
+  display: grid;
+  grid-auto-rows: 1px;
+  align-items: start;
+  row-gap: 1px;
+}
+
+.publication-masonry > .publication-card {
+  min-width: 0;
+}
+
+.publication-masonry > .publication-card:not(:has(.publication-card__media)) {
+  height: calc((455px - var(--masonry-gap)) / 2);
+}
+
 .publication-card {
   position: relative;
   flex: 0 0 395px;
@@ -2058,6 +2073,21 @@ body {
   color: #b94848;
 }
 
+.publication-card:not(:has(.publication-card__media)) {
+  height: 190px;
+}
+
+.publication-card:not(:has(.publication-card__media)) .publication-card__like,
+.publication-card:not(:has(.publication-card__media)) .publication-card__comments {
+  top: auto;
+  bottom: 16px;
+}
+
+.publication-card:not(:has(.publication-card__media)) .publication-card__owner-actions {
+  top: auto;
+  bottom: 20px;
+}
+
 .publication-card--feed {
   flex-basis: auto;
   width: 844px;
@@ -2065,17 +2095,17 @@ body {
 
 .publication-card--feed .publication-card__header {
   left: 19px;
-  width: 804px;
+  width: calc(100% - 40px);
 }
 
 .publication-card--feed .publication-card__text {
   left: 19px;
-  width: 804px;
+  width: calc(100% - 40px);
 }
 
 .publication-card--feed .publication-card__media {
   left: 19px;
-  width: 804px;
+  width: 374px;
 }
 
 .publication-card--feed .publication-card__report {
@@ -2097,22 +2127,23 @@ body {
 
 .publication-card--profile-third {
   flex-basis: 358.667px;
-  width: 358.667px;
+  width: 100%;
+  min-width: 0;
 }
 
 .publication-card--profile-third .publication-card__header {
   left: 9px;
-  width: 339px;
+  width: calc(100% - 18px);
 }
 
 .publication-card--profile-third .publication-card__text {
   left: 9px;
-  width: 339px;
+  width: calc(100% - 18px);
 }
 
 .publication-card--profile-third .publication-card__media {
   left: 9px;
-  width: 339px;
+  width: calc(100% - 18px);
 }
 
 .publication-card--profile-third .publication-card__report {
@@ -2120,11 +2151,11 @@ body {
 }
 
 .publication-card--profile-third .publication-card__like {
-  left: 43px;
+  left: 9px;
 }
 
 .publication-card--profile-third .publication-card__comments {
-  left: 91px;
+  left: 67px;
 }
 
 .publication-card--profile-half {
@@ -2195,6 +2226,9 @@ body {
     left: 19px;
     width: calc(100% - 38px);
   }
+  .publication-card--feed .publication-card__media {
+    width: min(374px, 100% - 38px);
+  }
 }
 @media (max-width: 767px) {
   .publication-card,
@@ -2255,6 +2289,14 @@ body {
   .publication-card:not(:has(.publication-card__text)) .publication-card__media {
     top: auto;
     height: 210px;
+  }
+  .publication-masonry > .publication-card:not(:has(.publication-card__media)) {
+    height: auto;
+    min-height: 230px;
+  }
+  .publication-card:not(:has(.publication-card__media)) {
+    height: auto;
+    min-height: 190px;
   }
   .publication-card__report,
   .publication-card--feed .publication-card__report,
@@ -3468,21 +3510,9 @@ body {
 
 .public-home__grid {
   --masonry-gap: 24px;
-  display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  grid-auto-rows: 1px;
-  align-items: start;
   width: min(100%, 1233px);
   column-gap: 24px;
-  row-gap: 1px;
-}
-
-.public-home__grid > .publication-card {
-  min-width: 0;
-}
-
-.public-home__grid > .publication-card:not(:has(.publication-card__media)) {
-  height: calc((455px - var(--masonry-gap)) / 2);
 }
 
 .public-home__empty {
@@ -3557,11 +3587,6 @@ body {
     --masonry-gap: 16px;
     grid-template-columns: minmax(0, 1fr);
     column-gap: 16px;
-    row-gap: 1px;
-  }
-  .public-home__grid > .publication-card:not(:has(.publication-card__media)) {
-    height: auto;
-    min-height: 230px;
   }
   .public-home__empty {
     height: auto;
@@ -3763,7 +3788,7 @@ body {
  * Rôle :
  * Assembler le compositeur, les filtres, les publications et l'état vide sur la colonne centrale.
  * Tâches :
- * Appliquer les espacements, la grille masonry des publications et les variantes de filtre et de réaction.
+ * Appliquer les espacements, les colonnes de la grille des publications et les états vides.
  * Liens avec les autres fichiers :
  * Utilise resources/scss/abstracts/_variables.scss et les composants du fil d'actualité.
  */
@@ -3778,17 +3803,9 @@ body {
 
 .feed-page__posts {
   --masonry-gap: 20px;
-  display: grid;
   grid-template-columns: repeat(2, 395px);
-  grid-auto-rows: 1px;
-  align-items: start;
   width: 844px;
   column-gap: 20px;
-  row-gap: 1px;
-}
-
-.feed-page__posts > .publication-card:not(:has(.publication-card__media)) {
-  height: calc((455px - var(--masonry-gap)) / 2);
 }
 
 .feed-page__empty {
@@ -3818,20 +3835,6 @@ body {
   font-size: 14px;
 }
 
-.feed-page--liked .publication-card:first-child .publication-card__like {
-  color: #c95f30;
-}
-
-.feed-page--liked .publication-card:first-child .publication-card__action-icon {
-  color: #c95f30;
-}
-
-.feed-page--liked .publication-card:first-child .publication-card__action-icon svg,
-.feed-page--liked .publication-card:first-child .publication-card__action-icon path {
-  fill: currentColor;
-  stroke: currentColor;
-}
-
 @media (max-width: 1439px) {
   .feed-page,
   .feed-page__posts,
@@ -3843,19 +3846,13 @@ body {
   }
 }
 @media (max-width: 767px) {
-  .feed-page,
-  .feed-page__posts {
+  .feed-page {
     gap: 16px;
   }
   .feed-page__posts {
     --masonry-gap: 16px;
     grid-template-columns: minmax(0, 1fr);
     column-gap: 16px;
-    row-gap: 1px;
-  }
-  .feed-page__posts > .publication-card:not(:has(.publication-card__media)) {
-    height: auto;
-    min-height: 230px;
   }
   .feed-page__empty {
     height: auto;
@@ -4233,11 +4230,10 @@ body {
 }
 
 .profile-page__publications {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 24px;
+  --masonry-gap: 16px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   width: 100%;
+  column-gap: 16px;
   overflow: hidden;
 }
 
@@ -4363,6 +4359,9 @@ body {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 20px;
   }
+  .profile-page__publications {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
   .profile-editor__field {
     width: 100%;
   }
@@ -4393,6 +4392,9 @@ body {
   .profile-page__publication-row--member {
     grid-template-columns: minmax(0, 1fr);
     gap: 16px;
+  }
+  .profile-page__publications {
+    grid-template-columns: minmax(0, 1fr);
   }
   .profile-editor__title {
     font-size: 22px;
@@ -4945,7 +4947,7 @@ body {
  * Rôle :
  * Harmoniser les écrans publics, membres et administratifs sur la grille desktop de 1440 pixels.
  * Tâches :
- * Corriger les proportions des cartes, formulaires, profils et contenus tout en conservant un rendu responsive.
+ * Corriger les proportions des formulaires, profils et contenus tout en conservant un rendu responsive.
  * Liens avec les autres fichiers :
  * Complète les composants et pages chargés auparavant par resources/scss/app.scss.
  */
@@ -5000,64 +5002,6 @@ body {
 
 .auth-card__avatar-upload {
   align-self: center;
-}
-
-.publication-card--feed .publication-card__media {
-  width: 374px;
-}
-
-.publication-card--feed .publication-card__header,
-.publication-card--feed .publication-card__text {
-  width: calc(100% - 40px);
-}
-
-.publication-card:not(:has(.publication-card__media)) {
-  height: 190px;
-}
-
-.publication-card:not(:has(.publication-card__media)) .publication-card__like,
-.publication-card:not(:has(.publication-card__media)) .publication-card__comments {
-  top: auto;
-  bottom: 16px;
-}
-
-.publication-card:not(:has(.publication-card__media)) .publication-card__owner-actions {
-  top: auto;
-  bottom: 20px;
-}
-
-.profile-page__publications {
-  --masonry-gap: 16px;
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  grid-auto-rows: 1px;
-  align-items: start;
-  column-gap: 16px;
-  row-gap: 1px;
-}
-
-.profile-page__publications > .publication-card:not(:has(.publication-card__media)) {
-  height: calc((455px - var(--masonry-gap)) / 2);
-}
-
-.publication-card--profile-third {
-  width: 100%;
-  min-width: 0;
-}
-
-.publication-card--profile-third .publication-card__header,
-.publication-card--profile-third .publication-card__text,
-.publication-card--profile-third .publication-card__media {
-  left: 9px;
-  width: calc(100% - 18px);
-}
-
-.publication-card--profile-third .publication-card__like {
-  left: 9px;
-}
-
-.publication-card--profile-third .publication-card__comments {
-  left: 67px;
 }
 
 .profile-page__summary,
@@ -5258,12 +5202,6 @@ body {
   body {
     max-width: none;
   }
-  .publication-card--feed .publication-card__media {
-    width: min(374px, 100% - 38px);
-  }
-  .profile-page__publications {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
   .profile-page__summary,
   .profile-page__summary--owner,
   .profile-page__summary--stranger,
@@ -5311,21 +5249,6 @@ body {
   }
   .profile-page__overview {
     flex-direction: column;
-  }
-  .profile-page__publications {
-    grid-template-columns: minmax(0, 1fr);
-  }
-  .profile-page__publications > .publication-card:not(:has(.publication-card__media)) {
-    height: auto;
-    min-height: 230px;
-  }
-  .publication-card--feed .publication-card__media,
-  .publication-card--profile-third .publication-card__media {
-    width: 100%;
-  }
-  .publication-card:not(:has(.publication-card__media)) {
-    height: auto;
-    min-height: 190px;
   }
   .publication-editor__form .visibility-selector,
   .publication-editor__form .form-actions {
