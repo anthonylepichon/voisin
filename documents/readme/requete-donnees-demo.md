@@ -11,7 +11,7 @@ Le script complet à importer est :
 
 [`documents/readme/donnees-demonstration.sql`](donnees-demonstration.sql)
 
-Il est prévu pour une base locale `voisin` ayant reçu la migration initiale. Il n'est jamais importé en production.
+Il est prévu pour une base locale `voisin` à jour avec toutes les migrations Doctrine du projet. Il n'est jamais importé en production.
 
 ## Comptes de démonstration
 
