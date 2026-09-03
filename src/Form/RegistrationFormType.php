@@ -1,5 +1,7 @@
 <?php
 
+/* Origine du code : Structure générée par Symfony puis modifiée par le développeur. */
+
 /*
  * Description générale : Formulaire Symfony de création d'un compte utilisateur.
  * Rôle : Collecter et valider les données nécessaires à l'inscription.

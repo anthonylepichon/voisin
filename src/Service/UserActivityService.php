@@ -1,5 +1,7 @@
 <?php
 
+/* Origine du code : Code créé par le développeur. */
+
 /*
  * Description générale : Gère l'activité récente des utilisateurs de l'application Voisin.
  * Rôle : Enregistrer une activité et déterminer si un utilisateur est actuellement en ligne.

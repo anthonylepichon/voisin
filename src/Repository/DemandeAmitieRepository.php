@@ -1,5 +1,7 @@
 <?php
 
+/* Origine du code : Structure générée par Symfony puis modifiée par le développeur. */
+
 /*
  * Description générale : Fournit l'accès Doctrine aux demandes d'amitié.
  * Rôle : Centraliser les recherches liées aux demandes d'amitié en attente.

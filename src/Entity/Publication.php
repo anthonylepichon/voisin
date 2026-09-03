@@ -1,5 +1,7 @@
 <?php
 
+/* Origine du code : Structure générée par Symfony puis modifiée par le développeur. */
+
 /*
  * Description générale : Représente une publication publiée par un membre.
  * Rôle : Conserver son contenu, son image, sa visibilité, son propriétaire et les utilisateurs qui l'aiment.

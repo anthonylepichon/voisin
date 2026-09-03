@@ -1,3 +1,4 @@
+# Origine du code : Code généré par Symfony et conservé sans modification fonctionnelle, hors commentaire de traçabilité.
 when@dev:
     web_profiler_wdt:
         resource: '@WebProfilerBundle/Resources/config/routing/wdt.php'

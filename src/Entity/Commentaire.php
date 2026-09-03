@@ -1,5 +1,7 @@
 <?php
 
+/* Origine du code : Structure générée par Symfony puis modifiée par le développeur. */
+
 /*
  * Description générale : Représente un commentaire déposé sous une publication.
  * Rôle : Conserver son contenu, sa date, son propriétaire et sa publication associée.

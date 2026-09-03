@@ -1,5 +1,7 @@
 <?php
 
+/* Origine du code : Code créé par le développeur. */
+
 /*
  * Description générale : Contrôleur du fil d'actualité des membres.
  * Rôle : Afficher les publications autorisées et traiter leur création directement dans le fil.

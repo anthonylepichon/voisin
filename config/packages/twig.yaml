@@ -1,3 +1,4 @@
+# Origine du code : Structure générée par Symfony puis modifiée par le développeur.
 twig:
     file_name_pattern: '*.twig'
     date:

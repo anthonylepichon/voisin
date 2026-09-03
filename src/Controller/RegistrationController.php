@@ -1,5 +1,7 @@
 <?php
 
+/* Origine du code : Structure générée par Symfony puis modifiée par le développeur. */
+
 /*
  * Description générale : Contrôleur de création des comptes utilisateur.
  * Rôle : Traiter l'inscription, déléguer la photo de profil et enregistrer le mot de passe haché.

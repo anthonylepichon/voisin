@@ -1,5 +1,7 @@
 <?php
 
+/* Origine du code : Structure générée par Symfony puis modifiée par le développeur. */
+
 /*
  * Description générale : Dépôt Doctrine des fichiers téléversés.
  * Rôle : Retrouver les métadonnées centralisées d'un fichier.

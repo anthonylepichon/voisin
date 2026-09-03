@@ -1,5 +1,7 @@
 <?php
 
+/* Origine du code : Structure générée par Symfony puis modifiée par le développeur. */
+
 /*
  * Description générale : Fournit l'accès Doctrine aux publications.
  * Rôle : Centraliser les recherches de publications et leur visibilité.

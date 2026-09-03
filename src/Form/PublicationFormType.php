@@ -1,5 +1,7 @@
 <?php
 
+/* Origine du code : Code créé par le développeur. */
+
 /*
  * Description générale : Formulaire de création et de modification d'une publication.
  * Rôle : Décrire le contenu, l'image et la visibilité que le membre peut choisir.

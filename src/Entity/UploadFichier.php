@@ -1,5 +1,7 @@
 <?php
 
+/* Origine du code : Structure générée par Symfony puis modifiée par le développeur. */
+
 /*
  * Description générale : Représente un fichier téléversé dans l'application Voisin.
  * Rôle : Centraliser les métadonnées des photos de profil et des images de publication.

@@ -1,5 +1,7 @@
 <?php
 
+/* Origine du code : Structure générée par Symfony puis modifiée par le développeur. */
+
 /*
  * Description générale : Contrôleur des actions d'authentification de Voisin.
  * Rôle : Afficher la connexion et déclarer le point de déconnexion intercepté par Symfony.

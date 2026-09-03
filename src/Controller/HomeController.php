@@ -1,5 +1,7 @@
 <?php
 
+/* Origine du code : Code créé par le développeur. */
+
 /*
  * Description générale : Contrôleur de la page d'accueil publique de Voisin.
  * Rôle : Présenter l'application et les cinq publications publiques les plus récentes.

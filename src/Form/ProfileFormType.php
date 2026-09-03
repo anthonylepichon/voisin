@@ -1,5 +1,7 @@
 <?php
 
+/* Origine du code : Code créé par le développeur. */
+
 /*
  * Description générale : Formulaire de modification du profil membre.
  * Rôle : Limiter les informations modifiables au pseudonyme, à la biographie et à la photo.

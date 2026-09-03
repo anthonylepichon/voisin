@@ -1,5 +1,7 @@
 <?php
 
+/* Origine du code : Code créé par le développeur. */
+
 /*
  * Description générale : Formulaire Symfony de saisie d'un commentaire.
  * Rôle : Autoriser uniquement la saisie du contenu textuel d'un commentaire.

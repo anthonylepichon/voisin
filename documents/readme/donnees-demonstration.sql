@@ -1,3 +1,4 @@
+-- Origine du code : Code créé par le développeur.
 -- Description générale : Crée un jeu complet de données fictives pour la démonstration locale de Voisin.
 -- Rôle : Alimenter toutes les tables métier avec huit profils, leurs fichiers, des publications, commentaires, likes, amitiés et demandes.
 -- Tâches : Insérer uniquement des données de démonstration locales, sans compte administrateur ni donnée personnelle réelle.

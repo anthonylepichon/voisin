@@ -1,5 +1,7 @@
 <?php
 
+/* Origine du code : Code créé par le développeur. */
+
 /*
  * Description générale : Centralise les règles métier d'accès aux publications.
  * Rôle : Déterminer si un visiteur ou un membre peut voir, modifier ou supprimer une publication.

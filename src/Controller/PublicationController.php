@@ -1,5 +1,7 @@
 <?php
 
+/* Origine du code : Code créé par le développeur. */
+
 /*
  * Description générale : Contrôleur de gestion des publications d'un membre.
  * Rôle : Modifier, supprimer et aimer les publications selon les autorisations prévues.

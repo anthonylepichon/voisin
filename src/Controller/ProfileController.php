@@ -1,5 +1,7 @@
 <?php
 
+/* Origine du code : Code créé par le développeur. */
+
 /*
  * Description générale : Contrôleur des profils membres.
  * Rôle : Afficher un profil avec son état d'amitié et permettre au propriétaire de modifier ses données.

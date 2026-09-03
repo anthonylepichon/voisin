@@ -1,4 +1,5 @@
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Gestion de l’aperçu local de la photo de profil.
  * Rôle :

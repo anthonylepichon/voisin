@@ -1,5 +1,7 @@
 <?php
 
+/* Origine du code : Code créé par le développeur. */
+
 /*
  * Description générale : Contrôleur de consultation et de gestion des commentaires.
  * Rôle : Afficher, créer, modifier et supprimer les commentaires selon les autorisations prévues.

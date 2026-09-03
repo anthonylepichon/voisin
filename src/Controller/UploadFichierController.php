@@ -1,5 +1,7 @@
 <?php
 
+/* Origine du code : Code créé par le développeur. */
+
 /*
  * Description générale : Distribution centralisée des fichiers téléversés.
  * Rôle : Servir une photo de profil ou une image de publication selon les autorisations applicables.

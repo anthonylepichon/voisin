@@ -1,4 +1,5 @@
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Gestion de la disposition masonry des cartes de publication.
  * Rôle :

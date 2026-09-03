@@ -1,5 +1,7 @@
 <?php
 
+/* Origine du code : Code créé par le développeur. */
+
 /*
  * Description générale : Contrôleur des relations d'amitié entre les membres.
  * Rôle : Envoyer, consulter, accepter ou refuser les demandes et afficher les amis.

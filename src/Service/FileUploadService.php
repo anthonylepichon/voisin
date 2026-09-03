@@ -1,5 +1,7 @@
 <?php
 
+/* Origine du code : Code créé par le développeur. */
+
 /*
  * Description générale : Service central de gestion des fichiers téléversés par les membres.
  * Rôle : Éviter la duplication du déplacement, du nommage, de la suppression et de la résolution des fichiers.

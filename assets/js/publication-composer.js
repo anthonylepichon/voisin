@@ -1,4 +1,5 @@
 /*
+ * Origine du code : Code créé par le développeur.
  * Description générale :
  * Gestion du formulaire de création de publication intégré au fil d’actualité.
  * Rôle :

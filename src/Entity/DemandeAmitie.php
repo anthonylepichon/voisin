@@ -1,5 +1,7 @@
 <?php
 
+/* Origine du code : Structure générée par Symfony puis modifiée par le développeur. */
+
 /*
  * Description générale : Représente une demande d'amitié envoyée entre deux utilisateurs.
  * Rôle : Conserver l'émetteur, le destinataire et la date de création d'une demande en attente.

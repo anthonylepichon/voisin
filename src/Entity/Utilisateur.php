@@ -1,5 +1,7 @@
 <?php
 
+/* Origine du code : Structure générée par Symfony puis modifiée par le développeur. */
+
 /*
  * Description générale : Représente un compte utilisateur de l'application Voisin.
  * Rôle : Porter les données de sécurité, de profil et d'activité d'un utilisateur.
