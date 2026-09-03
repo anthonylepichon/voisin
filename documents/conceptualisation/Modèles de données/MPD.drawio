@@ -1,6 +1,6 @@
 <mxfile host="Electron" pages="2">
   <diagram name="MPD" id="Suh-dnzl_69F96QHAMto">
-    <mxGraphModel dx="2801" dy="1128" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2200" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="2831" dy="1128" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2200" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -491,7 +491,7 @@
     </mxGraphModel>
   </diagram>
   <diagram name="MPD avec contraintes" id="3jC8UGvnTey1DY4_Pytn">
-    <mxGraphModel dx="2285" dy="1210" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2200" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="2831" dy="1128" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2200" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="VhuuCMi4t16bWJxCKNGh-0" />
         <mxCell id="VhuuCMi4t16bWJxCKNGh-1" parent="VhuuCMi4t16bWJxCKNGh-0" />
@@ -587,7 +587,7 @@
         <mxCell id="VhuuCMi4t16bWJxCKNGh-25" parent="VhuuCMi4t16bWJxCKNGh-14" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;strokeColor=#9FBAD0;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;fillColor=#FFFFFF;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" value="" vertex="1">
           <mxGeometry height="36" width="600" y="224" as="geometry" />
         </mxCell>
-        <mxCell id="VhuuCMi4t16bWJxCKNGh-26" parent="VhuuCMi4t16bWJxCKNGh-25" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=none;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;fontSize=16;fontColor=#1F1F1F;align=left;verticalAlign=middle;spacingLeft=10;" value="nom_photo_profil — VARCHAR(255) NOT NULL" vertex="1">
+        <mxCell id="VhuuCMi4t16bWJxCKNGh-26" parent="VhuuCMi4t16bWJxCKNGh-25" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=none;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;fontSize=16;fontColor=#1F1F1F;align=left;verticalAlign=middle;spacingLeft=10;" value="&lt;span style=&quot;color: rgb(51, 51, 51);&quot;&gt;upload_fichier_id INT&lt;/span&gt;&amp;nbsp;NOT NULL" vertex="1">
           <mxGeometry height="36" width="600" as="geometry">
             <mxRectangle height="36" width="600" as="alternateBounds" />
           </mxGeometry>
@@ -689,7 +689,7 @@
         <mxCell id="VhuuCMi4t16bWJxCKNGh-51" parent="VhuuCMi4t16bWJxCKNGh-46" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;strokeColor=#9FBAD0;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;fillColor=#FFFFFF;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" value="" vertex="1">
           <mxGeometry height="36" width="620" y="116" as="geometry" />
         </mxCell>
-        <mxCell id="VhuuCMi4t16bWJxCKNGh-52" parent="VhuuCMi4t16bWJxCKNGh-51" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=none;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;fontSize=16;fontColor=#1F1F1F;align=left;verticalAlign=middle;spacingLeft=10;" value="nom_image — VARCHAR(255) NULL" vertex="1">
+        <mxCell id="VhuuCMi4t16bWJxCKNGh-52" parent="VhuuCMi4t16bWJxCKNGh-51" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=none;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;fontSize=16;fontColor=#1F1F1F;align=left;verticalAlign=middle;spacingLeft=10;" value="&lt;span style=&quot;color: rgb(51, 51, 51);&quot;&gt;upload_fichier_id INT&lt;/span&gt;&amp;nbsp;NULL" vertex="1">
           <mxGeometry height="36" width="620" as="geometry">
             <mxRectangle height="36" width="620" as="alternateBounds" />
           </mxGeometry>
