@@ -1,18 +1,19 @@
 {#
-Description générale : En-tête public commun aux pages de l'application Voisin.
-Rôle : Afficher l'identité visuelle et les accès qui seront reliés au socle Security.
-Tâches : Présenter le logo et les actions de connexion et d'inscription de la maquette.
+Description générale : En-tête commun aux pages publiques et authentifiées de l'application Voisin.
+Rôle : Afficher l'identité visuelle et les accès adaptés à l'état de connexion.
+Tâches : Présenter le logo, les accès publics ou les actions du membre connecté.
 Liens avec les autres fichiers : Inclus par templates/base.html.twig et stylisé par resources/scss/layout/_header.scss.
 #}
-<header class="site-header site-header--public">
+<header class="site-header {{ app.user ? 'site-header--authenticated' : 'site-header--public' }}">
     <a class="site-header__brand" href="/" aria-label="Accueil Voisin">
         <img class="site-header__logo" src="{{ asset('images/logo/00-logo.png') }}" alt="Voisin">
     </a>
 
-    <nav class="site-header__actions" aria-label="Accès au compte">
+    <nav class="site-header__actions {{ app.user ? 'site-header__actions--authenticated' : '' }}" aria-label="Accès au compte">
         {% if app.user %}
-            <a class="site-header__login" href="{{ path('app_profile_current') }}">Mon profil</a>
-            <form action="{{ path('app_logout') }}" method="post">
+            <a class="site-header__publication" href="{{ path('app_publication_create') }}">Publier</a>
+            <a class="site-header__profile" href="{{ path('app_profile_current') }}">Mon profil</a>
+            <form class="site-header__logout" action="{{ path('app_logout') }}" method="post">
                 <input type="hidden" name="_token" value="{{ csrf_token('logout') }}">
                 <button class="site-header__register" type="submit">Déconnexion</button>
             </form>

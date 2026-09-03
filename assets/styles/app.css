@@ -186,6 +186,51 @@ body {
   height: 37px;
 }
 
+.site-header__actions--authenticated {
+  display: flex;
+  flex: 0 0 auto !important;
+  align-items: center;
+  justify-content: flex-end;
+  width: auto !important;
+  height: auto !important;
+  gap: 12px;
+}
+
+.site-header__publication,
+.site-header__profile,
+.site-header__logout .site-header__register {
+  position: static !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: auto !important;
+  height: 37px;
+  padding: 8px 20px;
+  overflow: hidden;
+  font-size: 16px;
+  font-weight: 400;
+  white-space: nowrap;
+  border-radius: 42px;
+}
+
+.site-header__publication,
+.site-header__profile {
+  color: #2c2420;
+  text-decoration: none;
+  background-color: #faf7f5;
+  border: 1px solid #2c2420;
+}
+
+.site-header__logout .site-header__register {
+  color: #ffffff;
+  background-color: #c95f30;
+  border: 0;
+}
+
+.site-header__logout {
+  margin: 0;
+}
+
 .site-header__login,
 .site-header__register {
   position: absolute;
@@ -966,6 +1011,10 @@ body {
   border-radius: 10px;
 }
 
+.file-upload__preview[hidden] {
+  display: none;
+}
+
 .file-upload__preview-image {
   width: 120px;
   height: 80px;
@@ -979,6 +1028,10 @@ body {
   font-size: 12px;
   font-weight: 400;
   line-height: normal;
+}
+
+.file-upload__remove {
+  min-height: 35px;
 }
 
 .file-upload__error {
@@ -2674,13 +2727,17 @@ body {
  * Utilise resources/scss/abstracts/_variables.scss et les composants de formulaire, bouton et alerte.
  */
 .auth-page {
+  min-height: 100vh;
+  background-color: #f0e8e3;
+}
+
+.auth-page #contenu-principal {
   display: flex;
   align-items: flex-start;
   justify-content: center;
   width: 100%;
   min-height: calc(100vh - 80px);
   padding: 60px;
-  background-color: #f0e8e3;
 }
 
 .auth-card {
@@ -2882,13 +2939,23 @@ body {
  * Liens avec les autres fichiers :
  * Utilise resources/scss/abstracts/_variables.scss et les composants de formulaire, bouton, badge et alerte.
  */
+.publication-editor-page {
+  min-height: 100vh;
+  background-color: #f0e8e3;
+}
+
+.publication-editor-page #contenu-principal {
+  width: 100%;
+  padding: 60px;
+}
+
 .publication-editor {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 20px;
   width: 100%;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .publication-editor__title {
@@ -2907,29 +2974,29 @@ body {
   gap: 20px;
   width: 700px;
   padding: 32px;
-  overflow: hidden;
+  overflow: visible;
   background-color: #ffffff;
   border-radius: 12px;
 }
 
 .publication-editor__form--initial {
-  height: 389px;
+  min-height: 389px;
 }
 
 .publication-editor__form--with-preview {
-  height: 475px;
+  min-height: 475px;
 }
 
 .publication-editor__form--invalid {
-  height: 424px;
+  min-height: 424px;
 }
 
 .publication-editor__form--image-kept {
-  height: 413px;
+  min-height: 413px;
 }
 
 .publication-editor__form--image-removed {
-  height: 407px;
+  min-height: 407px;
 }
 
 .publication-editor__textarea {

@@ -1,0 +1,52 @@
+{#
+ Description générale : Fragment commun des formulaires de publication.
+ Rôle : Éviter de dupliquer les champs de création et de modification.
+ Tâches : Rendre le contenu, l'image, la visibilité, l'aperçu et les actions du formulaire Symfony.
+ Liens avec les autres fichiers : Utilisé par les pages publication/create et publication/edit avec PublicationFormType.
+#}
+
+{{ form_start(publicationForm, {'attr': {'class': 'publication-editor__form publication-editor__form--initial'}}) }}
+    {{ form_errors(publicationForm) }}
+
+    <div class="form-field">
+        {{ form_label(publicationForm.contenu, null, {'label_attr': {'class': 'form-field__label'}}) }}
+        {{ form_widget(publicationForm.contenu, {'attr': {'class': 'form-field__control form-field__control--textarea publication-editor__textarea', 'placeholder': 'Partage une nouvelle avec ton voisinage'}}) }}
+        {{ form_errors(publicationForm.contenu) }}
+    </div>
+
+    <div class="file-upload publication-editor__upload" data-publication-image>
+        {{ form_label(publicationForm.image, null, {'label_attr': {'class': 'file-upload__label'}}) }}
+        <label class="file-upload__zone" for="{{ publicationForm.image.vars.id }}">
+            Choisir une image
+            {{ form_widget(publicationForm.image, {'attr': {'class': 'file-upload__input', 'accept': 'image/jpeg,image/png,image/webp', 'data-publication-image-input': ''}}) }}
+        </label>
+        <div class="file-upload__preview" data-publication-image-preview hidden>
+            <img class="file-upload__preview-image" src="" alt="Aperçu de l'image de la publication" data-publication-image-element>
+            <span class="file-upload__filename" data-publication-image-name></span>
+            <button class="button button--danger-outline file-upload__remove" type="button" data-publication-image-remove>Retirer l’image</button>
+        </div>
+        {{ form_errors(publicationForm.image) }}
+    </div>
+
+    {% if publication.nomImage %}
+        <div class="publication-editor__current-image">
+            <img class="publication-editor__current-image-preview" src="{{ path('app_publication_image', {nom: publication.nomImage}) }}" alt="Image actuelle de la publication">
+            {% if afficherSuppressionImage %}
+                {{ form_widget(publicationForm.supprimerImage, {'attr': {'class': 'button button--danger-outline'}}) }}
+            {% endif %}
+        </div>
+    {% else %}
+        {{ form_widget(publicationForm.supprimerImage, {'attr': {'hidden': 'hidden'}}) }}
+    {% endif %}
+
+    <div class="form-field">
+        {{ form_label(publicationForm.visibilite, null, {'label_attr': {'class': 'form-field__label'}}) }}
+        {{ form_widget(publicationForm.visibilite, {'attr': {'class': 'form-field__control'}}) }}
+        {{ form_errors(publicationForm.visibilite) }}
+    </div>
+
+    <div class="form-actions">
+        <button class="button button--primary" type="submit">{{ libelleValidation }}</button>
+        <a class="button button--secondary" href="{{ path('app_profile_current') }}">Annuler</a>
+    </div>
+{{ form_end(publicationForm) }}

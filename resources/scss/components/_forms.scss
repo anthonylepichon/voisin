@@ -135,6 +135,10 @@
     border-radius: variables.$radius-control;
 }
 
+.file-upload__preview[hidden] {
+    display: none;
+}
+
 .file-upload__preview-image {
     width: 120px;
     height: 80px;
@@ -148,6 +152,10 @@
     font-size: variables.$font-size-12;
     font-weight: variables.$font-weight-regular;
     line-height: normal;
+}
+
+.file-upload__remove {
+    min-height: 35px;
 }
 
 .file-upload__error {
