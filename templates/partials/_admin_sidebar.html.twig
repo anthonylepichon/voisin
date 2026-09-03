@@ -1,0 +1,23 @@
+{#
+Description générale : Navigation latérale propre à l’espace d’administration.
+Rôle : Reproduire la navigation administrative distincte de l’espace membre.
+Tâches : Donner accès aux membres, aux publications, au fil et à la déconnexion sécurisée.
+Liens avec les autres fichiers : Inclus par les templates d’administration et stylisé par layout/_sidebar.scss.
+#}
+
+{% set routeCourante = app.request.attributes.get('_route') %}
+
+<nav class="side-nav side-nav--admin" aria-label="Navigation d’administration">
+    <h2 class="side-nav__title">Administration</h2>
+    <hr class="side-nav__separator">
+    <div class="side-nav__links">
+        <a class="side-nav__link{% if routeCourante == 'app_admin_index' %} side-nav__link--active{% endif %}" href="{{ path('app_admin_index') }}"{% if routeCourante == 'app_admin_index' %} aria-current="page"{% endif %}>Membres</a>
+        <a class="side-nav__link{% if routeCourante == 'app_admin_publications' %} side-nav__link--active{% endif %}" href="{{ path('app_admin_publications') }}"{% if routeCourante == 'app_admin_publications' %} aria-current="page"{% endif %}>Publications</a>
+        <a class="side-nav__link" href="{{ path('app_feed') }}">Mon fil d’actualité</a>
+    </div>
+    <hr class="side-nav__separator">
+    <form action="{{ path('app_logout') }}" method="post">
+        <input type="hidden" name="_token" value="{{ csrf_token('logout') }}">
+        <button class="side-nav__logout" type="submit">Me déconnecter</button>
+    </form>
+</nav>

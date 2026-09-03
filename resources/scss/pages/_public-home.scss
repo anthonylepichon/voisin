@@ -4,7 +4,7 @@
  * Rôle :
  * Reproduire le héros, les publications récentes et leur état vide définis dans Figma.
  * Tâches :
- * Dimensionner les sections, centrer les appels à l'action et organiser les cartes sur trois colonnes.
+ * Dimensionner les sections, centrer les appels à l'action et organiser les cartes dans une grille masonry responsive.
  * Liens avec les autres fichiers :
  * Utilise resources/scss/abstracts/_variables.scss ainsi que les boutons et cartes du dossier components.
  */
@@ -79,10 +79,23 @@
 }
 
 .public-home__grid {
+    --masonry-gap: 24px;
+
     display: grid;
-    grid-template-columns: repeat(3, 395px);
-    width: 1233px;
-    gap: 24px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-auto-rows: 1px;
+    align-items: start;
+    width: min(100%, 1233px);
+    column-gap: 24px;
+    row-gap: 1px;
+}
+
+.public-home__grid > .publication-card {
+    min-width: 0;
+}
+
+.public-home__grid > .publication-card:not(:has(.publication-card__media)) {
+    height: calc((455px - var(--masonry-gap)) / 2);
 }
 
 .public-home__empty {
@@ -164,8 +177,16 @@
     }
 
     .public-home__grid {
+        --masonry-gap: 16px;
+
         grid-template-columns: minmax(0, 1fr);
-        gap: 16px;
+        column-gap: 16px;
+        row-gap: 1px;
+    }
+
+    .public-home__grid > .publication-card:not(:has(.publication-card__media)) {
+        height: auto;
+        min-height: 230px;
     }
 
     .public-home__empty {

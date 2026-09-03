@@ -4,7 +4,7 @@
  * Description générale : Service central de gestion des fichiers téléversés par les membres.
  * Rôle : Éviter la duplication du déplacement, du nommage, de la suppression et de la résolution des fichiers.
  * Tâches : Enregistrer les photos et images, créer leurs métadonnées Doctrine, retirer les anciens fichiers et fournir un chemin sûr.
- * Liens avec les autres fichiers : Utilise UploadFichier, Utilisateur, Publication, UploadFichierRepository et les contrôleurs de médias.
+ * Liens avec les autres fichiers : Utilise UploadFichier, Utilisateur, Publication et les contrôleurs de médias.
  */
 
 namespace App\Service;
@@ -12,7 +12,6 @@ namespace App\Service;
 use App\Entity\Publication;
 use App\Entity\UploadFichier;
 use App\Entity\Utilisateur;
-use App\Repository\UploadFichierRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -26,13 +25,12 @@ class FileUploadService
 
     /**
      * Rôle : Initialiser les dépendances nécessaires à la gestion centralisée des fichiers.
-     * Paramètres : Le slugger, Doctrine, le dépôt des fichiers et le noyau Symfony.
+     * Paramètres : Le slugger, Doctrine et le noyau Symfony.
      * Retour : Aucun.
      */
     public function __construct(
         private SluggerInterface $slugger,
         private EntityManagerInterface $entityManager,
-        private UploadFichierRepository $uploadFichierRepository,
         private KernelInterface $kernel
     ) {
     }
@@ -51,7 +49,7 @@ class FileUploadService
             return null;
         }
 
-        $upload->setUtilisateur($utilisateur);
+        $utilisateur->setUploadFichier($upload);
         $this->entityManager->persist($upload);
 
         return $upload;
@@ -71,7 +69,7 @@ class FileUploadService
             return null;
         }
 
-        $upload->setPublication($publication);
+        $publication->setUploadFichier($upload);
         $this->entityManager->persist($upload);
 
         return $upload;
@@ -79,34 +77,30 @@ class FileUploadService
 
     /**
      * Rôle : Supprimer une ancienne photo de profil et ses métadonnées éventuelles.
-     * Paramètres : L'utilisateur propriétaire et le nom du fichier.
+     * Paramètres : L'utilisateur propriétaire et les métadonnées du fichier à supprimer.
      * Retour : Aucun.
      */
-    public function supprimerPhotoProfil(Utilisateur $utilisateur, string $nom): void
+    public function supprimerPhotoProfil(Utilisateur $utilisateur, UploadFichier $upload): void
     {
-        $upload = $this->uploadFichierRepository->findOneBy([
-            'type' => UploadFichier::TYPE_PROFIL,
-            'nom' => $nom,
-            'utilisateur' => $utilisateur,
-        ]);
+        if ($utilisateur->getUploadFichier() === $upload) {
+            return;
+        }
 
-        $this->supprimer($upload, UploadFichier::TYPE_PROFIL, $nom);
+        $this->supprimer($upload);
     }
 
     /**
      * Rôle : Supprimer une ancienne image de publication et ses métadonnées éventuelles.
-     * Paramètres : La publication propriétaire et le nom du fichier.
+     * Paramètres : La publication propriétaire et les métadonnées du fichier à supprimer.
      * Retour : Aucun.
      */
-    public function supprimerImagePublication(Publication $publication, string $nom): void
+    public function supprimerImagePublication(Publication $publication, UploadFichier $upload): void
     {
-        $upload = $this->uploadFichierRepository->findOneBy([
-            'type' => UploadFichier::TYPE_PUBLICATION,
-            'nom' => $nom,
-            'publication' => $publication,
-        ]);
+        if ($publication->getUploadFichier() === $upload) {
+            $publication->setUploadFichier(null);
+        }
 
-        $this->supprimer($upload, UploadFichier::TYPE_PUBLICATION, $nom);
+        $this->supprimer($upload);
     }
 
     /**
@@ -168,26 +162,20 @@ class FileUploadService
 
     /**
      * Rôle : Supprimer un fichier physique et retirer ses métadonnées Doctrine.
-     * Paramètres : Les métadonnées éventuelles, le type et le nom du fichier.
+     * Paramètres : Les métadonnées du fichier à supprimer.
      * Retour : Aucun.
      */
-    private function supprimer(?UploadFichier $upload, string $type, string $nom): void
+    private function supprimer(UploadFichier $upload): void
     {
-        $cheminEnregistre = null;
-
-        if (null !== $upload) {
-            $cheminEnregistre = $upload->getChemin();
-        }
-
-        $chemin = $this->obtenirCheminFichier($type, $nom, $cheminEnregistre);
+        $type = (string) $upload->getType();
+        $nom = (string) $upload->getNom();
+        $chemin = $this->obtenirCheminFichier($type, $nom, $upload->getChemin());
 
         if (is_file($chemin)) {
             unlink($chemin);
         }
 
-        if (null !== $upload) {
-            $this->entityManager->remove($upload);
-        }
+        $this->entityManager->remove($upload);
     }
 
 }

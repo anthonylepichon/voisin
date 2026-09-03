@@ -50,7 +50,6 @@ class RegistrationController extends AbstractController
                 ]);
             }
 
-            $user->setNomPhotoProfil((string) $upload->getNom());
             $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
 
             $entityManager->persist($user);

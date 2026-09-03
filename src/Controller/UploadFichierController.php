@@ -3,7 +3,7 @@
 /*
  * Description générale : Distribution centralisée des fichiers téléversés.
  * Rôle : Servir une photo de profil ou une image de publication selon les autorisations applicables.
- * Tâches : Retrouver le fichier, préserver la compatibilité historique, contrôler la visibilité et retourner l'image.
+ * Tâches : Retrouver le fichier, identifier sa publication, contrôler la visibilité et retourner l'image.
  * Liens avec les autres fichiers : Utilise UploadFichierRepository, PublicationRepository, FileUploadService, Publication et Utilisateur.
  */
 
@@ -46,7 +46,7 @@ class UploadFichierController extends AbstractController
         $uploadFichier = $uploadFichierRepository->trouverParTypeEtNom($type, $nom);
 
         if (UploadFichier::TYPE_PUBLICATION === $type) {
-            $publication = $this->obtenirPublication($nom, $uploadFichier, $publicationRepository);
+            $publication = $this->obtenirPublication($uploadFichier, $publicationRepository);
 
             if (null === $publication || !$this->peutVoirPublication($publication)) {
                 throw $this->createNotFoundException();
@@ -69,20 +69,19 @@ class UploadFichierController extends AbstractController
     }
 
     /**
-     * Rôle : Retrouver la publication d'une image centralisée ou d'un ancien fichier.
-     * Paramètres : Le nom, les métadonnées éventuelles et le dépôt des publications.
+     * Rôle : Retrouver la publication qui référence une image centralisée.
+     * Paramètres : Les métadonnées éventuelles et le dépôt des publications.
      * Retour : La publication associée ou null lorsqu'elle est absente.
      */
     private function obtenirPublication(
-        string $nom,
         ?UploadFichier $uploadFichier,
         PublicationRepository $publicationRepository
     ): ?Publication {
-        if (null !== $uploadFichier) {
-            return $uploadFichier->getPublication();
+        if (null === $uploadFichier) {
+            return null;
         }
 
-        return $publicationRepository->findOneBy(['nomImage' => $nom]);
+        return $publicationRepository->findOneBy(['uploadFichier' => $uploadFichier]);
     }
 
     /**

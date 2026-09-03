@@ -1,14 +1,14 @@
 {#
- Description générale : Fragment commun des formulaires de publication.
- Rôle : Éviter de dupliquer les champs de création et de modification.
+ Description générale : Fragment du formulaire de modification d'une publication.
+ Rôle : Présenter clairement les champs modifiables d'une publication existante.
  Tâches : Rendre le contenu, l'image, la visibilité, l'aperçu et les actions du formulaire Symfony.
- Liens avec les autres fichiers : Utilisé par les pages publication/create et publication/edit avec PublicationFormType.
+ Liens avec les autres fichiers : Utilisé par publication/edit.html.twig avec PublicationFormType.
 #}
 
 {% set classeEtatFormulaire = 'publication-editor__form--initial' %}
 {% if publicationForm.vars.submitted and not publicationForm.vars.valid %}
     {% set classeEtatFormulaire = 'publication-editor__form--invalid' %}
-{% elseif publication.nomImage %}
+{% elseif publication.imageAffichee %}
     {% set classeEtatFormulaire = 'publication-editor__form--image-kept' %}
 {% endif %}
 
@@ -35,9 +35,9 @@
         {{ form_errors(publicationForm.image) }}
     </div>
 
-    {% if publication.nomImage %}
+    {% if publication.imageAffichee %}
         <div class="publication-editor__current-image">
-            <img class="publication-editor__current-image-preview" src="{{ path('app_upload_fichier', {type: 'publication', nom: publication.nomImage}) }}" alt="Image actuelle de la publication">
+            <img class="publication-editor__current-image-preview" src="{{ path('app_upload_fichier', {type: 'publication', nom: publication.imageAffichee}) }}" alt="Image actuelle de la publication">
             {% if afficherSuppressionImage %}
                 {{ form_widget(publicationForm.supprimerImage, {'attr': {'class': 'button button--danger-outline'}}) }}
             {% endif %}

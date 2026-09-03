@@ -4,7 +4,7 @@
  * Rôle :
  * Assembler le compositeur, les filtres, les publications et l'état vide sur la colonne centrale.
  * Tâches :
- * Appliquer les espacements et variantes de filtre, de réaction et de navigation administrateur.
+ * Appliquer les espacements, la grille masonry des publications et les variantes de filtre et de réaction.
  * Liens avec les autres fichiers :
  * Utilise resources/scss/abstracts/_variables.scss et les composants du fil d'actualité.
  */
@@ -21,10 +21,19 @@
 }
 
 .feed-page__posts {
-    display: flex;
-    flex-direction: column;
+    --masonry-gap: 20px;
+
+    display: grid;
+    grid-template-columns: repeat(2, 395px);
+    grid-auto-rows: 1px;
+    align-items: start;
     width: variables.$feed-content-width;
-    gap: 20px;
+    column-gap: 20px;
+    row-gap: 1px;
+}
+
+.feed-page__posts > .publication-card:not(:has(.publication-card__media)) {
+    height: calc((455px - var(--masonry-gap)) / 2);
 }
 
 .feed-page__empty {
@@ -74,12 +83,29 @@
     .feed-page__empty {
         width: 100%;
     }
+
+    .feed-page__posts {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
 }
 
 @media (max-width: variables.$breakpoint-mobile-max) {
     .feed-page,
     .feed-page__posts {
         gap: 16px;
+    }
+
+    .feed-page__posts {
+        --masonry-gap: 16px;
+
+        grid-template-columns: minmax(0, 1fr);
+        column-gap: 16px;
+        row-gap: 1px;
+    }
+
+    .feed-page__posts > .publication-card:not(:has(.publication-card__media)) {
+        height: auto;
+        min-height: 230px;
     }
 
     .feed-page__empty {

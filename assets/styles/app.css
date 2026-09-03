@@ -167,22 +167,24 @@ body {
  * Description générale :
  * Mise en page de l'en-tête principal d'après le composant Figma validé.
  * Rôle :
- * Reproduire exactement les variantes publique, authentifiée complète et authentifiée compacte.
+ * Maintenir le header visible et présenter clairement les actions publiques ou authentifiées.
  * Tâches :
- * Dimensionner le logo, les accès publics, la recherche, la notification et l'avatar.
+ * Dimensionner le logo, les boutons, la notification et l'avatar sur ordinateur, tablette et mobile.
  * Liens avec les autres fichiers :
- * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
+ * Utilise resources/scss/abstracts/_variables.scss et stylise templates/partials/_header.html.twig.
  */
 .site-header {
-  position: relative;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
   height: 80px;
   padding: 14px 64px;
-  overflow: hidden;
   background-color: #faf7f5;
+  border-bottom: 1px solid #d8d8d8;
 }
 
 .site-header__brand {
@@ -203,152 +205,72 @@ body {
 }
 
 .site-header__actions {
-  position: relative;
-  flex: 0 0 515px;
-  width: 515px;
-  height: 60px;
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: flex-end;
+  width: auto;
+  height: auto;
+  gap: 16px;
 }
 
-.site-header--public .site-header__actions {
-  flex-basis: 335px;
-  width: 335px;
-  height: 37px;
-}
-
-.site-header__actions--authenticated {
-  flex: 0 0 515px;
-  width: 515px;
-  height: 60px;
-}
-
+.site-header__login,
+.site-header__register,
 .site-header__publication,
 .site-header__profile,
-.site-header__logout .site-header__register {
-  position: static !important;
+.site-header__logout-button {
+  position: static;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: auto !important;
+  min-width: 150px;
   height: 37px;
   padding: 8px 20px;
-  overflow: hidden;
+  color: #2c2420;
+  font-family: "Inter", Arial, sans-serif;
   font-size: 16px;
   font-weight: 400;
-  white-space: nowrap;
-  border-radius: 42px;
-}
-
-.site-header__member-link {
-  display: block;
-}
-
-.site-header__publication,
-.site-header__profile {
-  color: #2c2420;
+  line-height: 1;
   text-decoration: none;
+  white-space: nowrap;
   background-color: #faf7f5;
   border: 1px solid #2c2420;
+  border-radius: 42px;
+  cursor: pointer;
 }
 
-.site-header__logout .site-header__register {
+.site-header__register,
+.site-header__logout-button {
   color: #ffffff;
   background-color: #c95f30;
-  border: 0;
+  border-color: #c95f30;
+}
+
+.site-header__login:hover,
+.site-header__publication:hover,
+.site-header__profile:hover {
+  color: #ffffff;
+  background-color: #2c2420;
+}
+
+.site-header__register:hover,
+.site-header__logout-button:hover {
+  background-color: #2c2420;
+  border-color: #2c2420;
 }
 
 .site-header__logout {
   margin: 0;
 }
 
-.site-header__login,
-.site-header__register {
-  position: absolute;
-  top: 0;
+.site-header__notification {
+  position: relative;
   display: inline-flex;
+  flex: 0 0 24px;
   align-items: center;
   justify-content: center;
-  padding: 8px 20px;
-  overflow: hidden;
-  font-size: 16px;
-  font-weight: 400;
-  white-space: nowrap;
-  border-radius: 42px;
-}
-
-.site-header__login {
-  left: 0;
-  width: 150px;
-  height: 37px;
-  color: #2c2420;
-  background-color: #faf7f5;
-  border: 1px solid #2c2420;
-}
-
-.site-header__register {
-  left: 168px;
-  width: 167px;
-  height: 35px;
-  color: #ffffff;
-  background-color: #c95f30;
-  border: 0;
-}
-
-.site-header__search {
-  position: absolute;
-  top: 9px;
-  left: 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 364px;
-  height: 42px;
-  padding: 8px 20px;
-  overflow: hidden;
-  background-color: #faf7f5;
-  border: 1px solid #d8d8d8;
-  border-radius: 42px;
-}
-
-.site-header__search-input {
-  flex: 1 1 auto;
-  min-width: 0;
-  padding: 0;
-  color: #2c2420;
-  font-size: 16px;
-  background: transparent;
-  border: 0;
-  outline: 0;
-}
-
-.site-header__search-input::placeholder {
-  color: #8d8d8d;
-  opacity: 1;
-}
-
-.site-header__search-placeholder {
-  flex: 1 1 auto;
-  min-width: 0;
-  overflow: hidden;
-  color: #8d8d8d;
-  font-size: 16px;
-  white-space: nowrap;
-}
-
-.site-header__search-icon {
-  flex: 0 0 24px;
   width: 24px;
   height: 24px;
-}
-
-.site-header__notification {
-  position: absolute;
-  top: 18px;
-  left: 397.5px;
-  width: 24px;
-  height: 24px;
-  padding: 0;
-  background: transparent;
-  border: 0;
 }
 
 .site-header__notification-image {
@@ -374,35 +296,26 @@ body {
   border-radius: 42px;
 }
 
-.site-header__avatar {
-  position: absolute;
-  top: 0;
-  right: 0;
+.site-header__member-link {
   display: block;
+  flex: 0 0 60px;
   width: 60px;
   height: 60px;
+}
+
+.site-header__avatar {
+  display: block;
+  width: 100%;
+  height: 100%;
   overflow: hidden;
   border-radius: 33px;
 }
 
 .site-header__avatar-image {
-  position: absolute;
-  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
   pointer-events: none;
-}
-
-.site-header--compact .site-header__search,
-.site-header--compact .site-header__notification {
-  display: none;
-}
-
-.site-header--public .site-header__search,
-.site-header--public .site-header__notification,
-.site-header--public .site-header__avatar {
-  display: none;
 }
 
 @media (max-width: 1439px) {
@@ -415,78 +328,70 @@ body {
     width: 132px;
     height: 47px;
   }
-  .site-header__actions--authenticated {
-    flex-basis: 430px;
-    width: 430px;
-    height: 52px;
+  .site-header__actions {
+    gap: 10px;
   }
-  .site-header__search {
-    top: 5px;
-    width: 300px;
+  .site-header__login,
+  .site-header__register,
+  .site-header__publication,
+  .site-header__profile,
+  .site-header__logout-button {
+    min-width: 128px;
+    padding-inline: 16px;
   }
-  .site-header__notification {
-    top: 14px;
-    left: 322px;
-  }
-  .site-header__avatar {
+  .site-header__member-link {
+    flex-basis: 52px;
     width: 52px;
     height: 52px;
   }
-  .site-header--public .site-header__actions {
-    flex-basis: 310px;
-    width: 310px;
+}
+@media (max-width: 1023px) {
+  .site-header__publication,
+  .site-header__profile,
+  .site-header__logout-button {
+    min-width: 0;
+    padding-inline: 13px;
+    font-size: 14px;
   }
-  .site-header__login {
-    width: 142px;
-  }
-  .site-header__register {
-    left: 154px;
-    width: 156px;
+  .site-header__notification {
+    display: none;
   }
 }
 @media (max-width: 767px) {
   .site-header {
-    height: 64px;
+    flex-wrap: wrap;
+    height: auto;
+    min-height: 112px;
     padding: 8px 16px;
+    gap: 8px;
   }
   .site-header__brand {
     flex-basis: 108px;
     width: 108px;
     height: 39px;
   }
-  .site-header__actions--authenticated,
-  .site-header--compact .site-header__actions--authenticated {
-    display: flex;
-    flex: 0 0 auto;
-    align-items: center;
-    width: auto;
-    height: 48px;
-    gap: 12px;
+  .site-header__actions--authenticated {
+    flex: 1 0 100%;
+    order: 2;
+    width: 100%;
+    gap: 8px;
   }
-  .site-header__search,
-  .site-header__notification {
+  .site-header__actions--authenticated .site-header__publication,
+  .site-header__actions--authenticated .site-header__profile,
+  .site-header__actions--authenticated .site-header__logout,
+  .site-header__actions--authenticated .site-header__logout-button {
+    flex: 1 1 0;
+    width: 100%;
+  }
+  .site-header__actions--authenticated .site-header__member-link {
     display: none;
   }
-  .site-header__avatar {
-    position: relative;
-    top: auto;
-    right: auto;
-    width: 48px;
-    height: 48px;
-  }
   .site-header--public .site-header__actions {
-    position: static;
-    display: flex;
-    flex: 0 0 auto;
-    align-items: center;
-    width: auto;
-    height: auto;
     gap: 8px;
   }
   .site-header__login,
   .site-header__register {
-    position: static;
-    width: auto;
+    min-width: 0;
     height: 34px;
     padding: 7px 12px;
     font-size: 13px;
@@ -494,17 +399,7 @@ body {
 }
 @media (max-width: 419px) {
   .site-header--public {
-    flex-wrap: wrap;
-    height: auto;
     min-height: 104px;
-    padding-block: 8px;
-    gap: 8px;
-    overflow: visible;
-  }
-  .site-header__brand {
-    flex-basis: 92px;
-    width: 92px;
-    height: 33px;
   }
   .site-header--public .site-header__actions {
     flex: 1 0 100%;
@@ -513,8 +408,6 @@ body {
   .site-header__login,
   .site-header__register {
     flex: 1 1 0;
-    padding-inline: 8px;
-    font-size: 12px;
   }
 }
 /*
@@ -1646,10 +1539,9 @@ body {
   display: flex;
   flex-direction: column;
   width: 844px;
-  height: 174px;
+  min-height: 174px;
   padding: 20px;
   gap: 12px;
-  overflow: hidden;
   background-color: #faf7f5;
   border-radius: 12px;
 }
@@ -1686,15 +1578,10 @@ body {
   outline: 0;
 }
 
-.post-composer__prompt {
-  display: flex;
-  align-items: flex-start;
-  text-decoration: none;
-}
-
-.post-composer__prompt:focus-visible,
-.post-composer__photo:focus-visible,
-.post-composer__visibility:focus-visible {
+.post-composer__textarea:focus-visible,
+.post-composer__photo:focus-within,
+.post-composer__visibility:focus-within,
+.post-composer__remove:focus-visible {
   outline: 2px solid #c95f30;
   outline-offset: 3px;
 }
@@ -1727,16 +1614,97 @@ body {
 }
 
 .post-composer__photo {
+  position: relative;
   width: 155px;
+  cursor: pointer;
 }
 
 .post-composer__visibility {
   width: 156px;
+  padding: 0 12px;
+}
+
+.post-composer__file-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.post-composer__preview {
+  flex: 0 0 54px;
+  width: 54px;
+  height: 42px;
+  overflow: hidden;
+  background-color: #d9d9d9;
+  border: 1px solid #d8d8d8;
+  border-radius: 8px;
+}
+
+.post-composer__preview-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.post-composer__remove {
+  min-height: 35px;
+  padding: 7px 12px;
+  color: #b94848;
+  font: inherit;
+  font-size: 13px;
+  background-color: #ffffff;
+  border: 1px solid #b94848;
+  border-radius: 42px;
+  cursor: pointer;
+}
+
+.post-composer__visibility-select {
+  width: 100%;
+  min-width: 0;
+  height: 40px;
+  padding: 0 4px;
+  color: #2c2420;
+  font: inherit;
+  font-size: 14px;
+  background-color: transparent;
+  border: 0;
+  outline: 0;
 }
 
 .post-composer__submit {
   width: 106px;
   height: 35px;
+  margin-left: auto;
+}
+
+.post-composer__submit:disabled {
+  color: #8d8d8d;
+  background-color: #d9d9d9;
+  border-color: #d9d9d9;
+  cursor: not-allowed;
+}
+
+.post-composer__errors:empty {
+  display: none;
+}
+
+.post-composer__errors ul {
+  margin: 0;
+  padding: 8px 12px;
+  color: #b94848;
+  font-size: 13px;
+  list-style: none;
+  background-color: #fff2f2;
+  border-radius: 8px;
+}
+
+.post-composer [hidden] {
+  display: none;
 }
 
 @media (max-width: 1439px) {
@@ -1753,7 +1721,6 @@ body {
 }
 @media (max-width: 767px) {
   .post-composer {
-    height: auto;
     padding: 16px;
   }
   .post-composer__editor {
@@ -1778,6 +1745,12 @@ body {
     min-width: 0;
     padding: 8px 10px;
     font-size: 13px;
+  }
+  .post-composer__preview {
+    flex: 0 0 56px;
+  }
+  .post-composer__remove {
+    flex: 1 1 auto;
   }
   .post-composer__submit {
     flex: 1 0 100%;
@@ -3420,7 +3393,7 @@ body {
  * Rôle :
  * Reproduire le héros, les publications récentes et leur état vide définis dans Figma.
  * Tâches :
- * Dimensionner les sections, centrer les appels à l'action et organiser les cartes sur trois colonnes.
+ * Dimensionner les sections, centrer les appels à l'action et organiser les cartes dans une grille masonry responsive.
  * Liens avec les autres fichiers :
  * Utilise resources/scss/abstracts/_variables.scss ainsi que les boutons et cartes du dossier components.
  */
@@ -3492,10 +3465,22 @@ body {
 }
 
 .public-home__grid {
+  --masonry-gap: 24px;
   display: grid;
-  grid-template-columns: repeat(3, 395px);
-  width: 1233px;
-  gap: 24px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-auto-rows: 1px;
+  align-items: start;
+  width: min(100%, 1233px);
+  column-gap: 24px;
+  row-gap: 1px;
+}
+
+.public-home__grid > .publication-card {
+  min-width: 0;
+}
+
+.public-home__grid > .publication-card:not(:has(.publication-card__media)) {
+  height: calc((455px - var(--masonry-gap)) / 2);
 }
 
 .public-home__empty {
@@ -3567,8 +3552,14 @@ body {
     padding: 28px 16px;
   }
   .public-home__grid {
+    --masonry-gap: 16px;
     grid-template-columns: minmax(0, 1fr);
-    gap: 16px;
+    column-gap: 16px;
+    row-gap: 1px;
+  }
+  .public-home__grid > .publication-card:not(:has(.publication-card__media)) {
+    height: auto;
+    min-height: 230px;
   }
   .public-home__empty {
     height: auto;
@@ -3770,7 +3761,7 @@ body {
  * Rôle :
  * Assembler le compositeur, les filtres, les publications et l'état vide sur la colonne centrale.
  * Tâches :
- * Appliquer les espacements et variantes de filtre, de réaction et de navigation administrateur.
+ * Appliquer les espacements, la grille masonry des publications et les variantes de filtre et de réaction.
  * Liens avec les autres fichiers :
  * Utilise resources/scss/abstracts/_variables.scss et les composants du fil d'actualité.
  */
@@ -3784,10 +3775,18 @@ body {
 }
 
 .feed-page__posts {
-  display: flex;
-  flex-direction: column;
+  --masonry-gap: 20px;
+  display: grid;
+  grid-template-columns: repeat(2, 395px);
+  grid-auto-rows: 1px;
+  align-items: start;
   width: 844px;
-  gap: 20px;
+  column-gap: 20px;
+  row-gap: 1px;
+}
+
+.feed-page__posts > .publication-card:not(:has(.publication-card__media)) {
+  height: calc((455px - var(--masonry-gap)) / 2);
 }
 
 .feed-page__empty {
@@ -3837,11 +3836,24 @@ body {
   .feed-page__empty {
     width: 100%;
   }
+  .feed-page__posts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 @media (max-width: 767px) {
   .feed-page,
   .feed-page__posts {
     gap: 16px;
+  }
+  .feed-page__posts {
+    --masonry-gap: 16px;
+    grid-template-columns: minmax(0, 1fr);
+    column-gap: 16px;
+    row-gap: 1px;
+  }
+  .feed-page__posts > .publication-card:not(:has(.publication-card__media)) {
+    height: auto;
+    min-height: 230px;
   }
   .feed-page__empty {
     height: auto;
@@ -4913,5 +4925,415 @@ body {
   .access-denied__alert {
     flex-basis: auto;
     width: 100%;
+  }
+}
+/*
+ * Description générale :
+ * Fondations typographiques communes à toute l'interface Voisin.
+ * Rôle :
+ * Appliquer la police Inter et les niveaux de texte relevés dans la maquette Figma.
+ * Tâches :
+ * Définir le texte courant, les titres principaux et les textes secondaires réutilisables.
+ * Liens avec les autres fichiers :
+ * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
+ */
+/*
+ * Description générale :
+ * Ajustements finaux issus de la maquette Figma simplifiée de l’application Voisin.
+ * Rôle :
+ * Harmoniser les écrans publics, membres et administratifs sur la grille desktop de 1440 pixels.
+ * Tâches :
+ * Corriger les proportions des cartes, formulaires, profils et contenus tout en conservant un rendu responsive.
+ * Liens avec les autres fichiers :
+ * Complète les composants et pages chargés auparavant par resources/scss/app.scss.
+ */
+html {
+  background-color: #f0e8e3;
+}
+
+body {
+  width: 100%;
+  max-width: 1440px;
+  min-height: 100vh;
+  margin-inline: auto;
+}
+
+#contenu-principal {
+  width: 100%;
+}
+
+.site-header {
+  max-width: 1440px;
+}
+
+.side-nav {
+  min-height: 238px;
+  height: auto;
+}
+
+.side-nav--admin {
+  min-height: 256px;
+}
+
+.side-nav--admin .side-nav__title {
+  line-height: normal;
+}
+
+.auth-card,
+.auth-card--registration,
+.auth-card--registration-invalid,
+.auth-card--login,
+.auth-card--login-with-alert {
+  height: auto;
+  min-height: 0;
+}
+
+.auth-card--registration .auth-card__form {
+  gap: 16px;
+}
+
+.auth-card__heading {
+  gap: 16px;
+}
+
+.auth-card__avatar-upload {
+  align-self: center;
+}
+
+.publication-card--feed .publication-card__media {
+  width: 374px;
+}
+
+.publication-card--feed .publication-card__header,
+.publication-card--feed .publication-card__text {
+  width: calc(100% - 40px);
+}
+
+.publication-card:not(:has(.publication-card__media)) {
+  height: 190px;
+}
+
+.publication-card:not(:has(.publication-card__media)) .publication-card__like,
+.publication-card:not(:has(.publication-card__media)) .publication-card__comments {
+  top: auto;
+  bottom: 16px;
+}
+
+.publication-card:not(:has(.publication-card__media)) .publication-card__owner-actions {
+  top: auto;
+  bottom: 20px;
+}
+
+.profile-page__publications {
+  --masonry-gap: 16px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-auto-rows: 1px;
+  align-items: start;
+  column-gap: 16px;
+  row-gap: 1px;
+}
+
+.profile-page__publications > .publication-card:not(:has(.publication-card__media)) {
+  height: calc((455px - var(--masonry-gap)) / 2);
+}
+
+.publication-card--profile-third {
+  width: 100%;
+  min-width: 0;
+}
+
+.publication-card--profile-third .publication-card__header,
+.publication-card--profile-third .publication-card__text,
+.publication-card--profile-third .publication-card__media {
+  left: 9px;
+  width: calc(100% - 18px);
+}
+
+.publication-card--profile-third .publication-card__like {
+  left: 9px;
+}
+
+.publication-card--profile-third .publication-card__comments {
+  left: 67px;
+}
+
+.profile-page__summary,
+.profile-page__summary--owner,
+.profile-page__summary--stranger,
+.profile-page__summary--friend,
+.profile-page__summary--request-sent,
+.profile-page__summary--request-received {
+  display: grid;
+  grid-template-columns: 120px minmax(0, 1fr) 190px;
+  align-items: center;
+  min-height: 180px;
+  padding: 32px;
+  gap: 24px;
+}
+
+.profile-page__cover {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+}
+
+.profile-page__identity {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  text-align: center;
+}
+
+.profile-page__overview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  min-width: 0;
+}
+
+.profile-page__stats {
+  justify-content: center;
+  gap: 32px;
+}
+
+.profile-page__actions {
+  justify-content: center;
+}
+
+.profile-page__relationship-message {
+  height: auto;
+  min-height: 0;
+}
+
+.profile-editor__form {
+  align-items: stretch;
+  width: 600px;
+  min-height: 0;
+  padding: 32px;
+}
+
+.profile-editor__current-photo {
+  align-self: center;
+  width: 96px;
+  height: 96px;
+  overflow: hidden;
+  border-radius: 32px;
+}
+
+.profile-editor__current-photo-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-editor__photo {
+  align-self: center;
+  width: auto;
+}
+
+.profile-editor__photo-button {
+  cursor: pointer;
+}
+
+.profile-editor__readonly-help {
+  color: #8d8d8d;
+  font-size: 12px;
+}
+
+.profile-editor__actions {
+  justify-content: flex-start;
+}
+
+.publication-editor__form {
+  width: 700px;
+  min-height: 0;
+}
+
+.publication-editor__form .form-field,
+.publication-editor__textarea {
+  width: 100%;
+}
+
+.publication-editor__current-image {
+  width: 100%;
+  height: auto;
+}
+
+.publication-editor__current-image-preview {
+  width: 150px;
+  height: 100px;
+}
+
+.publication-editor__form .visibility-selector {
+  align-self: flex-end;
+}
+
+.publication-editor__form .form-actions {
+  align-self: flex-end;
+}
+
+.comments-page {
+  gap: 20px;
+}
+
+.comment-card {
+  padding: 16px;
+  gap: 10px;
+  border-color: #d8d8d8;
+  border-radius: 10px;
+  box-shadow: none;
+}
+
+.comment-card__avatar {
+  flex-basis: 36px;
+  width: 36px;
+  height: 36px;
+}
+
+.comment-card__content,
+.comment-card__actions,
+.comment-card__edit-form {
+  padding-left: 0;
+}
+
+.comment-card__action {
+  min-height: auto;
+  padding: 0;
+  background: transparent;
+  border-radius: 0;
+}
+
+.comment-card__action:hover,
+.comment-card__action:focus-visible,
+.comment-card__action--delete,
+.comment-card__action--delete:hover,
+.comment-card__action--delete:focus-visible {
+  background: transparent;
+}
+
+.comment-form {
+  padding: 0;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+}
+
+.admin-page__header {
+  align-items: flex-start;
+}
+
+.admin-page__navigation {
+  display: none;
+}
+
+.moderation-item {
+  min-height: 90px;
+  gap: 12px;
+}
+
+.moderation-item__thumbnail {
+  flex-basis: 40px;
+  width: 40px;
+  height: 40px;
+}
+
+.moderation-item__comments {
+  width: 246px;
+}
+
+.moderation-item__delete {
+  width: 120px;
+  color: #2c2420;
+  background-color: #faf7f5;
+  border-color: #2c2420;
+}
+
+@media (max-width: 1439px) {
+  body {
+    max-width: none;
+  }
+  .publication-card--feed .publication-card__media {
+    width: min(374px, 100% - 38px);
+  }
+  .profile-page__publications {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .profile-page__summary,
+  .profile-page__summary--owner,
+  .profile-page__summary--stranger,
+  .profile-page__summary--friend,
+  .profile-page__summary--request-sent,
+  .profile-page__summary--request-received {
+    grid-template-columns: 104px minmax(0, 1fr);
+    min-height: 0;
+    padding: 24px;
+  }
+  .profile-page__cover {
+    width: 104px;
+    height: 104px;
+  }
+  .profile-page__overview {
+    grid-column: 1/-1;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+  }
+  .publication-editor__form,
+  .profile-editor__form {
+    width: min(700px, 100%);
+  }
+}
+@media (max-width: 767px) {
+  .auth-page #contenu-principal {
+    padding: 32px 16px;
+  }
+  .auth-card {
+    width: 100%;
+    padding: 28px 20px;
+  }
+  .profile-page__summary,
+  .profile-page__summary--owner,
+  .profile-page__summary--stranger,
+  .profile-page__summary--friend,
+  .profile-page__summary--request-sent,
+  .profile-page__summary--request-received {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    padding: 24px 16px;
+    gap: 16px;
+  }
+  .profile-page__overview {
+    flex-direction: column;
+  }
+  .profile-page__publications {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .profile-page__publications > .publication-card:not(:has(.publication-card__media)) {
+    height: auto;
+    min-height: 230px;
+  }
+  .publication-card--feed .publication-card__media,
+  .publication-card--profile-third .publication-card__media {
+    width: 100%;
+  }
+  .publication-card:not(:has(.publication-card__media)) {
+    height: auto;
+    min-height: 190px;
+  }
+  .publication-editor__form .visibility-selector,
+  .publication-editor__form .form-actions {
+    align-self: stretch;
+  }
+  .profile-editor__form {
+    padding: 24px 16px;
+  }
+  .moderation-item__comments,
+  .moderation-item__delete {
+    width: auto;
   }
 }

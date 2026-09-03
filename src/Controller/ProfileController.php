@@ -53,7 +53,7 @@ class ProfileController extends AbstractController
         FileUploadService $fileUploadService
     ): Response {
         $utilisateur = $this->getUtilisateurConnecte();
-        $anciennePhoto = $utilisateur->getNomPhotoProfil();
+        $anciennePhoto = $utilisateur->getUploadFichier();
         $form = $this->createForm(ProfileFormType::class, $utilisateur);
         $form->handleRequest($request);
 
@@ -72,8 +72,6 @@ class ProfileController extends AbstractController
                         'utilisateur' => $utilisateur,
                     ]);
                 }
-
-                $utilisateur->setNomPhotoProfil((string) $upload->getNom());
 
                 if (null !== $anciennePhoto) {
                     $fileUploadService->supprimerPhotoProfil($utilisateur, $anciennePhoto);

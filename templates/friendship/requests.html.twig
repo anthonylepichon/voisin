@@ -28,7 +28,7 @@ Liens avec les autres fichiers : Étend base.html.twig, utilise FriendshipContro
                     {% for demande in demandes %}
                         <article class="friend-request-card">
                             <a class="friend-request-card__avatar" href="{{ path('app_profile_show', {pseudonyme: demande.expediteur.pseudonyme}) }}">
-                                <img class="friend-request-card__avatar-image" src="{{ path('app_upload_fichier', {type: 'profil', nom: demande.expediteur.nomPhotoProfil}) }}" alt="Photo de profil de {{ demande.expediteur.pseudonyme }}">
+                                <img class="friend-request-card__avatar-image" src="{{ path('app_upload_fichier', {type: 'profil', nom: demande.expediteur.uploadFichier.nom}) }}" alt="Photo de profil de {{ demande.expediteur.pseudonyme }}">
                             </a>
                             <div class="friend-request-card__identity">
                                 <a class="friend-request-card__name" href="{{ path('app_profile_show', {pseudonyme: demande.expediteur.pseudonyme}) }}">{{ demande.expediteur.pseudonyme }}</a>

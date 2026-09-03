@@ -4,16 +4,18 @@ Gabarit HTML commun aux futures pages de l'application.
 Rôle :
 Fournir la structure de base et les blocs Twig réutilisables.
 Tâches :
-Charger les ressources classiques servies par AssetMapper et accueillir le contenu des pages.
+Charger le favicon et les ressources classiques servies par AssetMapper, puis accueillir le contenu des pages.
 Liens avec les autres fichiers :
-Charge assets/styles/app.css et assets/app.js ; sera étendu par les futurs modèles Twig.
+Charge assets/images/favicon/favicon.svg, assets/styles/app.css et assets/app.js ; sera étendu par les futurs modèles Twig.
 #}
 <!DOCTYPE html>
 <html lang="fr">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="theme-color" content="#f0e8e3">
         <title>{% block title %}Voisin — Le réseau de quartier{% endblock %}</title>
+        <link rel="icon" href="{{ asset('images/favicon/favicon.svg') }}" type="image/svg+xml" sizes="any">
 
         {% block stylesheets %}
             <link rel="stylesheet" href="{{ asset('styles/app.css') }}">

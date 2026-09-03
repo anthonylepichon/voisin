@@ -12,7 +12,7 @@ Liens avec les autres fichiers : Étend base.html.twig et utilise AdminControlle
 {% block body %}
     <div class="app-shell">
         <aside class="app-shell__sidebar">
-            {% include 'partials/_member_sidebar.html.twig' %}
+            {% include 'partials/_admin_sidebar.html.twig' %}
         </aside>
 
         <section class="app-shell__main admin-page" aria-labelledby="titre-moderation">
@@ -21,10 +21,6 @@ Liens avec les autres fichiers : Étend base.html.twig et utilise AdminControlle
                     <h1 class="admin-page__title" id="titre-moderation">Modération des publications</h1>
                     <p class="admin-page__count">{{ publications|length }} publication{% if publications|length != 1 %}s{% endif %}</p>
                 </div>
-                <nav class="admin-page__navigation" aria-label="Navigation d’administration">
-                    <a class="admin-page__navigation-link" href="{{ path('app_admin_index') }}">Membres</a>
-                    <a class="admin-page__navigation-link admin-page__navigation-link--active" href="{{ path('app_admin_publications') }}" aria-current="page">Publications</a>
-                </nav>
             </header>
 
             {% if publications is empty %}
@@ -37,10 +33,10 @@ Liens avec les autres fichiers : Étend base.html.twig et utilise AdminControlle
                     {% for publication in publications %}
                         <article class="moderation-item">
                             <span class="moderation-item__thumbnail">
-                                {% if publication.nomImage %}
-                                    <img class="moderation-item__thumbnail-image" src="{{ path('app_upload_fichier', {type: 'publication', nom: publication.nomImage}) }}" alt="">
+                                {% if publication.imageAffichee %}
+                                    <img class="moderation-item__thumbnail-image" src="{{ path('app_upload_fichier', {type: 'publication', nom: publication.imageAffichee}) }}" alt="">
                                 {% else %}
-                                    <img class="moderation-item__thumbnail-image" src="{{ path('app_upload_fichier', {type: 'profil', nom: publication.utilisateur.nomPhotoProfil}) }}" alt="">
+                                    <img class="moderation-item__thumbnail-image" src="{{ path('app_upload_fichier', {type: 'profil', nom: publication.utilisateur.uploadFichier.nom}) }}" alt="">
                                 {% endif %}
                             </span>
                             <span class="moderation-item__details">
@@ -55,8 +51,8 @@ Liens avec les autres fichiers : Étend base.html.twig et utilise AdminControlle
                                 <time class="moderation-item__date" datetime="{{ publication.dateCreation|date('c') }}">{{ publication.dateCreation|date('d/m/Y à H:i') }} · {{ publication.visibilite }}</time>
                             </span>
                             <span class="moderation-item__actions">
-                                <a class="moderation-item__comments" href="{{ path('app_comment_index', {id: publication.id}) }}">
-                                    {{ publication.commentaires|length }} commentaire{% if publication.commentaires|length > 1 %}s{% endif %}
+                                <a class="moderation-item__comments" href="{{ path('app_comment_index', {id: publication.id, administration: 1}) }}">
+                                    Modérer les commentaires ({{ publication.commentaires|length }})
                                 </a>
                                 <form action="{{ path('app_publication_delete', {id: publication.id}) }}" method="post" onsubmit="return confirm('Supprimer cette publication ?');">
                                     <input type="hidden" name="_token" value="{{ csrf_token('supprimer-publication-' ~ publication.id) }}">

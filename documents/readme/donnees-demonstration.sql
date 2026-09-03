@@ -3,27 +3,27 @@
 -- Tâches : Insérer uniquement des données de démonstration locales, sans compte administrateur ni donnée personnelle réelle.
 -- Liens avec les autres fichiers : Utilise les images présentes dans uploads/profils et est documenté dans documents/readme/requete-donnees-demo.md.
 
-INSERT INTO utilisateur (id, pseudonyme, adresse_email, mot_de_passe, roles, nom_photo_profil, biographie, date_inscription, date_derniere_activite) VALUES
-(1, 'Alice', 'alice@example.test', '$2y$13$33UYRTzpqOnbDrF1vk7HCOsnVQawfB0W0yJfI9pTczSMkOW/ixvaS', '["ROLE_USER"]', 'profil-alice.jpg', 'Habitante du quartier et passionnée de jardinage.', '2026-01-12 09:15:00', '2026-09-02 17:40:00'),
-(2, 'Aline', 'aline@example.test', '$2y$13$33UYRTzpqOnbDrF1vk7HCOsnVQawfB0W0yJfI9pTczSMkOW/ixvaS', '["ROLE_USER"]', 'profil-aline.jpg', 'Toujours partante pour les initiatives entre voisins.', '2026-01-18 11:30:00', '2026-09-02 16:25:00'),
-(3, 'Benoit', 'benoit@example.test', '$2y$13$33UYRTzpqOnbDrF1vk7HCOsnVQawfB0W0yJfI9pTczSMkOW/ixvaS', '["ROLE_USER"]', 'profil-benoit.jpg', 'Bricoleur du dimanche et voisin attentif.', '2026-02-03 14:10:00', '2026-09-02 15:50:00'),
-(4, 'Eloise', 'eloise@example.test', '$2y$13$33UYRTzpqOnbDrF1vk7HCOsnVQawfB0W0yJfI9pTczSMkOW/ixvaS', '["ROLE_USER"]', 'profil-eloise.jpg', 'Aime partager les bons plans du quartier.', '2026-02-11 08:45:00', '2026-09-01 19:20:00'),
-(5, 'Jessica', 'jessica@example.test', '$2y$13$33UYRTzpqOnbDrF1vk7HCOsnVQawfB0W0yJfI9pTczSMkOW/ixvaS', '["ROLE_USER"]', 'profil-jessica.jpg', 'Membre active de la vie locale.', '2026-03-02 10:05:00', '2026-09-02 18:05:00'),
-(6, 'Quentin', 'quentin@example.test', '$2y$13$33UYRTzpqOnbDrF1vk7HCOsnVQawfB0W0yJfI9pTczSMkOW/ixvaS', '["ROLE_USER"]', 'profil-quentin.jpg', 'Nouveau voisin curieux de découvrir les environs.', '2026-03-19 16:35:00', '2026-09-02 12:10:00'),
-(7, 'Quentin_2', 'quentin2@example.test', '$2y$13$33UYRTzpqOnbDrF1vk7HCOsnVQawfB0W0yJfI9pTczSMkOW/ixvaS', '["ROLE_USER"]', 'profil-quentin2.jpg', 'Partage volontiers des nouvelles du voisinage.', '2026-04-06 13:20:00', '2026-09-01 14:45:00'),
-(8, 'Sophie', 'sophie@example.test', '$2y$13$33UYRTzpqOnbDrF1vk7HCOsnVQawfB0W0yJfI9pTczSMkOW/ixvaS', '["ROLE_USER"]', 'profil-sophie.jpg', 'Amatrice de balades et de moments conviviaux.', '2026-04-22 09:50:00', '2026-09-02 17:15:00');
+INSERT INTO upload_fichier (id, type, nom, chemin) VALUES
+(1, 'profil', 'profil-alice.jpg', 'uploads/profils'),
+(2, 'profil', 'profil-aline.jpg', 'uploads/profils'),
+(3, 'profil', 'profil-benoit.jpg', 'uploads/profils'),
+(4, 'profil', 'profil-eloise.jpg', 'uploads/profils'),
+(5, 'profil', 'profil-jessica.jpg', 'uploads/profils'),
+(6, 'profil', 'profil-quentin.jpg', 'uploads/profils'),
+(7, 'profil', 'profil-quentin2.jpg', 'uploads/profils'),
+(8, 'profil', 'profil-sophie.jpg', 'uploads/profils');
 
-INSERT INTO upload_fichier (type, nom, chemin, utilisateur_id, publication_id) VALUES
-('profil', 'profil-alice.jpg', 'uploads/profils', 1, NULL),
-('profil', 'profil-aline.jpg', 'uploads/profils', 2, NULL),
-('profil', 'profil-benoit.jpg', 'uploads/profils', 3, NULL),
-('profil', 'profil-eloise.jpg', 'uploads/profils', 4, NULL),
-('profil', 'profil-jessica.jpg', 'uploads/profils', 5, NULL),
-('profil', 'profil-quentin.jpg', 'uploads/profils', 6, NULL),
-('profil', 'profil-quentin2.jpg', 'uploads/profils', 7, NULL),
-('profil', 'profil-sophie.jpg', 'uploads/profils', 8, NULL);
+INSERT INTO utilisateur (id, upload_fichier_id, pseudonyme, adresse_email, mot_de_passe, roles, biographie, date_inscription, date_derniere_activite) VALUES
+(1, 1, 'Alice', 'alice@example.test', '$2y$13$33UYRTzpqOnbDrF1vk7HCOsnVQawfB0W0yJfI9pTczSMkOW/ixvaS', '["ROLE_USER"]', 'Habitante du quartier et passionnée de jardinage.', '2026-01-12 09:15:00', '2026-09-02 17:40:00'),
+(2, 2, 'Aline', 'aline@example.test', '$2y$13$33UYRTzpqOnbDrF1vk7HCOsnVQawfB0W0yJfI9pTczSMkOW/ixvaS', '["ROLE_USER"]', 'Toujours partante pour les initiatives entre voisins.', '2026-01-18 11:30:00', '2026-09-02 16:25:00'),
+(3, 3, 'Benoit', 'benoit@example.test', '$2y$13$33UYRTzpqOnbDrF1vk7HCOsnVQawfB0W0yJfI9pTczSMkOW/ixvaS', '["ROLE_USER"]', 'Bricoleur du dimanche et voisin attentif.', '2026-02-03 14:10:00', '2026-09-02 15:50:00'),
+(4, 4, 'Eloise', 'eloise@example.test', '$2y$13$33UYRTzpqOnbDrF1vk7HCOsnVQawfB0W0yJfI9pTczSMkOW/ixvaS', '["ROLE_USER"]', 'Aime partager les bons plans du quartier.', '2026-02-11 08:45:00', '2026-09-01 19:20:00'),
+(5, 5, 'Jessica', 'jessica@example.test', '$2y$13$33UYRTzpqOnbDrF1vk7HCOsnVQawfB0W0yJfI9pTczSMkOW/ixvaS', '["ROLE_USER"]', 'Membre active de la vie locale.', '2026-03-02 10:05:00', '2026-09-02 18:05:00'),
+(6, 6, 'Quentin', 'quentin@example.test', '$2y$13$33UYRTzpqOnbDrF1vk7HCOsnVQawfB0W0yJfI9pTczSMkOW/ixvaS', '["ROLE_USER"]', 'Nouveau voisin curieux de découvrir les environs.', '2026-03-19 16:35:00', '2026-09-02 12:10:00'),
+(7, 7, 'Quentin_2', 'quentin2@example.test', '$2y$13$33UYRTzpqOnbDrF1vk7HCOsnVQawfB0W0yJfI9pTczSMkOW/ixvaS', '["ROLE_USER"]', 'Partage volontiers des nouvelles du voisinage.', '2026-04-06 13:20:00', '2026-09-01 14:45:00'),
+(8, 8, 'Sophie', 'sophie@example.test', '$2y$13$33UYRTzpqOnbDrF1vk7HCOsnVQawfB0W0yJfI9pTczSMkOW/ixvaS', '["ROLE_USER"]', 'Amatrice de balades et de moments conviviaux.', '2026-04-22 09:50:00', '2026-09-02 17:15:00');
 
-INSERT INTO publication (id, contenu, nom_image, visibilite, date_creation, utilisateur_id) VALUES
+INSERT INTO publication (id, contenu, upload_fichier_id, visibilite, date_creation, utilisateur_id) VALUES
 (1, 'Bienvenue sur Voisin : partageons les informations utiles de notre quartier.', NULL, 'publique', '2026-08-10 08:00:00', 1),
 (2, 'Le jardin partagé sera ouvert samedi matin.', NULL, 'amis', '2026-08-12 17:30:00', 1),
 (3, 'Je cherche des idées pour animer la prochaine rencontre de voisins.', NULL, 'publique', '2026-08-20 18:15:00', 1),

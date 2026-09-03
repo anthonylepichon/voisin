@@ -12,19 +12,15 @@ Liens avec les autres fichiers : Étend base.html.twig, utilise AdminController 
 {% block body %}
     <div class="app-shell">
         <aside class="app-shell__sidebar">
-            {% include 'partials/_member_sidebar.html.twig' %}
+            {% include 'partials/_admin_sidebar.html.twig' %}
         </aside>
 
         <section class="app-shell__main admin-page" aria-labelledby="titre-administration">
             <header class="admin-page__header">
                 <div>
-                    <h1 class="admin-page__title" id="titre-administration">Tableau de bord</h1>
+                    <h1 class="admin-page__title" id="titre-administration">Gestion des membres</h1>
                     <p class="admin-page__count">{{ membres|length }} membre{% if membres|length != 1 %}s{% endif %} inscrit{% if membres|length != 1 %}s{% endif %}</p>
                 </div>
-                <nav class="admin-page__navigation" aria-label="Navigation d’administration">
-                    <a class="admin-page__navigation-link admin-page__navigation-link--active" href="{{ path('app_admin_index') }}" aria-current="page">Membres</a>
-                    <a class="admin-page__navigation-link" href="{{ path('app_admin_publications') }}">Publications</a>
-                </nav>
             </header>
 
             {% if membres is empty %}

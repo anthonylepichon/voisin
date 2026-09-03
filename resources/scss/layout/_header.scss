@@ -2,25 +2,27 @@
  * Description générale :
  * Mise en page de l'en-tête principal d'après le composant Figma validé.
  * Rôle :
- * Reproduire exactement les variantes publique, authentifiée complète et authentifiée compacte.
+ * Maintenir le header visible et présenter clairement les actions publiques ou authentifiées.
  * Tâches :
- * Dimensionner le logo, les accès publics, la recherche, la notification et l'avatar.
+ * Dimensionner le logo, les boutons, la notification et l'avatar sur ordinateur, tablette et mobile.
  * Liens avec les autres fichiers :
- * Utilise resources/scss/abstracts/_variables.scss et est chargé par resources/scss/app.scss.
+ * Utilise resources/scss/abstracts/_variables.scss et stylise templates/partials/_header.html.twig.
  */
 
 @use '../abstracts/variables' as variables;
 
 .site-header {
-    position: relative;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
     display: flex;
     align-items: center;
     justify-content: space-between;
     width: 100%;
     height: variables.$header-height;
     padding: variables.$header-padding-vertical variables.$header-padding-horizontal;
-    overflow: hidden;
     background-color: variables.$header-background-color;
+    border-bottom: 1px solid variables.$color-border;
 }
 
 .site-header__brand {
@@ -41,152 +43,72 @@
 }
 
 .site-header__actions {
-    position: relative;
-    flex: 0 0 variables.$header-actions-width;
-    width: variables.$header-actions-width;
-    height: variables.$header-actions-height;
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: flex-end;
+    width: auto;
+    height: auto;
+    gap: 16px;
 }
 
-.site-header--public .site-header__actions {
-    flex-basis: 335px;
-    width: 335px;
-    height: 37px;
-}
-
-.site-header__actions--authenticated {
-    flex: 0 0 variables.$header-actions-width;
-    width: variables.$header-actions-width;
-    height: variables.$header-actions-height;
-}
-
+.site-header__login,
+.site-header__register,
 .site-header__publication,
 .site-header__profile,
-.site-header__logout .site-header__register {
-    position: static !important;
+.site-header__logout-button {
+    position: static;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: auto !important;
+    min-width: 150px;
     height: 37px;
     padding: 8px 20px;
-    overflow: hidden;
+    color: variables.$color-text;
+    font-family: variables.$font-family-base;
     font-size: variables.$font-size-16;
     font-weight: variables.$font-weight-regular;
-    white-space: nowrap;
-    border-radius: variables.$radius-pill;
-}
-
-.site-header__member-link {
-    display: block;
-}
-
-.site-header__publication,
-.site-header__profile {
-    color: variables.$color-text;
+    line-height: 1;
     text-decoration: none;
+    white-space: nowrap;
     background-color: variables.$color-surface-soft;
     border: 1px solid variables.$color-text;
+    border-radius: variables.$radius-pill;
+    cursor: pointer;
 }
 
-.site-header__logout .site-header__register {
+.site-header__register,
+.site-header__logout-button {
     color: variables.$color-surface;
     background-color: variables.$color-primary;
-    border: 0;
+    border-color: variables.$color-primary;
+}
+
+.site-header__login:hover,
+.site-header__publication:hover,
+.site-header__profile:hover {
+    color: variables.$color-surface;
+    background-color: variables.$color-text;
+}
+
+.site-header__register:hover,
+.site-header__logout-button:hover {
+    background-color: variables.$color-text;
+    border-color: variables.$color-text;
 }
 
 .site-header__logout {
     margin: 0;
 }
 
-.site-header__login,
-.site-header__register {
-    position: absolute;
-    top: 0;
+.site-header__notification {
+    position: relative;
     display: inline-flex;
+    flex: 0 0 variables.$icon-size;
     align-items: center;
     justify-content: center;
-    padding: 8px 20px;
-    overflow: hidden;
-    font-size: variables.$font-size-16;
-    font-weight: variables.$font-weight-regular;
-    white-space: nowrap;
-    border-radius: variables.$radius-pill;
-}
-
-.site-header__login {
-    left: 0;
-    width: 150px;
-    height: 37px;
-    color: variables.$color-text;
-    background-color: variables.$color-surface-soft;
-    border: 1px solid variables.$color-text;
-}
-
-.site-header__register {
-    left: 168px;
-    width: 167px;
-    height: 35px;
-    color: variables.$color-surface;
-    background-color: variables.$color-primary;
-    border: 0;
-}
-
-.site-header__search {
-    position: absolute;
-    top: 9px;
-    left: 0;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 364px;
-    height: 42px;
-    padding: 8px 20px;
-    overflow: hidden;
-    background-color: variables.$color-surface-soft;
-    border: 1px solid variables.$color-border;
-    border-radius: variables.$radius-pill;
-}
-
-.site-header__search-input {
-    flex: 1 1 auto;
-    min-width: 0;
-    padding: 0;
-    color: variables.$color-text;
-    font-size: variables.$font-size-16;
-    background: transparent;
-    border: 0;
-    outline: 0;
-}
-
-.site-header__search-input::placeholder {
-    color: variables.$color-text-muted;
-    opacity: 1;
-}
-
-.site-header__search-placeholder {
-    flex: 1 1 auto;
-    min-width: 0;
-    overflow: hidden;
-    color: variables.$color-text-muted;
-    font-size: variables.$font-size-16;
-    white-space: nowrap;
-}
-
-.site-header__search-icon {
-    flex: 0 0 variables.$icon-size;
     width: variables.$icon-size;
     height: variables.$icon-size;
-}
-
-.site-header__notification {
-    position: absolute;
-    top: 18px;
-    left: 397.5px;
-    width: variables.$icon-size;
-    height: variables.$icon-size;
-    padding: 0;
-    background: transparent;
-    border: 0;
 }
 
 .site-header__notification-image {
@@ -212,35 +134,26 @@
     border-radius: variables.$radius-pill;
 }
 
-.site-header__avatar {
-    position: absolute;
-    top: 0;
-    right: 0;
+.site-header__member-link {
     display: block;
+    flex: 0 0 variables.$header-avatar-size;
     width: variables.$header-avatar-size;
     height: variables.$header-avatar-size;
+}
+
+.site-header__avatar {
+    display: block;
+    width: 100%;
+    height: 100%;
     overflow: hidden;
     border-radius: variables.$header-avatar-radius;
 }
 
 .site-header__avatar-image {
-    position: absolute;
-    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
     pointer-events: none;
-}
-
-.site-header--compact .site-header__search,
-.site-header--compact .site-header__notification {
-    display: none;
-}
-
-.site-header--public .site-header__search,
-.site-header--public .site-header__notification,
-.site-header--public .site-header__avatar {
-    display: none;
 }
 
 @media (max-width: variables.$breakpoint-tablet-max) {
@@ -255,46 +168,47 @@
         height: 47px;
     }
 
-    .site-header__actions--authenticated {
-        flex-basis: 430px;
-        width: 430px;
-        height: 52px;
+    .site-header__actions {
+        gap: 10px;
     }
 
-    .site-header__search {
-        top: 5px;
-        width: 300px;
+    .site-header__login,
+    .site-header__register,
+    .site-header__publication,
+    .site-header__profile,
+    .site-header__logout-button {
+        min-width: 128px;
+        padding-inline: 16px;
     }
 
-    .site-header__notification {
-        top: 14px;
-        left: 322px;
-    }
-
-    .site-header__avatar {
+    .site-header__member-link {
+        flex-basis: 52px;
         width: 52px;
         height: 52px;
     }
+}
 
-    .site-header--public .site-header__actions {
-        flex-basis: 310px;
-        width: 310px;
+@media (max-width: variables.$breakpoint-narrow-tablet-max) {
+    .site-header__publication,
+    .site-header__profile,
+    .site-header__logout-button {
+        min-width: 0;
+        padding-inline: 13px;
+        font-size: variables.$font-size-14;
     }
 
-    .site-header__login {
-        width: 142px;
-    }
-
-    .site-header__register {
-        left: 154px;
-        width: 156px;
+    .site-header__notification {
+        display: none;
     }
 }
 
 @media (max-width: variables.$breakpoint-mobile-max) {
     .site-header {
-        height: 64px;
+        flex-wrap: wrap;
+        height: auto;
+        min-height: 112px;
         padding: 8px variables.$mobile-page-padding;
+        gap: 8px;
     }
 
     .site-header__brand {
@@ -303,43 +217,32 @@
         height: 39px;
     }
 
-    .site-header__actions--authenticated,
-    .site-header--compact .site-header__actions--authenticated {
-        display: flex;
-        flex: 0 0 auto;
-        align-items: center;
-        width: auto;
-        height: 48px;
-        gap: 12px;
+    .site-header__actions--authenticated {
+        flex: 1 0 100%;
+        order: 2;
+        width: 100%;
+        gap: 8px;
     }
 
-    .site-header__search,
-    .site-header__notification {
+    .site-header__actions--authenticated .site-header__publication,
+    .site-header__actions--authenticated .site-header__profile,
+    .site-header__actions--authenticated .site-header__logout,
+    .site-header__actions--authenticated .site-header__logout-button {
+        flex: 1 1 0;
+        width: 100%;
+    }
+
+    .site-header__actions--authenticated .site-header__member-link {
         display: none;
     }
 
-    .site-header__avatar {
-        position: relative;
-        top: auto;
-        right: auto;
-        width: 48px;
-        height: 48px;
-    }
-
     .site-header--public .site-header__actions {
-        position: static;
-        display: flex;
-        flex: 0 0 auto;
-        align-items: center;
-        width: auto;
-        height: auto;
         gap: 8px;
     }
 
     .site-header__login,
     .site-header__register {
-        position: static;
-        width: auto;
+        min-width: 0;
         height: 34px;
         padding: 7px 12px;
         font-size: variables.$font-size-13;
@@ -348,18 +251,7 @@
 
 @media (max-width: 419px) {
     .site-header--public {
-        flex-wrap: wrap;
-        height: auto;
         min-height: 104px;
-        padding-block: 8px;
-        gap: 8px;
-        overflow: visible;
-    }
-
-    .site-header__brand {
-        flex-basis: 92px;
-        width: 92px;
-        height: 33px;
     }
 
     .site-header--public .site-header__actions {
@@ -370,7 +262,5 @@
     .site-header__login,
     .site-header__register {
         flex: 1 1 0;
-        padding-inline: 8px;
-        font-size: variables.$font-size-12;
     }
 }

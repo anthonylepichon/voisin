@@ -2,8 +2,8 @@
 
 /*
  * Description générale : Contrôleur de gestion des publications d'un membre.
- * Rôle : Créer, modifier, supprimer et aimer les publications selon les autorisations prévues.
- * Tâches : Gérer le formulaire, déléguer l'image, contrôler la propriété, sécuriser la suppression et traiter les likes.
+ * Rôle : Modifier, supprimer et aimer les publications selon les autorisations prévues.
+ * Tâches : Gérer la modification, déléguer l'image, contrôler la propriété, sécuriser la suppression et traiter les likes.
  * Liens avec les autres fichiers : Utilise PublicationFormType, PublicationRepository, FileUploadService, UserActivityService et les gabarits publication.
  */
 
@@ -26,57 +26,6 @@ use Symfony\Component\Routing\Attribute\Route;
 class PublicationController extends AbstractController
 {
     /**
-     * Rôle : Afficher et traiter la création d'une publication.
-     * Paramètres : La requête, Doctrine et le service central des fichiers.
-     * Retour : Une réponse Twig ou une redirection après création.
-     */
-    #[Route('/publications/nouvelle', name: 'app_publication_create', methods: ['GET', 'POST'])]
-    public function create(
-        Request $request,
-        EntityManagerInterface $entityManager,
-        FileUploadService $fileUploadService
-    ): Response {
-        $publication = new Publication();
-        $publication->setUtilisateur($this->getUtilisateurConnecte());
-        $form = $this->createForm(PublicationFormType::class, $publication);
-        $form->handleRequest($request);
-
-        /** @var UploadedFile|null $image */
-        $image = $form->isSubmitted() ? $form->get('image')->getData() : null;
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            if (null !== $image) {
-                $upload = $fileUploadService->televerserImagePublication($image, $publication);
-
-                if (null === $upload) {
-                    $publication->setNomImage(null);
-                    $form->get('image')->addError(new FormError('L’image n’a pas pu être enregistrée. Réessaie plus tard.'));
-
-                    return $this->render('publication/create.html.twig', [
-                        'publicationForm' => $form,
-                    ]);
-                }
-
-                $publication->setNomImage((string) $upload->getNom());
-            }
-
-            $entityManager->persist($publication);
-            $entityManager->flush();
-            $this->addFlash('success', 'Ta publication a été créée.');
-
-            return $this->redirectToRoute('app_publication_edit', ['id' => $publication->getId()]);
-        }
-
-        if ($form->isSubmitted() && null !== $image) {
-            $publication->setNomImage(null);
-        }
-
-        return $this->render('publication/create.html.twig', [
-            'publicationForm' => $form,
-        ]);
-    }
-
-    /**
      * Rôle : Afficher et traiter la modification d'une publication par son propriétaire.
      * Paramètres : L'identifiant, la requête, le dépôt, Doctrine et le service des fichiers.
      * Retour : Une réponse Twig, une redirection ou une erreur HTTP.
@@ -91,7 +40,7 @@ class PublicationController extends AbstractController
     ): Response {
         $publication = $this->trouverPublication($id, $publicationRepository);
         $this->refuserSiNonUtilisateur($publication);
-        $ancienneImage = $publication->getNomImage();
+        $ancienneImage = $publication->getUploadFichier();
         $form = $this->createForm(PublicationFormType::class, $publication);
         $form->handleRequest($request);
 
@@ -104,7 +53,8 @@ class PublicationController extends AbstractController
                 $upload = $fileUploadService->televerserImagePublication($image, $publication);
 
                 if (null === $upload) {
-                    $publication->setNomImage($ancienneImage);
+                    $publication->setUploadFichier($ancienneImage);
+                    $publication->setImageEnAttente(false);
                     $form->get('image')->addError(new FormError('L’image n’a pas pu être enregistrée. Réessaie plus tard.'));
 
                     return $this->render('publication/edit.html.twig', [
@@ -113,9 +63,6 @@ class PublicationController extends AbstractController
                     ]);
                 }
 
-                $publication->setNomImage((string) $upload->getNom());
-            } elseif ($supprimerImage) {
-                $publication->setNomImage(null);
             }
 
             if ((null !== $image || $supprimerImage) && null !== $ancienneImage) {
@@ -130,7 +77,8 @@ class PublicationController extends AbstractController
         }
 
         if ($form->isSubmitted()) {
-            $publication->setNomImage($ancienneImage);
+            $publication->setUploadFichier($ancienneImage);
+            $publication->setImageEnAttente(false);
         }
 
         return $this->render('publication/edit.html.twig', [
@@ -161,10 +109,10 @@ class PublicationController extends AbstractController
             throw $this->createAccessDeniedException('La demande de suppression est invalide.');
         }
 
-        $nomImage = $publication->getNomImage();
+        $image = $publication->getUploadFichier();
 
-        if (null !== $nomImage) {
-            $fileUploadService->supprimerImagePublication($publication, $nomImage);
+        if (null !== $image) {
+            $fileUploadService->supprimerImagePublication($publication, $image);
         }
 
         $entityManager->remove($publication);

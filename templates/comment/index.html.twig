@@ -13,14 +13,18 @@ Liens avec les autres fichiers : Étend base.html.twig, utilise CommentControlle
 {% block body %}
 	<div class="app-shell">
 		<aside class="app-shell__sidebar">
-			{% include 'partials/_member_sidebar.html.twig' %}
+			{% if is_granted('ROLE_ADMIN') and app.request.query.get('administration') %}
+				{% include 'partials/_admin_sidebar.html.twig' %}
+			{% else %}
+				{% include 'partials/_member_sidebar.html.twig' %}
+			{% endif %}
 		</aside>
 
 		<section class="app-shell__main comments-page" aria-labelledby="titre-commentaires">
 			<article class="publication-summary">
 				<header class="publication-summary__header">
 					<span class="publication-summary__avatar">
-						<img class="publication-summary__avatar-image" src="{{ path('app_upload_fichier', {type: 'profil', nom: publication.utilisateur.nomPhotoProfil}) }}" alt="Photo de profil de {{ publication.utilisateur.pseudonyme }}">
+						<img class="publication-summary__avatar-image" src="{{ path('app_upload_fichier', {type: 'profil', nom: publication.utilisateur.uploadFichier.nom}) }}" alt="Photo de profil de {{ publication.utilisateur.pseudonyme }}">
 					</span>
 					<span class="publication-summary__identity">
 						<a class="publication-summary__author" href="{{ path('app_profile_show', {pseudonyme: publication.utilisateur.pseudonyme}) }}">{{ publication.utilisateur.pseudonyme }}</a>
@@ -32,14 +36,14 @@ Liens avec les autres fichiers : Étend base.html.twig, utilise CommentControlle
 							Publique
 						{% else %}
 							<img class="publication-summary__visibility-icon" src="{{ asset('images/icons/icon_users.png') }}" alt="">
-							Amis uniquement
+							Amis
 						{% endif %}
 					</span>
 				</header>
 
 				{% if publication.contenu is not null and publication.contenu|trim != '' %}
 					<p class="publication-summary__text">{{ publication.contenu }}</p>
-				{% elseif publication.nomImage %}
+				{% elseif publication.imageAffichee %}
 					<p class="publication-summary__text">Publication avec une image.</p>
 				{% endif %}
 
@@ -75,7 +79,7 @@ Liens avec les autres fichiers : Étend base.html.twig, utilise CommentControlle
 						<article class="comment-card{% if estEnEdition %} comment-card--editing{% elseif estUtilisateurCommentaire or peutSupprimer %} comment-card--manageable{% endif %}{% if estUtilisateurPublication and not estUtilisateurCommentaire %} comment-card--publication-owner{% endif %}">
 							<header class="comment-card__header">
 								<span class="comment-card__avatar">
-									<img class="comment-card__avatar-image" src="{{ path('app_upload_fichier', {type: 'profil', nom: commentaire.utilisateur.nomPhotoProfil}) }}" alt="Photo de profil de {{ commentaire.utilisateur.pseudonyme }}">
+									<img class="comment-card__avatar-image" src="{{ path('app_upload_fichier', {type: 'profil', nom: commentaire.utilisateur.uploadFichier.nom}) }}" alt="Photo de profil de {{ commentaire.utilisateur.pseudonyme }}">
 								</span>
 								<span class="comment-card__identity">
 									<a class="comment-card__author" href="{{ path('app_profile_show', {pseudonyme: commentaire.utilisateur.pseudonyme}) }}">{{ commentaire.utilisateur.pseudonyme }}</a>
@@ -122,7 +126,7 @@ Liens avec les autres fichiers : Étend base.html.twig, utilise CommentControlle
 				{{ form_start(commentForm, {attr: {class: classeFormulaireCommentaire}}) }}
 				<div class="comment-form__row">
 					<span class="comment-form__avatar">
-						<img class="comment-form__avatar-image" src="{{ path('app_upload_fichier', {type: 'profil', nom: app.user.nomPhotoProfil}) }}" alt="Photo de profil de {{ app.user.pseudonyme }}">
+						<img class="comment-form__avatar-image" src="{{ path('app_upload_fichier', {type: 'profil', nom: app.user.uploadFichier.nom}) }}" alt="Photo de profil de {{ app.user.pseudonyme }}">
 					</span>
 					{{ form_widget(commentForm.contenu, {attr: {class: 'comment-form__input'}}) }}
 					<button class="comment-form__submit" type="submit">Publier le commentaire</button>

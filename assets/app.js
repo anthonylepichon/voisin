@@ -84,3 +84,136 @@ function initialiserApercuImagePublication() {
 }
 
 initialiserApercuImagePublication();
+
+/**
+ * Rôle : Rendre interactif le formulaire de création intégré au fil d’actualité.
+ * Paramètres : Aucun.
+ * Retour : Aucun.
+ */
+function initialiserCreationPublicationDansFil() {
+    const formulaire = document.querySelector('[data-publication-composer]');
+
+    if (!formulaire) {
+        return;
+    }
+
+    const contenu = formulaire.querySelector('[data-composer-text]');
+    const imageInput = formulaire.querySelector('[data-composer-image]');
+    const visibilite = formulaire.querySelector('[data-composer-visibility]');
+    const apercu = formulaire.querySelector('[data-composer-preview]');
+    const imageApercu = formulaire.querySelector('[data-composer-preview-image]');
+    const boutonRetrait = formulaire.querySelector('[data-composer-remove]');
+    const boutonPublication = formulaire.querySelector('[data-composer-submit]');
+    let adresseApercu = null;
+
+    if (!contenu || !imageInput || !visibilite || !apercu || !imageApercu || !boutonRetrait || !boutonPublication) {
+        return;
+    }
+
+    /**
+     * Rôle : Activer le bouton uniquement lorsque le contenu et la visibilité sont valides côté interface.
+     * Paramètres : Aucun.
+     * Retour : Aucun.
+     */
+    function actualiserBoutonPublication() {
+        const textePresent = contenu.value.trim() !== '';
+        const imagePresente = imageInput.files.length > 0;
+        const visibiliteChoisie = visibilite.value !== '';
+
+        boutonPublication.disabled = !((textePresent || imagePresente) && visibiliteChoisie);
+    }
+
+    /**
+     * Rôle : Masquer l’aperçu et libérer son adresse temporaire.
+     * Paramètres : Aucun.
+     * Retour : Aucun.
+     */
+    function masquerApercu() {
+        if (adresseApercu !== null) {
+            URL.revokeObjectURL(adresseApercu);
+            adresseApercu = null;
+        }
+
+        imageApercu.removeAttribute('src');
+        apercu.hidden = true;
+        boutonRetrait.hidden = true;
+    }
+
+    contenu.addEventListener('input', actualiserBoutonPublication);
+    visibilite.addEventListener('change', actualiserBoutonPublication);
+
+    imageInput.addEventListener('change', function () {
+        masquerApercu();
+
+        if (imageInput.files.length === 0) {
+            actualiserBoutonPublication();
+
+            return;
+        }
+
+        adresseApercu = URL.createObjectURL(imageInput.files[0]);
+        imageApercu.src = adresseApercu;
+        apercu.hidden = false;
+        boutonRetrait.hidden = false;
+        actualiserBoutonPublication();
+    });
+
+    boutonRetrait.addEventListener('click', function () {
+        imageInput.value = '';
+        masquerApercu();
+        actualiserBoutonPublication();
+    });
+
+    actualiserBoutonPublication();
+}
+
+initialiserCreationPublicationDansFil();
+
+/**
+ * Rôle : Répartir les publications en masonry tout en conservant leur ordre chronologique dans le HTML.
+ * Paramètres : Aucun.
+ * Retour : Aucun.
+ */
+function initialiserGrillesMasonryPublications() {
+    const grilles = document.querySelectorAll('[data-publication-masonry]');
+
+    if (grilles.length === 0) {
+        return;
+    }
+
+    grilles.forEach(function (grille) {
+        const cartes = grille.querySelectorAll(':scope > .publication-card');
+
+        /**
+         * Rôle : Calculer le nombre de lignes nécessaire à chaque carte selon sa hauteur réelle.
+         * Paramètres : Aucun.
+         * Retour : Aucun.
+         */
+        function ajusterHauteurCartes() {
+            const stylesGrille = window.getComputedStyle(grille);
+            const hauteurLigne = Number.parseFloat(stylesGrille.gridAutoRows);
+            const espaceEntreLignes = Number.parseFloat(stylesGrille.rowGap);
+            const espaceVisuel = Number.parseFloat(stylesGrille.getPropertyValue('--masonry-gap'));
+
+            cartes.forEach(function (carte) {
+                carte.style.gridRowEnd = 'auto';
+
+                const hauteurCarte = carte.getBoundingClientRect().height;
+                const nombreLignes = Math.ceil((hauteurCarte + espaceVisuel) / (hauteurLigne + espaceEntreLignes));
+
+                carte.style.gridRowEnd = 'span ' + nombreLignes;
+            });
+        }
+
+        grille.querySelectorAll('img').forEach(function (image) {
+            if (!image.complete) {
+                image.addEventListener('load', ajusterHauteurCartes);
+            }
+        });
+
+        window.addEventListener('resize', ajusterHauteurCartes);
+        ajusterHauteurCartes();
+    });
+}
+
+initialiserGrillesMasonryPublications();

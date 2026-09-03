@@ -14,7 +14,7 @@
     <section class="auth-card auth-card--registration{% if registrationForm.vars.submitted and not registrationForm.vars.valid %} auth-card--registration-invalid{% endif %}" aria-labelledby="titre-inscription">
         <div class="auth-card__heading">
             <h1 class="auth-card__title" id="titre-inscription">Créer un compte</h1>
-            <p class="auth-card__subtitle">Rejoignez la communauté Voisin</p>
+            <p class="auth-card__subtitle">Rejoins ton voisinage en quelques instants.</p>
         </div>
 
         {{ form_start(registrationForm, {'attr': {'class': 'auth-card__form'}}) }}
@@ -30,9 +30,14 @@
                 {{ form_errors(registrationForm.adresseEmail) }}
             </div>
             <div class="form-field">
-                {{ form_label(registrationForm.plainPassword, null, {'label_attr': {'class': 'form-field__label'}}) }}
-                {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'form-field__control', 'placeholder': '8 caractères minimum'}}) }}
-                {{ form_errors(registrationForm.plainPassword) }}
+                {{ form_label(registrationForm.plainPassword.first, 'Mot de passe', {'label_attr': {'class': 'form-field__label'}}) }}
+                {{ form_widget(registrationForm.plainPassword.first, {'attr': {'class': 'form-field__control', 'placeholder': '8 caractères minimum'}}) }}
+                {{ form_errors(registrationForm.plainPassword.first) }}
+            </div>
+            <div class="form-field">
+                {{ form_label(registrationForm.plainPassword.second, 'Confirmer le mot de passe', {'label_attr': {'class': 'form-field__label'}}) }}
+                {{ form_widget(registrationForm.plainPassword.second, {'attr': {'class': 'form-field__control', 'placeholder': 'Saisis de nouveau ton mot de passe'}}) }}
+                {{ form_errors(registrationForm.plainPassword.second) }}
             </div>
             <div class="file-upload file-upload--avatar auth-card__avatar-upload" data-photo-profil>
                 {{ form_label(registrationForm.photoProfil, 'Photo de profil (obligatoire)', {'label_attr': {'class': 'file-upload__label'}}) }}

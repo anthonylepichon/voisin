@@ -37,8 +37,11 @@ class Publication
     #[Assert\Length(max: 2000, maxMessage: 'Le contenu ne peut pas dépasser {{ limit }} caractères.')]
     private ?string $contenu = null;
 
-    #[ORM\Column(name: 'nom_image', length: 255, nullable: true)]
-    private ?string $nomImage = null;
+    #[ORM\OneToOne(cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'upload_fichier_id', referencedColumnName: 'id', nullable: true, unique: true, onDelete: 'RESTRICT')]
+    private ?UploadFichier $uploadFichier = null;
+
+    private bool $imageEnAttente = false;
 
     #[ORM\Column(name: 'visibilite', length: 20)]
     #[Assert\NotBlank(message: 'La visibilité est obligatoire.')]
@@ -54,10 +57,6 @@ class Publication
     #[ORM\ManyToOne(inversedBy: 'publications')]
     #[ORM\JoinColumn(name: 'utilisateur_id', nullable: false, onDelete: 'RESTRICT')]
     private ?Utilisateur $utilisateur = null;
-
-    /** @var Collection<int, UploadFichier> */
-    #[ORM\OneToMany(mappedBy: 'publication', targetEntity: UploadFichier::class)]
-    private Collection $uploadFichiers;
 
     /**
      * @var Collection<int, Utilisateur>
@@ -84,7 +83,6 @@ class Publication
         $this->dateCreation = new \DateTimeImmutable();
         $this->utilisateursAimant = new ArrayCollection();
         $this->commentaires = new ArrayCollection();
-        $this->uploadFichiers = new ArrayCollection();
     }
 
     /**
@@ -120,23 +118,35 @@ class Publication
     }
 
     /**
-     * Rôle : Retourner le nom facultatif du fichier image.
+     * Rôle : Retourner le fichier image facultatif de la publication.
      * Paramètres : Aucun.
-     * Retour : Le nom du fichier ou null si aucune image n'est publiée.
+     * Retour : Le fichier ou null si aucune image n'est publiée.
      */
-    public function getNomImage(): ?string
+    public function getUploadFichier(): ?UploadFichier
     {
-        return $this->nomImage;
+        return $this->uploadFichier;
     }
 
     /**
-     * Rôle : Définir le nom facultatif du fichier image.
-     * Paramètres : Le nom du fichier ou null.
+     * Rôle : Définir le fichier image facultatif de la publication.
+     * Paramètres : Le fichier à rattacher ou null.
      * Retour : La publication modifiée.
      */
-    public function setNomImage(?string $nomImage): static
+    public function setUploadFichier(?UploadFichier $uploadFichier): static
     {
-        $this->nomImage = $nomImage;
+        $this->uploadFichier = $uploadFichier;
+
+        return $this;
+    }
+
+    /**
+     * Rôle : Signaler temporairement qu'une nouvelle image valide est présente dans le formulaire.
+     * Paramètres : Vrai lorsqu'une image attend son téléversement.
+     * Retour : La publication modifiée.
+     */
+    public function setImageEnAttente(bool $imageEnAttente): static
+    {
+        $this->imageEnAttente = $imageEnAttente;
 
         return $this;
     }
@@ -258,44 +268,17 @@ class Publication
     }
 
     /**
-     * Rôle : Retourner les fichiers téléversés pour la publication.
+     * Rôle : Retrouver le nom de l’image associée en privilégiant la table centralisée des fichiers.
      * Paramètres : Aucun.
-     * Retour : La collection des images de la publication.
-     *
-     * @return Collection<int, UploadFichier>
+     * Retour : Le nom du fichier image ou null lorsque la publication ne contient aucune image.
      */
-    public function getUploadFichiers(): Collection
+    public function getImageAffichee(): ?string
     {
-        return $this->uploadFichiers;
-    }
-
-    /**
-     * Rôle : Ajouter un fichier téléversé à la publication.
-     * Paramètres : Le fichier à rattacher.
-     * Retour : La publication modifiée.
-     */
-    public function ajouterUploadFichier(UploadFichier $uploadFichier): static
-    {
-        if (!$this->uploadFichiers->contains($uploadFichier)) {
-            $this->uploadFichiers->add($uploadFichier);
-            $uploadFichier->setPublication($this);
+        if (null !== $this->uploadFichier) {
+            return $this->uploadFichier->getNom();
         }
 
-        return $this;
-    }
-
-    /**
-     * Rôle : Retirer un fichier téléversé de la publication.
-     * Paramètres : Le fichier à détacher.
-     * Retour : La publication modifiée.
-     */
-    public function retirerUploadFichier(UploadFichier $uploadFichier): static
-    {
-        if ($this->uploadFichiers->removeElement($uploadFichier)) {
-            $uploadFichier->setPublication(null);
-        }
-
-        return $this;
+        return null;
     }
 
     /**
@@ -332,7 +315,7 @@ class Publication
      */
     public function aUnContenuOuUneImage(): bool
     {
-        if ($this->nomImage !== null) {
+        if ($this->getImageAffichee() !== null || $this->imageEnAttente) {
             return true;
         }
 

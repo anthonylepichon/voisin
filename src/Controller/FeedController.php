@@ -2,19 +2,25 @@
 
 /*
  * Description générale : Contrôleur du fil d'actualité des membres.
- * Rôle : Afficher les publications autorisées selon le filtre choisi.
- * Tâches : Actualiser l'activité, normaliser le filtre et transmettre publications, présence et demandes à Twig.
- * Liens avec les autres fichiers : Utilise les repositories du fil, UserActivityService et templates/feed/index.html.twig.
+ * Rôle : Afficher les publications autorisées et traiter leur création directement dans le fil.
+ * Tâches : Créer une publication, actualiser l'activité, normaliser le filtre et transmettre les données à Twig.
+ * Liens avec les autres fichiers : Utilise PublicationFormType, les repositories, FileUploadService, UserActivityService et templates/feed/index.html.twig.
  */
 
 namespace App\Controller;
 
 use App\Entity\Utilisateur;
+use App\Entity\Publication;
+use App\Form\PublicationFormType;
 use App\Repository\DemandeAmitieRepository;
 use App\Repository\PublicationRepository;
 use App\Repository\UtilisateurRepository;
 use App\Service\UserActivityService;
+use App\Service\FileUploadService;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormError;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -22,16 +28,18 @@ use Symfony\Component\Routing\Attribute\Route;
 class FeedController extends AbstractController
 {
     /**
-     * Rôle : Afficher le fil d'actualité filtré du membre connecté.
-     * Paramètres : La requête HTTP, les dépôts utiles et le service d'activité.
-     * Retour : La réponse Twig du fil d'actualité.
+     * Rôle : Afficher le fil filtré et traiter son formulaire de création rapide.
+     * Paramètres : La requête HTTP, Doctrine, les dépôts et les services du fil.
+     * Retour : La réponse Twig du fil ou une redirection après publication.
      */
-    #[Route('/fil-actualite', name: 'app_feed', methods: ['GET'])]
+    #[Route('/fil-actualite', name: 'app_feed', methods: ['GET', 'POST'])]
     public function index(
         Request $request,
+        EntityManagerInterface $entityManager,
         PublicationRepository $publicationRepository,
         UtilisateurRepository $utilisateurRepository,
         DemandeAmitieRepository $demandeAmitieRepository,
+        FileUploadService $fileUploadService,
         UserActivityService $userActivityService,
     ): Response
     {
@@ -39,6 +47,45 @@ class FeedController extends AbstractController
 
         if (!$utilisateur instanceof Utilisateur) {
             throw $this->createAccessDeniedException();
+        }
+
+        $publication = new Publication();
+        $publication->setUtilisateur($utilisateur);
+        $publication->setVisibilite('');
+        $formulairePublication = $this->createForm(PublicationFormType::class, $publication, [
+            'creation_dans_fil' => true,
+        ]);
+        $formulairePublication->handleRequest($request);
+
+        /** @var UploadedFile|null $image */
+        $image = null;
+
+        if ($formulairePublication->isSubmitted()) {
+            $image = $formulairePublication->get('image')->getData();
+        }
+
+        if ($formulairePublication->isSubmitted() && $formulairePublication->isValid()) {
+            if (null !== $image) {
+                $upload = $fileUploadService->televerserImagePublication($image, $publication);
+
+                if (null === $upload) {
+                    $publication->setUploadFichier(null);
+                    $publication->setImageEnAttente(false);
+                    $formulairePublication->get('image')->addError(new FormError('L’image n’a pas pu être enregistrée. Réessaie plus tard.'));
+                }
+            }
+
+            if ($formulairePublication->isValid()) {
+                $entityManager->persist($publication);
+                $entityManager->flush();
+                $this->addFlash('success', 'Ta publication a été créée.');
+
+                return $this->redirectToRoute('app_feed');
+            }
+        }
+
+        if ($formulairePublication->isSubmitted() && null !== $image) {
+            $publication->setImageEnAttente(false);
         }
 
         $filtre = $request->query->getString('filtre', PublicationRepository::FILTRE_TOUTES);
@@ -77,6 +124,7 @@ class FeedController extends AbstractController
             'amisEnLigne' => $amisEnLigne,
             'statutsEnLigne' => $statutsEnLigne,
             'nombreDemandesAmitieEnAttente' => $demandeAmitieRepository->compterRecues($utilisateur),
+            'publicationForm' => $formulairePublication,
         ]);
     }
 }

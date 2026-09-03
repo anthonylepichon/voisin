@@ -1,8 +1,8 @@
 {#
- Description générale : Page d'accueil publique minimale de l'application Voisin.
- Rôle : Permettre de contrôler le gabarit Twig, les styles compilés et l'en-tête commun.
- Tâches : Présenter les accès statiques prévus et l'état vide des publications récentes.
- Liens avec les autres fichiers : Étend templates/base.html.twig et utilise les styles de resources/scss/pages/_public-home.scss.
+ Description générale : Page d'accueil publique de l'application Voisin.
+ Rôle : Présenter le réseau et les cinq publications publiques les plus récentes.
+ Tâches : Afficher les appels à l'action, les cartes publiques ou leur état vide.
+ Liens avec les autres fichiers : Étend base.html.twig et utilise HomeController ainsi que publication/_card.html.twig.
 #}
 
 {% extends 'base.html.twig' %}
@@ -25,9 +25,21 @@
     <section class="public-home__recent" aria-labelledby="publications-recentes">
         <h2 class="public-home__recent-title" id="publications-recentes">Ils ont partagé récemment leurs expériences</h2>
 
-        <div class="public-home__empty">
-            <p class="public-home__empty-title">Les publications apparaîtront bientôt ici.</p>
-            <p class="public-home__empty-description">Connectez-vous pour rejoindre votre voisinage.</p>
-        </div>
+        {% if publications is empty %}
+            <div class="public-home__empty">
+                <p class="public-home__empty-title">Les publications apparaîtront bientôt ici.</p>
+                <p class="public-home__empty-description">Connectez-vous pour rejoindre votre voisinage.</p>
+            </div>
+        {% else %}
+            <div class="public-home__grid" data-publication-masonry>
+                {% for publication in publications %}
+                    {% include 'publication/_card.html.twig' with {
+                        publication: publication,
+                        varianteCarte: '',
+                        afficherActionsProprietaire: false
+                    } only %}
+                {% endfor %}
+            </div>
+        {% endif %}
     </section>
 {% endblock %}
