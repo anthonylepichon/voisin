@@ -145,8 +145,7 @@ Avec le projet placé dans `C:\laragon\www\voisin` et la racine Web configurée 
 
 Un jeu de données fictives permet de tester localement les profils, publications, commentaires, mentions « J'aime », amitiés et demandes d'amitié.
 
-- [Consulter le guide des données de démonstration](documents/readme/requete-donnees-demo.md)
-- [Consulter le script SQL d'insertion](documents/readme/donnees-demonstration.sql)
+- [Consulter le guide et la requête SQL des données de démonstration](documents/readme/requete-donnees-demo.md)
 
 Le script doit être importé uniquement après l'exécution de toutes les migrations, dans une base locale vide. Il contient exclusivement des insertions et ne doit être exécuté qu'une seule fois.
 
@@ -156,11 +155,7 @@ Pour l'importer avec le client MySQL :
 mysql -u utilisateur -p voisin
 ```
 
-Puis, dans le terminal MySQL, en adaptant le chemin au poste de travail :
-
-```sql
-SOURCE C:/laragon/www/voisin/documents/readme/donnees-demonstration.sql;
-```
+Puis, dans le terminal MySQL, copier et exécuter le bloc intitulé « Requête SQL complète » du [guide des données de démonstration](documents/readme/requete-donnees-demo.md).
 
 Les huit comptes fictifs utilisent le mot de passe local indiqué dans le [guide des données de démonstration](documents/readme/requete-donnees-demo.md). Ils possèdent uniquement `ROLE_USER` : aucun compte administrateur n'est créé par ce script.
 
