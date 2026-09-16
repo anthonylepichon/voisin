@@ -5,7 +5,7 @@
 /*
  * Description générale : Représente un commentaire déposé sous une publication.
  * Rôle : Conserver son contenu, sa date, son propriétaire et sa publication associée.
- * Tâches : Appliquer les champs et index du MPD, puis synchroniser les relations avec l'utilisateur et la publication.
+ * Tâches : Appliquer les champs et index du MPD, normaliser la date en UTC puis synchroniser les relations avec l'utilisateur et la publication.
  * Liens avec les autres fichiers : Lié à Utilisateur, Publication, CommentaireRepository, CommentFormType et CommentController.
  */
 
@@ -51,7 +51,7 @@ class Commentaire
      */
     public function __construct()
     {
-        $this->dateCreation = new \DateTimeImmutable();
+        $this->dateCreation = new \DateTimeImmutable('now', new \DateTimeZone('UTC'));
     }
 
     /**
@@ -103,7 +103,7 @@ class Commentaire
      */
     public function setDateCreation(\DateTimeImmutable $dateCreation): static
     {
-        $this->dateCreation = $dateCreation;
+        $this->dateCreation = $dateCreation->setTimezone(new \DateTimeZone('UTC'));
 
         return $this;
     }

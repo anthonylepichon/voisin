@@ -5,7 +5,7 @@
 /*
  * Description générale : Représente un compte utilisateur de l'application Voisin.
  * Rôle : Porter les données de sécurité, de profil et d'activité d'un utilisateur.
- * Tâches : Garantir les contraintes Doctrine, les caractères autorisés du pseudonyme, la photo du profil et l'encapsulation des relations inverses.
+ * Tâches : Garantir les contraintes Doctrine, les dates UTC, les caractères autorisés du pseudonyme, la photo du profil et l'encapsulation des relations inverses.
  * Liens avec les autres fichiers : Utilisée par UtilisateurRepository, UploadFichier, Security, les contrôleurs et les autres entités métier.
  */
 
@@ -92,7 +92,7 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function __construct()
     {
-        $this->dateInscription = new \DateTimeImmutable();
+        $this->dateInscription = new \DateTimeImmutable('now', new \DateTimeZone('UTC'));
         $this->publications = new ArrayCollection();
         $this->commentaires = new ArrayCollection();
         $this->publicationsAimees = new ArrayCollection();
@@ -273,7 +273,7 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function setDateInscription(\DateTimeImmutable $dateInscription): static
     {
-        $this->dateInscription = $dateInscription;
+        $this->dateInscription = $dateInscription->setTimezone(new \DateTimeZone('UTC'));
 
         return $this;
     }
@@ -295,7 +295,13 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function setDateDerniereActivite(?\DateTimeImmutable $dateDerniereActivite): static
     {
-        $this->dateDerniereActivite = $dateDerniereActivite;
+        if (null === $dateDerniereActivite) {
+            $this->dateDerniereActivite = null;
+
+            return $this;
+        }
+
+        $this->dateDerniereActivite = $dateDerniereActivite->setTimezone(new \DateTimeZone('UTC'));
 
         return $this;
     }

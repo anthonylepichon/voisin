@@ -35,7 +35,10 @@ class AdminController extends AbstractController
         UserActivityService $userActivityService
     ): Response {
         $utilisateur = $this->getUtilisateurConnecte();
-        $userActivityService->enregistrerActivite($utilisateur, new \DateTimeImmutable());
+        $userActivityService->enregistrerActivite(
+            $utilisateur,
+            new \DateTimeImmutable('now', new \DateTimeZone('UTC'))
+        );
 
         return $this->render('admin/index.html.twig', [
             'membres' => $utilisateurRepository->trouverTousPourAdministration(),
@@ -53,7 +56,10 @@ class AdminController extends AbstractController
         UserActivityService $userActivityService
     ): Response {
         $utilisateur = $this->getUtilisateurConnecte();
-        $userActivityService->enregistrerActivite($utilisateur, new \DateTimeImmutable());
+        $userActivityService->enregistrerActivite(
+            $utilisateur,
+            new \DateTimeImmutable('now', new \DateTimeZone('UTC'))
+        );
 
         return $this->render('admin/publications.html.twig', [
             'publications' => $publicationRepository->trouverToutesPourModeration(),

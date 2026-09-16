@@ -52,7 +52,10 @@ class CommentController extends AbstractController
         $publication = $this->trouverPublication($id, $publicationRepository);
         $utilisateur = $this->getUtilisateurConnecte();
         $this->refuserSiPublicationInvisible($publication, $utilisateur);
-        $userActivityService->enregistrerActivite($utilisateur, new \DateTimeImmutable());
+        $userActivityService->enregistrerActivite(
+            $utilisateur,
+            new \DateTimeImmutable('now', new \DateTimeZone('UTC'))
+        );
 
         $commentaire = new Commentaire();
         $formulaire = $this->creerFormulaireAjout($commentaire, $publication);
@@ -83,7 +86,10 @@ class CommentController extends AbstractController
         $publication = $this->trouverPublication($id, $publicationRepository);
         $utilisateur = $this->getUtilisateurConnecte();
         $this->refuserSiPublicationInvisible($publication, $utilisateur);
-        $userActivityService->enregistrerActivite($utilisateur, new \DateTimeImmutable());
+        $userActivityService->enregistrerActivite(
+            $utilisateur,
+            new \DateTimeImmutable('now', new \DateTimeZone('UTC'))
+        );
 
         $commentaire = new Commentaire();
         $commentaire->setUtilisateur($utilisateur);
@@ -140,13 +146,19 @@ class CommentController extends AbstractController
 
         if ($formulaireEdition->isSubmitted() && $formulaireEdition->isValid()) {
             $entityManager->flush();
-            $userActivityService->enregistrerActivite($utilisateur, new \DateTimeImmutable());
+            $userActivityService->enregistrerActivite(
+                $utilisateur,
+                new \DateTimeImmutable('now', new \DateTimeZone('UTC'))
+            );
             $this->addFlash('success', 'Ton commentaire a été modifié.');
 
             return $this->redirectToRoute('app_comment_index', ['id' => $publication->getId()]);
         }
 
-        $userActivityService->enregistrerActivite($utilisateur, new \DateTimeImmutable());
+        $userActivityService->enregistrerActivite(
+            $utilisateur,
+            new \DateTimeImmutable('now', new \DateTimeZone('UTC'))
+        );
         $formulaireAjout = $this->creerFormulaireAjout(new Commentaire(), $publication);
 
         return $this->afficherPage(
@@ -190,7 +202,10 @@ class CommentController extends AbstractController
 
         $entityManager->remove($commentaire);
         $entityManager->flush();
-        $userActivityService->enregistrerActivite($utilisateur, new \DateTimeImmutable());
+        $userActivityService->enregistrerActivite(
+            $utilisateur,
+            new \DateTimeImmutable('now', new \DateTimeZone('UTC'))
+        );
         $this->addFlash('success', 'Le commentaire a été supprimé.');
 
         return $this->redirectToRoute('app_comment_index', ['id' => $publication->getId()]);

@@ -51,7 +51,7 @@ class FeedController extends AbstractController
             throw $this->createAccessDeniedException();
         }
 
-        $dateCourante = new \DateTimeImmutable();
+        $dateCourante = new \DateTimeImmutable('now', new \DateTimeZone('UTC'));
         $userActivityService->enregistrerActivite($utilisateur, $dateCourante);
 
         $publication = new Publication();
