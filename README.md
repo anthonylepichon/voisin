@@ -1,11 +1,3 @@
-<!--
-Origine du code : Code créé par le développeur.
-Description générale : Présente l'application Voisin, son installation, sa conception et son déploiement.
-Rôle : Servir de point d'entrée technique et fonctionnel pour découvrir, installer et évaluer le projet.
-Tâches : Décrire les fonctionnalités, les prérequis, la configuration locale, les données de démonstration et le processus de livraison.
-Liens avec les autres fichiers : S'appuie sur composer.json, package.json, migrations/, documents/conceptualisation/, documents/readme/ et .github/workflows/.
--->
-
 # Voisin
 
 Voisin est un réseau social de proximité développé avec Symfony. L'application permet aux habitants d'un même quartier de publier des informations, d'échanger avec leurs amis et de participer à une communauté locale.
@@ -59,13 +51,86 @@ Le projet est accessible en production à l'adresse suivante : [voisin.creativco
 
 Le dossier généré `public/assets/` n'est pas versionné. AssetMapper le construit pour la production à partir des fichiers suivis dans `assets/`.
 
+## Construction de l'application avec Symfony
+
+Le projet suit l'architecture MVC de Symfony. Les outils du framework ont servi à construire le socle technique, puis le code généré a été complété pour appliquer les règles métier de Voisin.
+
+### Outils Symfony utilisés
+
+| Outil | Rôle dans Symfony | Utilisation dans Voisin |
+|---|---|---|
+| Composer | Installe les bibliothèques PHP définies dans `composer.json` et verrouille leurs versions dans `composer.lock`. | Installation de Symfony 7.4, Doctrine, Twig, Security, Validator, AssetMapper et des autres composants du projet. |
+| Symfony Flex | Automatise la configuration initiale des composants installés avec Composer grâce aux recettes Symfony. | Création et mise à jour des fichiers de configuration dans `config/` lors de l'installation des composants. |
+| Symfony MakerBundle | Fournit des commandes `make:*` qui génèrent une structure de départ cohérente avec Symfony. | Génération initiale de plusieurs entités, contrôleurs, formulaires et éléments de sécurité, ensuite adaptés au fonctionnement de Voisin. |
+| Console Symfony | Exécute les commandes du framework depuis `php bin/console`. | Création des migrations, contrôle du schéma, inspection des routes, nettoyage du cache et vérification de la configuration. |
+| Doctrine ORM | Associe les objets PHP aux tables MySQL et permet de manipuler les données avec les entités et repositories. | Gestion des utilisateurs, publications, commentaires, mentions J'aime, amitiés, demandes d'amitié et fichiers téléversés. |
+| Doctrine Migrations | Versionne les changements de structure de la base de données. | Création et évolution reproductible des tables, colonnes, index et contraintes de Voisin. |
+| Routing et contrôleurs | Relient une URL à une méthode PHP et injectent les services nécessaires. | Routes déclarées par attributs dans `src/Controller/`, réponses Twig, redirections et traitements des formulaires. |
+| Form et Validator | Construisent les formulaires et contrôlent les données reçues avant leur traitement. | Inscription, profil, publications, commentaires et téléversement des images avec contraintes de validation. |
+| Symfony Security | Gère l'authentification, le hachage des mots de passe, les rôles, le pare-feu et les contrôles d'accès. | Authentification des membres, protection CSRF et séparation des droits `ROLE_USER` et `ROLE_ADMIN`. |
+| Twig | Produit les pages HTML à partir de templates et des données fournies par les contrôleurs. | Pages publiques, fil d'actualité, profils, formulaires et administration, avec affichage des dates en `Europe/Paris`. |
+| AssetMapper | Référence et publie les fichiers CSS, JavaScript et images sans bundler JavaScript supplémentaire. | Utilisation des sources versionnées dans `assets/`, puis compilation de la carte des ressources dans `public/assets/` en production. |
+| Web Profiler et DebugBundle | Affichent en développement les routes, requêtes, services, erreurs et performances d'une page. | Diagnostic local uniquement ; ces outils ne sont pas installés en production grâce à `composer install --no-dev`. |
+
+### Étapes de construction du code
+
+1. **Installation du socle** : Composer et Symfony Flex ont installé les composants nécessaires et préparé leur configuration.
+2. **Modélisation avec Doctrine** : les entités et leurs relations ont traduit le modèle de données en objets PHP. Les repositories centralisent les recherches en base.
+3. **Versionnement de la base** : les différences entre les entités et le schéma ont été transformées en migrations, puis appliquées avec `doctrine:migrations:migrate`.
+4. **Création des parcours** : les contrôleurs et leurs routes ont été construits pour l'inscription, l'authentification, le fil, les profils, les publications, les interactions et l'administration.
+5. **Traitement des entrées** : les FormTypes et les contraintes Validator vérifient les données avant l'écriture en base. Les contrôleurs appliquent ensuite les autorisations et les règles métier.
+6. **Sécurisation** : Symfony Security protège les zones membres et administrateur. Les actions sensibles contrôlent également les rôles, la propriété des ressources et les jetons CSRF.
+7. **Création des vues** : Twig affiche les données transmises par les contrôleurs. Les composants visuels communs sont partagés entre les templates.
+8. **Intégration des ressources** : Sass compile `resources/scss/app.scss` vers `assets/styles/app.css`. AssetMapper sert ensuite le CSS, le JavaScript classique et les images.
+9. **Contrôle du projet** : les commandes `lint:*`, le lanceur de tests PHP et la CI GitHub vérifient la syntaxe, le conteneur de services, les templates, la configuration et les règles métier.
+
+Les principales commandes Symfony correspondant à cette construction sont :
+
+```bash
+php bin/console make:entity
+php bin/console make:controller
+php bin/console make:form
+php bin/console make:migration
+php bin/console doctrine:migrations:migrate
+php bin/console debug:router
+php bin/console cache:clear
+php bin/console asset-map:compile
+```
+
+MakerBundle accélère donc la création des structures répétitives, mais il ne remplace pas le développement. Les règles de visibilité, d'amitié, de propriété, de modération et de téléversement ont été écrites et adaptées dans les contrôleurs, repositories, formulaires et services du projet.
+
 ## Prérequis locaux
 
-- PHP 8.2 ou supérieur avec les extensions requises par Symfony et MySQL ;
+- PHP 8.2 ou supérieur avec les extensions détaillées ci-dessous ;
 - Composer ;
 - MySQL ;
 - Node.js et npm ;
 - Laragon avec Apache configuré pour utiliser `public/` comme racine Web.
+
+### Extensions PHP
+
+| Extension | Utilisation dans Voisin |
+|---|---|
+| `ctype` | Traitement de caractères utilisé par les composants Symfony |
+| `iconv` | Conversion et traitement des chaînes de caractères |
+| `PDO` | Couche d'accès aux bases de données utilisée par Doctrine |
+| `pdo_mysql` | Connexion de Doctrine à MySQL en local et sur OVH |
+| `fileinfo` | Détection du type réel des images téléversées |
+| `intl` | Fonctions d'internationalisation utilisées par Symfony |
+
+Sous PowerShell, leur présence peut être contrôlée avec :
+
+```powershell
+php -m | Select-String '^(ctype|iconv|PDO|pdo_mysql|fileinfo|intl)$'
+```
+
+Dans le terminal SSH du serveur OVH :
+
+```bash
+php -m | grep -E '^(ctype|iconv|PDO|pdo_mysql|fileinfo|intl)$'
+```
+
+Une extension peut être disponible sur le serveur sans être explicitement déclarée dans `composer.json`. Sa déclaration reste recommandée afin que Composer puisse détecter un environnement incomplet avant l'installation.
 
 ## Installation locale
 
@@ -145,7 +210,15 @@ Avec le projet placé dans `C:\laragon\www\voisin` et la racine Web configurée 
 
 Un jeu de données fictives permet de tester localement les profils, publications, commentaires, mentions « J'aime », amitiés et demandes d'amitié.
 
-- [Consulter le guide et la requête SQL des données de démonstration](documents/readme/requete-donnees-demo.md)
+- [Consulter le guide complet et la requête SQL des données de démonstration](documents/readme/requete-donnees-demo.md)
+
+Ce document associé regroupe dans un seul fichier :
+
+- les comptes fictifs disponibles ;
+- le mot de passe commun réservé au développement local ;
+- le nombre d'enregistrements créés dans chaque table ;
+- les précautions d'importation ;
+- la requête SQL complète et versionnée avec le projet.
 
 Le script doit être importé uniquement après l'exécution de toutes les migrations, dans une base locale vide. Il contient exclusivement des insertions et ne doit être exécuté qu'une seule fois.
 
@@ -162,6 +235,12 @@ Les huit comptes fictifs utilisent le mot de passe local indiqué dans le [guide
 > Le jeu de démonstration est strictement réservé au développement local. Il ne doit jamais être importé dans la base de production.
 
 ## Conception
+
+### Tableau des spécifications
+
+Le classeur de spécifications relie les choix de conception aux fichiers réellement développés. Il comporte trois feuilles consacrées aux contrôleurs Symfony, aux templates Twig et au JavaScript. Chaque ligne précise notamment le traitement du fichier, son rôle, les dépendances utilisées, les droits nécessaires et les règles métier ou de sécurité associées.
+
+- [Télécharger le tableau Excel des spécifications de Voisin](<documents/conceptualisation/Spécifications/Specifications-VOISIN.xlsx>)
 
 ### Schéma ergonomique
 
@@ -235,22 +314,90 @@ npm run sass:build
 
 ## Déploiement
 
+Le site est hébergé sur une offre Web mutualisée OVH. Le déploiement suit une démarche CI/CD avec Git, GitHub, GitHub Actions et SSH. Cette organisation relève d'une pratique DevOps : le développement, les contrôles et les opérations de mise en production sont reliés par un processus versionné, automatisé et reproductible.
+
 Le projet utilise deux branches permanentes :
 
 - `develop` pour l'intégration et le développement ;
 - `main` pour la version stable déployée en production.
 
-Le workflow `.github/workflows/deploy-production.yml` se déclenche uniquement après une mise à jour de `main`. Il :
+### Préparation de l'hébergement OVH
 
-1. vérifie la connexion SSH et l'état des migrations ;
-2. interrompt le déploiement si une migration non appliquée est détectée ;
-3. met à jour le dépôt sur OVH par avance rapide ;
-4. installe les dépendances Composer sans les outils de développement ;
-5. vide le cache Symfony ;
-6. compile les ressources avec AssetMapper ;
-7. vérifie que l'URL de production répond correctement.
+La mise en production initiale a nécessité les opérations suivantes :
 
-Les migrations de production sont exécutées manuellement après sauvegarde de la base de données.
+1. associer le domaine `voisin.creativconsulting.fr` à l'hébergement OVH et activer son certificat SSL ;
+2. configurer `public/` comme racine Web afin que les autres fichiers du projet ne soient pas directement accessibles ;
+3. sélectionner PHP 8.2 sur l'hébergement et vérifier les extensions nécessaires ;
+4. créer la base MySQL de production et vérifier la connexion avec `pdo_mysql` ;
+5. cloner le dépôt dans le répertoire de déploiement OVH et positionner sa copie de travail sur `main` ;
+6. créer sur OVH un fichier `.env.local` de production contenant `APP_ENV`, `APP_SECRET`, `DATABASE_URL` et `DEFAULT_URI` ;
+7. créer un compte administrateur de production distinct des comptes locaux ;
+8. installer sur le serveur une clé de déploiement GitHub en lecture seule pour permettre les opérations `git fetch` et `git pull`.
+
+Le fichier `.env.local` de production est ignoré par Git. Une mise à jour du dépôt ne l'écrase donc pas et aucun secret de production n'est stocké dans le code source.
+
+### Intégration continue
+
+Le workflow [`.github/workflows/ci.yml`](.github/workflows/ci.yml) s'exécute sur les Pull Requests vers `develop` et `main`, ainsi que sur les mises à jour de `develop`. Il installe un environnement PHP 8.2 et Node.js, puis contrôle Composer, la syntaxe PHP et JavaScript, le conteneur Symfony, Twig, YAML, les tests automatisés et la compilation Sass.
+
+Le chemin normal d'une modification est donc :
+
+```text
+branche de travail
+→ Pull Request vers develop
+→ contrôles CI
+→ fusion dans develop
+→ Pull Request de production vers main
+→ nouveaux contrôles CI
+→ fusion dans main
+```
+
+`develop` ne déploie jamais l'application. Seule une version relue, contrôlée puis fusionnée dans `main` peut atteindre la production.
+
+### Secrets GitHub de production
+
+L'environnement GitHub `production` fournit au workflow les secrets suivants :
+
+| Secret | Utilisation |
+|---|---|
+| `OVH_HOST` | Adresse du serveur SSH OVH |
+| `OVH_PORT` | Port de connexion SSH |
+| `OVH_USER` | Compte SSH de l'hébergement |
+| `OVH_DEPLOY_PATH` | Chemin absolu du dépôt sur OVH |
+| `OVH_SSH_PRIVATE_KEY` | Clé privée utilisée temporairement par GitHub Actions pour joindre OVH |
+| `OVH_KNOWN_HOSTS` | Empreinte SSH attendue du serveur OVH |
+| `PRODUCTION_URL` | URL utilisée pour le contrôle final du site |
+
+La clé privée GitHub Actions et la clé de déploiement en lecture seule installée sur OVH ont deux rôles différents : la première autorise GitHub Actions à ouvrir une session SSH vers OVH ; la seconde autorise le serveur OVH à lire le dépôt GitHub.
+
+### Déploiement automatique
+
+Le workflow [`.github/workflows/deploy-production.yml`](.github/workflows/deploy-production.yml) se déclenche après une mise à jour de `main` ou lors d'un lancement manuel autorisé. Il :
+
+1. prépare une clé SSH temporaire sur le runner GitHub Actions ;
+2. vérifie que le dépôt OVH est bien positionné sur `main` ;
+3. compare le dossier `migrations/` installé avec celui de la version à déployer ;
+4. interrompt le processus avant toute mise à jour si une migration est détectée ;
+5. ouvre une connexion SSH vers OVH et exécute `git pull --ff-only origin main` ;
+6. exécute Composer avec `--no-dev` et `--optimize-autoloader` ;
+7. vide et reconstruit le cache Symfony en environnement `prod` ;
+8. exécute `asset-map:compile` pour produire `public/assets/` ;
+9. appelle l'URL de production avec `curl` et fait échouer le workflow si le site ne répond pas correctement ;
+10. supprime la clé SSH temporaire du runner, même en cas d'échec.
+
+Le CSS compilé dans `assets/styles/app.css` est versionné. La CI vérifie avant fusion qu'il correspond encore aux sources Sass. Le serveur de production n'a donc pas besoin de Node.js pour déployer la version validée ; AssetMapper se charge de publier les ressources suivies par Git.
+
+### Gestion volontairement manuelle des migrations
+
+Les migrations de production ne sont pas lancées automatiquement. Lorsqu'une modification du dossier `migrations/` est détectée, le workflow s'arrête avant de modifier le serveur. La procédure consiste alors à :
+
+1. sauvegarder la base MySQL de production ;
+2. vérifier les migrations concernées ;
+3. les exécuter manuellement avec Doctrine sur OVH ;
+4. contrôler l'état de la base ;
+5. relancer le workflow de production.
+
+Ce choix conserve l'automatisation des opérations répétitives tout en maintenant une validation humaine avant une modification structurelle des données de production.
 
 ## Licence
 
