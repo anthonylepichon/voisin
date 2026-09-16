@@ -53,6 +53,7 @@ Le projet est accessible en production à l'adresse suivante : [voisin.creativco
 | `assets/` | CSS compilé, JavaScript et images sources servis par AssetMapper |
 | `resources/scss/` | Fichiers Sass sources |
 | `migrations/` | Évolution versionnée du schéma de base de données |
+| `tests/` | Tests PHP unitaires et d'intégration exécutés sans bibliothèque externe |
 | `documents/` | Conception et ressources de démonstration |
 
 Le dossier généré `public/assets/` n'est pas versionné. AssetMapper le construit pour la production à partir des fichiers suivis dans `assets/`.
@@ -205,7 +206,16 @@ La CI GitHub Actions est exécutée sur les Pull Requests vers `develop` et `mai
 - le conteneur Symfony ;
 - les templates Twig ;
 - les fichiers YAML ;
+- les règles métier couvertes par le lanceur PHP du dossier `tests/` ;
 - la compilation Sass et l'actualisation du CSS compilé.
+
+Les tests ne se connectent ni à la base locale ni à la production. Les tests d'intégration utilisent une base SQLite créée uniquement en mémoire pendant leur exécution.
+
+Pour lancer toute la campagne de tests :
+
+```bash
+composer test
+```
 
 Les principaux contrôles peuvent aussi être exécutés localement :
 
@@ -214,6 +224,7 @@ composer validate --strict --no-check-publish
 php bin/console lint:container
 php bin/console lint:twig templates
 php bin/console lint:yaml config --parse-tags
+composer test
 npm run sass:build
 ```
 
