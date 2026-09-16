@@ -5,7 +5,7 @@
 /*
  * Description générale : Représente une publication publiée par un membre.
  * Rôle : Conserver son contenu, son image, sa visibilité, son propriétaire et les utilisateurs qui l'aiment.
- * Tâches : Appliquer les champs et contraintes, puis synchroniser les relations avec l'utilisateur, les commentaires et les likes.
+ * Tâches : Appliquer les champs, les contraintes et les dates UTC, puis synchroniser les relations avec l'utilisateur, les commentaires et les likes.
  * Liens avec les autres fichiers : Liée à Utilisateur, UploadFichier, Commentaire, PublicationRepository et aux contrôleurs métier.
  */
 
@@ -84,7 +84,7 @@ class Publication
      */
     public function __construct()
     {
-        $this->dateCreation = new \DateTimeImmutable();
+        $this->dateCreation = new \DateTimeImmutable('now', new \DateTimeZone('UTC'));
         $this->utilisateursAimant = new ArrayCollection();
         $this->commentaires = new ArrayCollection();
     }
@@ -194,7 +194,7 @@ class Publication
      */
     public function setDateCreation(\DateTimeImmutable $dateCreation): static
     {
-        $this->dateCreation = $dateCreation;
+        $this->dateCreation = $dateCreation->setTimezone(new \DateTimeZone('UTC'));
 
         return $this;
     }

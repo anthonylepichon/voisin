@@ -17,6 +17,8 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 require dirname(__DIR__) . '/vendor/autoload.php';
 require __DIR__ . '/LanceurTest.php';
 
+date_default_timezone_set('UTC');
+
 $_SERVER['APP_ENV'] = 'test';
 $_ENV['APP_ENV'] = 'test';
 $_SERVER['APP_DEBUG'] = '0';
@@ -38,6 +40,7 @@ $testsUnitaires = [
     'Rôles utilisateur' => __DIR__ . '/unitaire/TestUtilisateur.php',
     'Publication et relations' => __DIR__ . '/unitaire/TestPublication.php',
     'Accès aux publications' => __DIR__ . '/unitaire/TestPublicationAccessService.php',
+    'Dates internes UTC' => __DIR__ . '/unitaire/TestDatesUtc.php',
 ];
 
 foreach ($testsUnitaires as $nomTest => $cheminTest) {

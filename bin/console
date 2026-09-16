@@ -1,10 +1,19 @@
 #!/usr/bin/env php
 <?php
 
-/* Origine du code : Code généré par Symfony et conservé sans modification fonctionnelle, hors commentaire de traçabilité. */
+/* Origine du code : Structure générée par Symfony puis modifiée par le développeur. */
+
+/*
+ * Description générale : Point d'entrée des commandes Symfony de l'application Voisin.
+ * Rôle : Exécuter les commandes avec le même fuseau interne UTC que l'application Web.
+ * Tâches : Imposer UTC, contrôler les dépendances puis créer l'application Console.
+ * Liens avec les autres fichiers : Charge vendor/autoload_runtime.php et instancie App\Kernel.
+ */
 
 use App\Kernel;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
+
+date_default_timezone_set('UTC');
 
 if (!is_dir(dirname(__DIR__).'/vendor')) {
     throw new LogicException('Dependencies are missing. Try running "composer install".');

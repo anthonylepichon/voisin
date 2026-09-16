@@ -5,7 +5,7 @@
 /*
  * Description générale : Représente une demande d'amitié envoyée entre deux utilisateurs.
  * Rôle : Conserver l'émetteur, le destinataire et la date de création d'une demande en attente.
- * Tâches : Appliquer les relations et contraintes prévues par la table demande_amitie du MPD.
+ * Tâches : Appliquer les relations, la date UTC et les contraintes prévues par la table demande_amitie du MPD.
  * Liens avec les autres fichiers : Liée à Utilisateur et utilisée par DemandeAmitieRepository, FriendshipController et les vues d'amitié.
  */
 
@@ -43,7 +43,7 @@ class DemandeAmitie
      */
     public function __construct()
     {
-        $this->dateCreation = new \DateTimeImmutable();
+        $this->dateCreation = new \DateTimeImmutable('now', new \DateTimeZone('UTC'));
     }
 
     /**
@@ -73,7 +73,7 @@ class DemandeAmitie
      */
     public function setDateCreation(\DateTimeImmutable $dateCreation): static
     {
-        $this->dateCreation = $dateCreation;
+        $this->dateCreation = $dateCreation->setTimezone(new \DateTimeZone('UTC'));
 
         return $this;
     }

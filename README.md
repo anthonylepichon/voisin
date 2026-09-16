@@ -33,6 +33,7 @@ Le projet est accessible en production à l'adresse suivante : [voisin.creativco
 | Back-end | PHP 8.2 ou supérieur, Symfony 7.4 |
 | Données | Doctrine ORM, migrations Doctrine, MySQL |
 | Sécurité | Symfony Security, CSRF, contrôle des rôles et des autorisations |
+| Dates | Stockage et traitements en UTC, affichage Twig en `Europe/Paris` |
 | Interface | Twig, HTML, Sass, CSS, JavaScript classique |
 | Ressources | Symfony AssetMapper |
 | Dépendances | Composer, npm |
@@ -196,6 +197,15 @@ Le MPD traduit le modèle conceptuel dans la structure relationnelle utilisée p
 - les secrets de production sont stockés dans l'environnement GitHub `production`.
 
 Aucun mot de passe, secret applicatif ou clé SSH ne doit être ajouté au dépôt.
+
+## Gestion des dates
+
+Le serveur OVH est situé en France et les utilisateurs consultent les dates selon le fuseau `Europe/Paris`. L'application sépare cependant deux responsabilités :
+
+- PHP Web, PHP CLI, Doctrine et les entités utilisent UTC pour créer, traiter et enregistrer les dates sans ambiguïté ;
+- Twig convertit les dates en `Europe/Paris` au moment de l'affichage, avec la gestion automatique des heures d'été et d'hiver.
+
+Les entités utilisent `DateTimeImmutable` afin qu'une opération comme `modify()` ne change jamais silencieusement une date déjà transmise à un autre composant.
 
 ## Contrôles automatisés
 
