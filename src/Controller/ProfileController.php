@@ -127,7 +127,10 @@ class ProfileController extends AbstractController
         }
 
         $utilisateurConnecte = $this->getUtilisateurConnecte();
-        $userActivityService->enregistrerActivite($utilisateurConnecte, new \DateTimeImmutable());
+        $userActivityService->enregistrerActivite(
+            $utilisateurConnecte,
+            new \DateTimeImmutable('now', new \DateTimeZone('UTC'))
+        );
         $estProprietaire = $utilisateurConnecte->getId() === $utilisateur->getId();
         $statutAmitie = 'aucune';
         $demandeAmitie = null;

@@ -39,7 +39,10 @@ final class FriendshipController extends AbstractController
         UserActivityService $userActivityService,
     ): Response {
         $utilisateurConnecte = $this->getUtilisateurConnecte();
-        $userActivityService->enregistrerActivite($utilisateurConnecte, new \DateTimeImmutable());
+        $userActivityService->enregistrerActivite(
+            $utilisateurConnecte,
+            new \DateTimeImmutable('now', new \DateTimeZone('UTC'))
+        );
         $destinataire = $utilisateurRepository->find($id);
 
         if (null === $destinataire) {
@@ -95,7 +98,10 @@ final class FriendshipController extends AbstractController
         UserActivityService $userActivityService,
     ): Response {
         $utilisateurConnecte = $this->getUtilisateurConnecte();
-        $userActivityService->enregistrerActivite($utilisateurConnecte, new \DateTimeImmutable());
+        $userActivityService->enregistrerActivite(
+            $utilisateurConnecte,
+            new \DateTimeImmutable('now', new \DateTimeZone('UTC'))
+        );
         $demandes = $demandeAmitieRepository->trouverRecues($utilisateurConnecte);
 
         return $this->render('friendship/requests.html.twig', [
@@ -119,7 +125,10 @@ final class FriendshipController extends AbstractController
         UserActivityService $userActivityService,
     ): Response {
         $utilisateurConnecte = $this->getUtilisateurConnecte();
-        $userActivityService->enregistrerActivite($utilisateurConnecte, new \DateTimeImmutable());
+        $userActivityService->enregistrerActivite(
+            $utilisateurConnecte,
+            new \DateTimeImmutable('now', new \DateTimeZone('UTC'))
+        );
         $demande = $this->trouverDemande($id, $demandeAmitieRepository);
         $this->refuserSiNonDestinataire($demande, $utilisateurConnecte);
         $this->verifierJeton($request, 'accepter-demande-amitie-'.$demande->getId());
@@ -155,7 +164,10 @@ final class FriendshipController extends AbstractController
         UserActivityService $userActivityService,
     ): Response {
         $utilisateurConnecte = $this->getUtilisateurConnecte();
-        $userActivityService->enregistrerActivite($utilisateurConnecte, new \DateTimeImmutable());
+        $userActivityService->enregistrerActivite(
+            $utilisateurConnecte,
+            new \DateTimeImmutable('now', new \DateTimeZone('UTC'))
+        );
         $demande = $this->trouverDemande($id, $demandeAmitieRepository);
         $this->refuserSiNonDestinataire($demande, $utilisateurConnecte);
         $this->verifierJeton($request, 'refuser-demande-amitie-'.$demande->getId());
@@ -180,7 +192,7 @@ final class FriendshipController extends AbstractController
         UserActivityService $userActivityService,
     ): Response {
         $utilisateurConnecte = $this->getUtilisateurConnecte();
-        $dateCourante = new \DateTimeImmutable();
+        $dateCourante = new \DateTimeImmutable('now', new \DateTimeZone('UTC'));
         $userActivityService->enregistrerActivite($utilisateurConnecte, $dateCourante);
         $amis = $utilisateurRepository->trouverAmis($utilisateurConnecte);
         $statutsEnLigne = [];

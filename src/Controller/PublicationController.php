@@ -201,7 +201,10 @@ class PublicationController extends AbstractController
         }
 
         $entityManager->flush();
-        $userActivityService->enregistrerActivite($utilisateur, new \DateTimeImmutable());
+        $userActivityService->enregistrerActivite(
+            $utilisateur,
+            new \DateTimeImmutable('now', new \DateTimeZone('UTC'))
+        );
 
         return $this->redirigerVersOrigine($request);
     }
