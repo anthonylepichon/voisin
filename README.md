@@ -1,3 +1,11 @@
+<!--
+Origine du code : Code créé par le développeur.
+Description générale : Présente l'application Voisin, sa construction avec Symfony, son installation, sa conception et son déploiement.
+Rôle : Servir de point d'entrée technique et fonctionnel pour découvrir, installer et évaluer le projet.
+Tâches : Décrire les fonctionnalités, les outils Symfony, les prérequis, la configuration locale, les livrables, les données de démonstration et le processus DevOps.
+Liens avec les autres fichiers : S'appuie sur composer.json, package.json, migrations/, documents/conceptualisation/, documents/readme/ et .github/workflows/.
+-->
+
 # Voisin
 
 Voisin est un réseau social de proximité développé avec Symfony. L'application permet aux habitants d'un même quartier de publier des informations, d'échanger avec leurs amis et de participer à une communauté locale.
