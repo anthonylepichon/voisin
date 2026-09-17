@@ -240,6 +240,16 @@ Puis, dans le terminal MySQL, copier et exécuter le bloc intitulé « Requête 
 
 Les huit comptes fictifs utilisent le mot de passe local indiqué dans le [guide des données de démonstration](documents/readme/requete-donnees-demo.md). Ils possèdent uniquement `ROLE_USER` : aucun compte administrateur n'est créé par ce script.
 
+### Compte administrateur de démonstration
+
+| Champ | Valeur |
+|---|---|
+| Pseudonyme | `admin` |
+| Adresse e-mail | `admin@gmail.com` |
+| Mot de passe | `VoisinDemo2026!` |
+
+Ce compte est exclusivement destiné aux démonstrations. Ces identifiants étant publiés dans le dépôt GitHub, ils ne doivent pas être réutilisés pour un compte de production ou pour un autre service.
+
 > Le jeu de démonstration est strictement réservé au développement local. Il ne doit jamais être importé dans la base de production.
 
 ## Conception
