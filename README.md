@@ -1,11 +1,3 @@
-<!--
-Origine du code : Code créé par le développeur.
-Description générale : Présente l'application Voisin, sa construction avec Symfony, son installation, sa conception et son déploiement.
-Rôle : Servir de point d'entrée technique et fonctionnel pour découvrir, installer et évaluer le projet.
-Tâches : Décrire les fonctionnalités, les outils Symfony, les prérequis, la configuration locale, les livrables, les données de démonstration et le processus DevOps.
-Liens avec les autres fichiers : S'appuie sur composer.json, package.json, migrations/, documents/conceptualisation/, documents/readme/ et .github/workflows/.
--->
-
 # Voisin
 
 Voisin est un réseau social de proximité développé avec Symfony. L'application permet aux habitants d'un même quartier de publier des informations, d'échanger avec leurs amis et de participer à une communauté locale.
@@ -107,38 +99,7 @@ php bin/console asset-map:compile
 
 MakerBundle accélère donc la création des structures répétitives, mais il ne remplace pas le développement. Les règles de visibilité, d'amitié, de propriété, de modération et de téléversement ont été écrites et adaptées dans les contrôleurs, repositories, formulaires et services du projet.
 
-## Prérequis locaux
 
-- PHP 8.2 ou supérieur avec les extensions détaillées ci-dessous ;
-- Composer ;
-- MySQL ;
-- Node.js et npm ;
-- Laragon avec Apache configuré pour utiliser `public/` comme racine Web.
-
-### Extensions PHP
-
-| Extension | Utilisation dans Voisin |
-|---|---|
-| `ctype` | Traitement de caractères utilisé par les composants Symfony |
-| `iconv` | Conversion et traitement des chaînes de caractères |
-| `PDO` | Couche d'accès aux bases de données utilisée par Doctrine |
-| `pdo_mysql` | Connexion de Doctrine à MySQL en local et sur OVH |
-| `fileinfo` | Détection du type réel des images téléversées |
-| `intl` | Fonctions d'internationalisation utilisées par Symfony |
-
-Sous PowerShell, leur présence peut être contrôlée avec :
-
-```powershell
-php -m | Select-String '^(ctype|iconv|PDO|pdo_mysql|fileinfo|intl)$'
-```
-
-Dans le terminal SSH du serveur OVH :
-
-```bash
-php -m | grep -E '^(ctype|iconv|PDO|pdo_mysql|fileinfo|intl)$'
-```
-
-Une extension peut être disponible sur le serveur sans être explicitement déclarée dans `composer.json`. Sa déclaration reste recommandée afin que Composer puisse détecter un environnement incomplet avant l'installation.
 
 ## Installation locale
 
